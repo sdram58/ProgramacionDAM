@@ -124,6 +124,10 @@ Una de las ventajas más sobresalientes de IntelliJ IDEA es que **puede descarga
    * Marca la casilla opcional *Add sample code* si deseas que genere un archivo de prueba.
 4. Haz clic en **Create**.
 
+:::tip[No te compliques configurando variables de entorno a mano]
+En cursos antiguos o manuales tradicionales era necesario configurar manualmente las variables del sistema (`PATH`, `JAVA_HOME`, `CLASSPATH`) en el Panel de Control de Windows o en el fichero `.bashrc` de Linux para poder compilar y ejecutar desde la terminal. **IntelliJ IDEA se encarga de todo esto por ti**: detecta o descarga cualquier versión del JDK que necesites directamente desde su asistente, y compila y ejecuta con un solo clic. Como futuro técnico superior en DAM es conveniente que comprendas para qué sirven estas variables (lo vimos en la sección anterior), pero apóyate en la potencia de tu IDE para concentrarte en lo verdaderamente determinante: aprender a programar.
+:::
+
 ```text
 Estructura de directorios generada por IntelliJ IDEA:
 UD02_PrimerosPasos/
@@ -286,6 +290,13 @@ Un **identificador** es el nombre que el programador asigna a una variable, cons
 | **Constantes (`final`)** | **UPPER_SNAKE_CASE**: Todas las letras en mayúsculas separadas por guion bajo. | `PI`, `MAX_INTENTOS_LOGIN`, `VELOCIDAD_DE_LA_LUZ` |
 | **Paquetes** | Minúsculas continuas separadas por puntos; dominio inverso. | `es.iesperenxisa.primerospasos`, `org.empresa.utilidades` |
 
+:::caution[Evita la 'ñ', tildes y caracteres especiales en el código fuente]
+Técnicamente, el compilador de Java utiliza la codificación Unicode y aceptará variables como `int año = 2024;` o `double puntuación = 9.5;` sin dar error sintáctico. Sin embargo, **la convención profesional internacional prohíbe taxativamente su uso**.
+Si compartes código con compañeros en otros sistemas operativos (Windows, Linux, macOS), repositorios Git o servidores de integración y despliegue continuo (CI/CD) con diferentes configuraciones regionales de terminal (*charsets* como UTF-8 vs Windows-1252), esos caracteres pueden corromperse y provocar fallos de compilación desconcertantes.
+* En **comentarios** y en **cadenas de texto para el usuario** (`println`, interfaces): escribe con ortografía impecable en español (con tildes y 'ñ').
+* En **identificadores de código** (variables, métodos, clases): utiliza **exclusivamente el alfabeto inglés sin tildes ni eñes** (`int anio = 2024;` o en inglés `int year = 2024;`).
+:::
+
 ### 4.2 Variables vs Constantes
 
 * **Variable:** Es una posición nombrada de memoria RAM cuyo contenido puede cambiar a lo largo del tiempo durante la ejecución del programa.
@@ -338,6 +349,13 @@ A continuación se detalla la tabla canónica de los 8 tipos primitivos de Java:
 | | `double` | 64 bits (8 bytes) | ~4.9 × 10⁻³²⁴ a ~1.8 × 10³⁰⁸ (precisión doble, 15-17 dígitos) | `0.0d` |
 | **Carácter** | `char` | 16 bits (2 bytes) | Caracteres Unicode UTF-16 (` ` a `￿` ó 0 a 65.535) | ` ` |
 | **Booleano** | `boolean` | 1 bit (lógico) | Únicamente `true` o `false` | `false` |
+
+:::caution[Java no comprueba desbordamientos numéricos en tipos primitivos]
+A diferencia de lo que cabría esperar intuitivamente, si a una variable `short` que contiene su valor máximo permitido (`32.767`) le sumas `1`, Java **no lanza ningún error ni detiene el programa**: el valor da la vuelta de manera cíclica en aritmética binaria de complemento a dos, pasando a valer instantáneamente `-32.768`.
+Elegir un tipo de dato numérico demasiado ajustado para tus variables es una fuente clásica de *bugs* silenciosos y catastróficos en producción. En caso de duda:
+* Para números enteros: utiliza siempre `int` (o `long` para cifras astronómicas o identificadores globales).
+* Para números con decimales: utiliza siempre `double`.
+:::
 
 ### 5.1 Literales y Notación Numérica
 
@@ -704,6 +722,11 @@ if (diaHoy == DiaSemana.SABADO || diaHoy == DiaSemana.DOMINGO) {
 }
 ```
 
+:::tip[⭐ Be the Code: Seguridad de tipos frente a "cadenas mágicas"]
+Imagina que en lugar de un `enum`, utilizas una variable de tipo `String` para controlar el día: `String dia = "LUNS";`. Si cometes una errata tipográfica al teclear, **el compilador de Java no se quejará en absoluto**: tu programa compilará con éxito y el fallo pasará completamente desapercibido hasta que un cliente lo descubra en producción.
+Por el contrario, al utilizar `DiaSemana dia = DiaSemana.LUNS;`, **el compilador bloqueará la construcción en el acto**, subrayándolo en rojo e indicando que `LUNS` no existe en la enumeración. Un buen desarrollador siempre prefiere que un error salte en tiempo de compilación antes que en tiempo de ejecución.
+:::
+
 ---
 
 ## 9. Entrada y Salida Estándar por Consola
@@ -781,6 +804,15 @@ teclado.nextLine();
 
 System.out.print("Introduce tu ciudad: ");
 String ciudad = teclado.nextLine(); // Ahora sí espera a que el usuario escriba su ciudad
+```
+:::
+
+:::tip[¿Cómo leer un único carácter con `Scanner`?]
+Habrás notado que `Scanner` cuenta con métodos para casi todos los tipos primitivos (`nextInt()`, `nextDouble()`, `nextBoolean()`), pero **no dispone de ningún método `nextChar()`**.
+Para leer un único carácter de teclado, la técnica idiomática en Java consiste en leer la siguiente palabra como texto con `next()` y extraer su primer carácter con `.charAt(0)`:
+```java
+System.out.print("¿Deseas continuar? (S/N): ");
+char respuesta = teclado.next().toUpperCase().charAt(0);
 ```
 :::
 
@@ -881,7 +913,32 @@ System.out.println("El día " + dia + " es: " + tipoDia);
 
 ---
 
-## 11. ⭐ Be the Code: Análisis de Traza y Memoria
+## 11. Tipología Práctica de Errores en Java
+
+Retomando la clasificación de la Unidad 1, al programar en Java nos enfrentamos a tres categorías de errores bien diferenciadas:
+
+### 1. Errores de Compilación (Sintácticos y Semánticos Estáticos)
+* **Cuándo ocurren:** Antes de que el programa pueda ejecutarse. El compilador `javac` analiza el código y detecta que se violan las reglas gramaticales de Java (olvidar un punto y coma, cometer erratas en palabras reservadas, tipos incompatibles como `int n = "hola";` o variables no declaradas).
+* **Cómo te ayuda IntelliJ IDEA:** Subraya inmediatamente el error con una línea roja ondulada. Al colocar el cursor sobre ella y pulsar <kbd>Alt</kbd> + <kbd>Enter</kbd> (*Show Context Actions*), el IDE te ofrece sugerencias automáticas de corrección (*Quick-fixes*).
+
+### 2. Errores en Tiempo de Ejecución (*Runtime Exceptions*)
+* **Cuándo ocurren:** El código es sintácticamente impecable y compila sin problemas a Bytecode, pero la JVM se topa con una operación imposible al ejecutarse con determinados datos (dividir un número entero entre cero `10 / 0`, introducir letras en la consola cuando `Scanner.nextInt()` esperaba dígitos, o intentar acceder a una posición inexistente).
+* **Cómo se manifiestan:** El programa aborta bruscamente lanzando una **Excepción** en la consola acompañada de un volcado de pila (*Stack Trace*) en texto rojo, indicando la clase, método y línea exacta del colapso:
+  ```text
+  Exception in thread "main" java.util.InputMismatchException
+      at java.base/java.util.Scanner.throwFor(Scanner.java:947)
+      at java.base/java.util.Scanner.nextInt(Scanner.java:2267)
+      at es.iesperenxisa.primerospasos.Main.main(Main.java:14)
+  ```
+  *(En la Unidad 3 aprenderás a capturar y gestionar estas excepciones de forma elegante con bloques `try-catch`).*
+
+### 3. Errores Lógicos (*Bugs*)
+* **Cuándo ocurren:** El programa compila perfectamente y se ejecuta sin lanzar ninguna excepción, pero **el resultado obtenido es incorrecto** (por ejemplo, calcular una media dividiendo entre 2 en vez de entre 3, o aplicar una condición `>` en lugar de `>=`).
+* **Cómo resolverlos:** Son los errores más desafiantes en la vida profesional. Para localizarlos, se recurre al **depurador (*Debugger*) de IntelliJ IDEA** (<kbd>Shift</kbd> + <kbd>F9</kbd>), colocando puntos de interrupción (*breakpoints*) para pausar la ejecución y ver paso a paso el contenido de cada variable en memoria RAM.
+
+---
+
+## 12. ⭐ Be the Code: Análisis de Traza y Memoria
 
 Para ser un programador competente, debes ser capaz de "ejecutar" mentalmente el código como si fueras la propia CPU. Vamos a analizar dos de los enigmas más desconcertantes de Java.
 
@@ -977,7 +1034,7 @@ PILA (Stack)                        MEMORIA DINÁMICA (Heap)
 
 ---
 
-## 12. ¡No Hay Preguntas Tontas!
+## 13. ¡No Hay Preguntas Tontas!
 
 ### ¿Por qué `1 / 2` da `0` en Java cuando cualquier calculadora dice `0.5`?
 > Porque en Java rige la regla de **preservación de tipos en operaciones binarias**: si los dos operandos son de tipo entero (`int`), el operador división `/` ejecuta obligatoriamente una **división entera**, truncando cualquier resto o parte decimal. Para que el resultado conserve decimales, al menos uno de los operandos debe ser de tipo decimal: escribe `1.0 / 2`, `1 / 2.0` o aplica un cast explícito `(double) 1 / 2`.
@@ -1003,7 +1060,7 @@ PILA (Stack)                        MEMORIA DINÁMICA (Heap)
 
 ---
 
-## 13. Resumen de la Unidad y Enlace con Java Avanzado
+## 14. Resumen de la Unidad y Enlace con Java Avanzado
 
 En esta intensa unidad didáctica has dado el salto definitivo al desarrollo profesional:
 * Has asimilado la arquitectura del ecosistema Java: cómo el compilador `javac` genera Bytecode neutral y cómo la **JVM** lo ejecuta a la velocidad de la luz mediante el compilador **JIT**.
@@ -1019,7 +1076,7 @@ En la **Unidad 3**, ampliaremos este control del flujo incorporando **bucles e i
 
 ---
 
-## 14. Relación Curricular: Resultados de Aprendizaje y Criterios de Evaluación
+## 15. Relación Curricular: Resultados de Aprendizaje y Criterios de Evaluación
 
 Esta unidad cubre íntegramente los siguientes Resultados de Aprendizaje y Criterios de Evaluación del currículo oficial del módulo **0485 - Programación (DAM)**:
 
@@ -1027,10 +1084,15 @@ Esta unidad cubre íntegramente los siguientes Resultados de Aprendizaje y Crite
 |---|---|
 | **RA1.** Reconoce la estructura de un programa informático, identificando y relacionando los elementos propios del lenguaje de programación utilizado. | **CE 1.a)** Se ha reconocido la estructura de un programa informático.<br/>**CE 1.b)** Se han identificado los componentes de la plataforma de desarrollo (JDK, JRE, JVM).<br/>**CE 1.c)** Se ha utilizado un entorno integrado de desarrollo (IntelliJ IDEA).<br/>**CE 1.d)** Se han utilizado las herramientas de compilación y ejecución de programas.<br/>**CE 1.e)** Se han identificado los diferentes tipos de variables y su ámbito de utilización.<br/>**CE 1.f)** Se ha reconocido la necesidad de utilizar constantes.<br/>**CE 1.g)** Se han utilizado los tipos de datos básicos y operadores provistos por el lenguaje.<br/>**CE 1.h)** Se han aplicado conversiones de tipo explícitas e implícitas.<br/>**CE 1.i)** Se han introducido comentarios explicativos y documentación adecuada (JavaDoc).<br/>**CE 1.j)** Se han utilizado clases estándar del lenguaje (`String`, `Math`, `Scanner`). |
 | **RA4.** Desarrolla programas organizados en clases aplicando criterios de encapsulamiento y modularidad. | **CE 4.a)** Se han utilizado estructuras de control condicionales (`if`, `switch`).<br/>**CE 4.b)** Se han evaluado expresiones lógicas y relacionales complejas.<br/>**CE 4.c)** Se han aplicado buenas prácticas en el control del flujo del programa. |
+| **RA5.** Realiza operaciones de entrada y salida de información. | **CE 5.a)** Se ha utilizado la consola para realizar operaciones de entrada y salida de información.<br/>**CE 5.b)** Se han aplicado formatos en la visualización de la información (`printf`).<br/>**CE 5.c)** Se han identificado las posibilidades de entrada/salida de la consola (`System.out`, `Scanner`). |
+
+:::note[Aclaración curricular sobre los Resultados de Aprendizaje de la Unidad 2]
+En la programación didáctica oficial del centro se asignan formalmente las 24 horas de esta unidad didáctica a **RA1** y **RA4**. No obstante, las competencias relativas a entrada y salida de datos por consola (`System.out`, `Scanner`, formatos con `printf`) se encuentran tipificadas en el Real Decreto estatal del título bajo el **RA5**. Se han integrado con total naturalidad en esta unidad para dotar al alumno de herramientas prácticas de interacción interactiva desde el primer día de trabajo en IntelliJ IDEA.
+:::
 
 ---
 
-## 15. Boletines de Ejercicios y Retos Prácticos
+## 16. Boletines de Ejercicios y Retos Prácticos
 
 Pon en práctica de forma autónoma todos los conocimientos adquiridos a través de los boletines de ejercicios organizados por niveles:
 
