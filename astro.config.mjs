@@ -37,25 +37,7 @@ export default defineConfig({
             },
           ],
         },
-        {
-          label: '🔤 02. Primeros pasos con Java',
-          collapsed: true,
-          badge: { text: 'Próximamente', variant: 'note' },
-          items: [
-            { label: '📖 Teoría y Contenidos', link: '/ud02/' },
-            {
-              label: '📝 Boletines de Ejercicios',
-              collapsed: true,
-              items: [
-                { label: 'Boletín Inicial', link: '/ud02/boletin-02-inicial/' },
-                { label: 'Boletín Inicial (Resuelto)', link: '/ud02/boletin-02-inicial-resuelto/' },
-                { label: 'Boletín Intermedio', link: '/ud02/boletin-02-intermedio/' },
-                { label: 'Boletín Intermedio (Resuelto)', link: '/ud02/boletin-02-intermedio-resuelto/' },
-                { label: 'Retos y Extras', link: '/ud02/boletin-02-extras/' },
-              ],
-            },
-          ],
-        },
+        { label: '🔤 02. Primeros pasos con Java', link: '/ud02/', badge: { text: 'Próximamente', variant: 'note' } },
         { label: '🔀 03. Excepciones, bucles, arrays y métodos', link: '/ud03/', badge: { text: 'Próximamente', variant: 'note' } },
         { label: '🏗️ 04. Clases y objetos', link: '/ud04/', badge: { text: 'Próximamente', variant: 'note' } },
         { label: '🧬 05. Programación orientada a objetos avanzada', link: '/ud05/', badge: { text: 'Próximamente', variant: 'note' } },

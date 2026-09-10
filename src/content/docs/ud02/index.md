@@ -1094,12 +1094,6 @@ En la programación didáctica oficial del centro se asignan formalmente las 24 
 
 ## 16. Boletines de Ejercicios y Retos Prácticos
 
-Pon en práctica de forma autónoma todos los conocimientos adquiridos a través de los boletines de ejercicios organizados por niveles:
-
-<div class="ejercicio-links">
-  <a class="elink" href="./boletin-02-inicial/">🟢 Boletín Inicial (Propuestos)</a>
-  <a class="elink" href="./boletin-02-inicial-resuelto/">✅ Boletín Inicial (Resueltos)</a>
-  <a class="elink" href="./boletin-02-intermedio/">⭐ Boletín Intermedio (Propuestos)</a>
-  <a class="elink" href="./boletin-02-intermedio-resuelto/">✅ Boletín Intermedio (Resueltos)</a>
-  <a class="elink" href="./boletin-02-extras/">🔥 Retos y Plataformas Externas</a>
-</div>
+:::note[Boletines en preparación]
+Los boletines de ejercicios y retos prácticos de esta unidad se encuentran actualmente en fase de revisión y no están accesibles todavía. Se publicarán próximamente.
+:::

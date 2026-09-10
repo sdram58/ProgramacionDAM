@@ -1,6 +1,8 @@
----
+--- 
 title: 🧠 Boletín 02 Extras — Retos y Plataformas Competitivas
 description: Retos de algorítmica matemática y lógica en Java 21 LTS sin bucles complejos (DNI oficial, año bisiesto gregoriano, simulación probabilística y números gigantes con BigInteger).
+draft: true
+
 ---
 
 En este boletín extra nos enfrentaremos a **problemas reales y retos de plataformas de programación competitiva** (CodeWars, Acepta el Reto, Project Euler) utilizando exclusivamente los conceptos aprendidos en la Unidad 2: aritmética modular, sentencias condicionales rigurosas, manipulación de `String` y tipos de precisión extendida (`BigInteger`).

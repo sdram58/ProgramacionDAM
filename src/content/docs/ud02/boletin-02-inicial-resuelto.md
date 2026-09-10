@@ -1,6 +1,8 @@
----
+--- 
 title: 📝 Boletín 02 Inicial (Resuelto) — Primeros Pasos con Java
 description: Soluciones completas, verificadas y comentadas línea a línea en Java 21 LTS con IntelliJ IDEA para los 10 ejercicios del Boletín Inicial de la Unidad 2.
+draft: true
+
 ---
 
 A continuación se presentan las soluciones comentadas a los 10 ejercicios propuestos en el [Boletín Inicial](./boletin-02-inicial/). Cada programa ha sido verificado con Java 21 LTS en IntelliJ IDEA.
