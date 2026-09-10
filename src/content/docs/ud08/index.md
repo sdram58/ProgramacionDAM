@@ -1,6 +1,6 @@
 ---
-title: "Unidad 8. Arrays y colecciones lineales"
-description: "Arrays unidimensionales y bidimensionales, la clase Arrays, colecciones lineales del Java Collections Framework: List, ArrayList, LinkedList, Pilas y Colas."
+title: "📁 Unidad 8. Ficheros y streams"
+description: "Flujos de datos de entrada/salida, sistema de archivos con Java NIO.2 (Path, Files), lectura/escritura de ficheros de texto y binarios, y serialización."
 ---
 
 :::note[🚧 Unidad Didáctica en desarrollo activo]
@@ -8,5 +8,5 @@ Esta unidad se encuentra actualmente en proceso de generación y redacción téc
 :::
 
 ## Información Curricular
-* **Resultados de Aprendizaje cubiertos:** RA 6
-* **Descripción sintética:** Arrays unidimensionales y bidimensionales, la clase Arrays, colecciones lineales del Java Collections Framework: List, ArrayList, LinkedList, Pilas y Colas.
+* **Resultados de Aprendizaje cubiertos:** RA2, RA3, RA4, RA5 (22 horas)
+* **Descripción sintética:** Flujos de datos de entrada/salida, sistema de archivos con Java NIO.2 (Path, Files), lectura/escritura de ficheros de texto y binarios, y serialización.

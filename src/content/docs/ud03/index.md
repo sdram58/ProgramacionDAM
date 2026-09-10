@@ -1,6 +1,6 @@
 ---
-title: "Unidad 3. Estructuras de control de flujo y excepciones"
-description: "Condicionales (if-else, switch tradicional y expresiones switch), bucles iterativos (while, do-while, for), depuracion con breakpoints en IntelliJ y captura basica de excepciones."
+title: "🔀 Unidad 3. Excepciones, bucles, arrays y métodos"
+description: "Estructuras condicionales y bucles iterativos, depuración con breakpoints en IntelliJ IDEA, arrays unidimensionales y bidimensionales, diseño modular con métodos y gestión de excepciones."
 ---
 
 :::note[🚧 Unidad Didáctica en desarrollo activo]
@@ -8,5 +8,5 @@ Esta unidad se encuentra actualmente en proceso de generación y redacción téc
 :::
 
 ## Información Curricular
-* **Resultados de Aprendizaje cubiertos:** RA 3
-* **Descripción sintética:** Condicionales (if-else, switch tradicional y expresiones switch), bucles iterativos (while, do-while, for), depuracion con breakpoints en IntelliJ y captura basica de excepciones.
+* **Resultados de Aprendizaje cubiertos:** RA1, RA2, RA3, RA6 (28 horas)
+* **Descripción sintética:** Estructuras condicionales y bucles iterativos, depuración con breakpoints en IntelliJ IDEA, arrays unidimensionales y bidimensionales, diseño modular con métodos y gestión de excepciones.

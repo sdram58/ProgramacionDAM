@@ -1,6 +1,6 @@
 ---
-title: "Unidad 7. Herencia, polimorfismo e interfaces"
-description: "Jerarquias de clases, superclase y subclase, sobrescritura, ligadura dinamica, polimorfismo, clases abstractas, interfaces y modelado UML."
+title: "⚡ Unidad 7. La API Stream"
+description: "Programación funcional en Java, expresiones lambda, interfaces funcionales predefinidas (Predicate, Function, Consumer, Supplier), flujos y colectores avanzados."
 ---
 
 :::note[🚧 Unidad Didáctica en desarrollo activo]
@@ -8,5 +8,5 @@ Esta unidad se encuentra actualmente en proceso de generación y redacción téc
 :::
 
 ## Información Curricular
-* **Resultados de Aprendizaje cubiertos:** RA 4, RA 7
-* **Descripción sintética:** Jerarquias de clases, superclase y subclase, sobrescritura, ligadura dinamica, polimorfismo, clases abstractas, interfaces y modelado UML.
+* **Resultados de Aprendizaje cubiertos:** RA6, RA7, RA8 (19 horas)
+* **Descripción sintética:** Programación funcional en Java, expresiones lambda, interfaces funcionales predefinidas (Predicate, Function, Consumer, Supplier), flujos y colectores avanzados.

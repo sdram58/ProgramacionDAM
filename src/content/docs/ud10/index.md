@@ -1,6 +1,6 @@
 ---
-title: "Unidad 10. Programacion funcional y la API Streams"
-description: "Expresiones lambda, interfaces funcionales (Predicate, Function, Consumer, Supplier), pipeline de Streams y colectores avanzados."
+title: "🗄️ Unidad 10. Trabajar con bases de datos relacionales"
+description: "Conectividad de aplicaciones con JDBC, drivers de base de datos, consultas con PreparedStatement, transacciones ACID y patrón DAO."
 ---
 
 :::note[🚧 Unidad Didáctica en desarrollo activo]
@@ -8,5 +8,5 @@ Esta unidad se encuentra actualmente en proceso de generación y redacción téc
 :::
 
 ## Información Curricular
-* **Resultados de Aprendizaje cubiertos:** RA 6
-* **Descripción sintética:** Expresiones lambda, interfaces funcionales (Predicate, Function, Consumer, Supplier), pipeline de Streams y colectores avanzados.
+* **Resultados de Aprendizaje cubiertos:** RA9 (20 horas)
+* **Descripción sintética:** Conectividad de aplicaciones con JDBC, drivers de base de datos, consultas con PreparedStatement, transacciones ACID y patrón DAO.

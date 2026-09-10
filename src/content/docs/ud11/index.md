@@ -1,6 +1,6 @@
 ---
-title: "Unidad 11. Consola, ficheros, directorios y expresiones regulares"
-description: "Formateo avanzado con printf, expresiones regulares (Pattern, Matcher), Java NIO.2 (Path, Files), lectura/escritura de flujos y serializacion."
+title: "🌐 Unidad 11. Trabajar con bases de datos orientadas a objetos"
+description: "Persistencia orientada a objetos, bases de datos no relacionales / orientadas a objetos (ODB/NoSQL), mapeo objeto-relacional y estrategias de persistencia."
 ---
 
 :::note[🚧 Unidad Didáctica en desarrollo activo]
@@ -8,5 +8,5 @@ Esta unidad se encuentra actualmente en proceso de generación y redacción téc
 :::
 
 ## Información Curricular
-* **Resultados de Aprendizaje cubiertos:** RA 5, RA 6
-* **Descripción sintética:** Formateo avanzado con printf, expresiones regulares (Pattern, Matcher), Java NIO.2 (Path, Files), lectura/escritura de flujos y serializacion.
+* **Resultados de Aprendizaje cubiertos:** RA8 (17 horas)
+* **Descripción sintética:** Persistencia orientada a objetos, bases de datos no relacionales / orientadas a objetos (ODB/NoSQL), mapeo objeto-relacional y estrategias de persistencia.

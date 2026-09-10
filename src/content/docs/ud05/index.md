@@ -1,6 +1,6 @@
 ---
-title: "Unidad 5. Programacion orientada a objetos: clases y objetos"
-description: "Paradigma orientado a objetos, clases, instancias, atributos, metodos de instancia, el operador new, la referencia this y constructores."
+title: "🧬 Unidad 5. Programación orientada a objetos avanzada"
+description: "Herencia, jerarquías de clases, clases abstractas, interfaces, polimorfismo, ligadura dinámica, miembros estáticos y modelado de dominio con diagramas de clases UML."
 ---
 
 :::note[🚧 Unidad Didáctica en desarrollo activo]
@@ -8,5 +8,5 @@ Esta unidad se encuentra actualmente en proceso de generación y redacción téc
 :::
 
 ## Información Curricular
-* **Resultados de Aprendizaje cubiertos:** RA 2, RA 4
-* **Descripción sintética:** Paradigma orientado a objetos, clases, instancias, atributos, metodos de instancia, el operador new, la referencia this y constructores.
+* **Resultados de Aprendizaje cubiertos:** RA4, RA7 (30 horas)
+* **Descripción sintética:** Herencia, jerarquías de clases, clases abstractas, interfaces, polimorfismo, ligadura dinámica, miembros estáticos y modelado de dominio con diagramas de clases UML.

@@ -1,6 +1,6 @@
 ---
-title: "Unidad 9. Genericos y mapas"
-description: "Programacion generica con tipos parametrizados, colecciones no lineales: conjuntos (Set) y mapas asociativos (Map, HashMap, TreeMap), y ordenacion con Comparator."
+title: "🖼️ Unidad 9. Aplicaciones controladas por eventos"
+description: "Construcción de interfaces gráficas de escritorio con Swing y AWT, despachador EDT, gestores de diseño (layouts), listeners y patrón MVC."
 ---
 
 :::note[🚧 Unidad Didáctica en desarrollo activo]
@@ -8,5 +8,5 @@ Esta unidad se encuentra actualmente en proceso de generación y redacción téc
 :::
 
 ## Información Curricular
-* **Resultados de Aprendizaje cubiertos:** RA 6
-* **Descripción sintética:** Programacion generica con tipos parametrizados, colecciones no lineales: conjuntos (Set) y mapas asociativos (Map, HashMap, TreeMap), y ordenacion con Comparator.
+* **Resultados de Aprendizaje cubiertos:** RA5 (22 horas)
+* **Descripción sintética:** Construcción de interfaces gráficas de escritorio con Swing y AWT, despachador EDT, gestores de diseño (layouts), listeners y patrón MVC.

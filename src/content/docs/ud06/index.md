@@ -1,6 +1,6 @@
 ---
-title: "Unidad 6. Encapsulacion, visibilidad y miembros static"
-description: "Modificadores de visibilidad, encapsulamiento, metodos canonicos de Object (toString, equals, hashCode), constantes y miembros static, e inmutabilidad con record."
+title: "📚 Unidad 6. Genéricos y colecciones de datos"
+description: "Tipos genéricos <T>, Java Collections Framework (List, ArrayList, LinkedList, Set, Map, HashMap), ordenación con Comparator y algoritmos sobre colecciones."
 ---
 
 :::note[🚧 Unidad Didáctica en desarrollo activo]
@@ -8,5 +8,5 @@ Esta unidad se encuentra actualmente en proceso de generación y redacción téc
 :::
 
 ## Información Curricular
-* **Resultados de Aprendizaje cubiertos:** RA 4
-* **Descripción sintética:** Modificadores de visibilidad, encapsulamiento, metodos canonicos de Object (toString, equals, hashCode), constantes y miembros static, e inmutabilidad con record.
+* **Resultados de Aprendizaje cubiertos:** RA6, RA7 (30 horas)
+* **Descripción sintética:** Tipos genéricos <T>, Java Collections Framework (List, ArrayList, LinkedList, Set, Map, HashMap), ordenación con Comparator y algoritmos sobre colecciones.

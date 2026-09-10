@@ -1,6 +1,6 @@
 ---
-title: "Unidad 2. Primeros pasos en Java: sintaxis y tipos de datos"
-description: "Estructura de un programa en Java, instalacion de IntelliJ IDEA, tipos primitivos, variables, constantes, operadores, conversiones de tipo y entrada/salida por consola."
+title: "🔤 Unidad 2. Primeros pasos con Java"
+description: "Estructura de un programa en Java, instalación y configuración de IntelliJ IDEA, compilación y JVM, tipos primitivos, variables, constantes, operadores y entrada/salida por consola."
 ---
 
 :::note[🚧 Unidad Didáctica en desarrollo activo]
@@ -8,5 +8,5 @@ Esta unidad se encuentra actualmente en proceso de generación y redacción téc
 :::
 
 ## Información Curricular
-* **Resultados de Aprendizaje cubiertos:** RA 1, RA 2
-* **Descripción sintética:** Estructura de un programa en Java, instalacion de IntelliJ IDEA, tipos primitivos, variables, constantes, operadores, conversiones de tipo y entrada/salida por consola.
+* **Resultados de Aprendizaje cubiertos:** RA1, RA4 (24 horas)
+* **Descripción sintética:** Estructura de un programa en Java, instalación y configuración de IntelliJ IDEA, compilación y JVM, tipos primitivos, variables, constantes, operadores y entrada/salida por consola.

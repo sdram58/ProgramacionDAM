@@ -30,127 +30,100 @@ hero:
 
   <div class="unit-card" style="border: 1px solid var(--sl-color-accent); border-radius: 8px; padding: 1.25rem; background: rgba(45, 138, 78, 0.06);">
     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem;">
-      <h3 style="margin: 0; font-size: 1.2rem;">🚀 01. Algorítmica y Pseudocódigo</h3>
+      <h3 style="margin: 0; font-size: 1.2rem;">🚀 01. Introducción a la programación</h3>
       <span class="unit-badge-available">Disponible</span>
     </div>
-    <p>Fundamentos del pensamiento computacional, diagramas de flujo ANSI, trazas de algoritmos y pseudocódigo estructurado con PSeInt.</p>
+    <p><strong>RA1 (8 h)</strong> — Fundamentos del pensamiento computacional, arquitectura y ciclo de vida del software, diagramas de flujo ANSI, trazas de algoritmos y pseudocódigo estructurado con PSeInt.</p>
     <a class="unit-link" href="/ProgramacionDAM/ud01/">Ver unidad →</a>
   </div>
 
   <div class="unit-card unit-card-disabled" style="border: 1px dashed var(--sl-color-gray-4); border-radius: 8px; padding: 1.25rem;">
     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem;">
-      <h3 style="margin: 0; font-size: 1.2rem;">🔤 02. Primeros pasos en Java</h3>
+      <h3 style="margin: 0; font-size: 1.2rem;">🔤 02. Primeros pasos con Java</h3>
       <span class="unit-badge-unavailable">🔒 No disponible</span>
     </div>
-    <p>Estructura de un programa en Java, entorno IntelliJ IDEA, tipos primitivos, variables, literales, operadores y E/S por consola.</p>
+    <p><strong>RA1, RA4 (24 h)</strong> — Estructura de un programa en Java, entorno IntelliJ IDEA, compilación y JVM, tipos primitivos, variables, constantes, operadores y entrada/salida por consola.</p>
     <span class="unit-link-disabled">🔒 No disponible</span>
   </div>
 
   <div class="unit-card unit-card-disabled" style="border: 1px dashed var(--sl-color-gray-4); border-radius: 8px; padding: 1.25rem;">
     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem;">
-      <h3 style="margin: 0; font-size: 1.2rem;">🔀 03. Control de flujo y excepciones</h3>
+      <h3 style="margin: 0; font-size: 1.2rem;">🔀 03. Excepciones, bucles, arrays y métodos</h3>
       <span class="unit-badge-unavailable">🔒 No disponible</span>
     </div>
-    <p>Estructuras condicionales (if/else, switch moderno), bucles iterativos, depuración con breakpoints en IntelliJ IDEA y excepciones.</p>
+    <p><strong>RA1, RA2, RA3, RA6 (28 h)</strong> — Estructuras condicionales y bucles iterativos, depuración con breakpoints en IntelliJ IDEA, arrays unidimensionales y bidimensionales, diseño modular con métodos y gestión de excepciones.</p>
     <span class="unit-link-disabled">🔒 No disponible</span>
   </div>
 
   <div class="unit-card unit-card-disabled" style="border: 1px dashed var(--sl-color-gray-4); border-radius: 8px; padding: 1.25rem;">
     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem;">
-      <h3 style="margin: 0; font-size: 1.2rem;">🧩 04. Métodos y recursividad</h3>
+      <h3 style="margin: 0; font-size: 1.2rem;">🏗️ 04. Clases y objetos</h3>
       <span class="unit-badge-unavailable">🔒 No disponible</span>
     </div>
-    <p>Diseño modular de software, firma de métodos, paso de parámetros por valor, pila de llamadas y algoritmos recursivos.</p>
+    <p><strong>RA1, RA2, RA3, RA4 (28 h)</strong> — Fundamentos de la programación orientada a objetos, instanciación, constructores, atributos, métodos, encapsulamiento, visibilidad y referencia <code>this</code>.</p>
     <span class="unit-link-disabled">🔒 No disponible</span>
   </div>
 
   <div class="unit-card unit-card-disabled" style="border: 1px dashed var(--sl-color-gray-4); border-radius: 8px; padding: 1.25rem;">
     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem;">
-      <h3 style="margin: 0; font-size: 1.2rem;">⚡ 05. Clases y Objetos</h3>
+      <h3 style="margin: 0; font-size: 1.2rem;">🧬 05. Programación orientada a objetos avanzada</h3>
       <span class="unit-badge-unavailable">🔒 No disponible</span>
     </div>
-    <p>Fundamentos del paradigma orientado a objetos, instanciación, referencia <code>this</code>, constructores y memoria.</p>
+    <p><strong>RA4, RA7 (30 h)</strong> — Herencia, clases abstractas, interfaces, polimorfismo, ligadura dinámica, miembros estáticos y modelado de dominio con diagramas de clases UML.</p>
     <span class="unit-link-disabled">🔒 No disponible</span>
   </div>
 
   <div class="unit-card unit-card-disabled" style="border: 1px dashed var(--sl-color-gray-4); border-radius: 8px; padding: 1.25rem;">
     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem;">
-      <h3 style="margin: 0; font-size: 1.2rem;">🏗️ 06. Encapsulación y static</h3>
+      <h3 style="margin: 0; font-size: 1.2rem;">📚 06. Genéricos y colecciones de datos</h3>
       <span class="unit-badge-unavailable">🔒 No disponible</span>
     </div>
-    <p>Modificadores de visibilidad, getters/setters, miembros estáticos, métodos canónicos de <code>Object</code> e inmutabilidad con <code>record</code>.</p>
+    <p><strong>RA6, RA7 (30 h)</strong> — Tipos genéricos <code>&lt;T&gt;</code>, Java Collections Framework (<code>List</code>, <code>ArrayList</code>, <code>Set</code>, <code>Map</code>, <code>HashMap</code>), ordenación con <code>Comparator</code> y algoritmos sobre colecciones.</p>
     <span class="unit-link-disabled">🔒 No disponible</span>
   </div>
 
   <div class="unit-card unit-card-disabled" style="border: 1px dashed var(--sl-color-gray-4); border-radius: 8px; padding: 1.25rem;">
     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem;">
-      <h3 style="margin: 0; font-size: 1.2rem;">🔒 07. Herencia y Polimorfismo</h3>
+      <h3 style="margin: 0; font-size: 1.2rem;">⚡ 07. La API Stream</h3>
       <span class="unit-badge-unavailable">🔒 No disponible</span>
     </div>
-    <p>Jerarquías de clases, sobrescritura, ligadura dinámica, clases abstractas, interfaces y modelado de dominio con diagramas UML.</p>
+    <p><strong>RA6, RA7, RA8 (19 h)</strong> — Programación funcional en Java, expresiones lambda, interfaces funcionales (<code>Predicate</code>, <code>Function</code>, <code>Consumer</code>), operaciones intermedias/terminales en Streams y colectores avanzados.</p>
     <span class="unit-link-disabled">🔒 No disponible</span>
   </div>
 
   <div class="unit-card unit-card-disabled" style="border: 1px dashed var(--sl-color-gray-4); border-radius: 8px; padding: 1.25rem;">
     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem;">
-      <h3 style="margin: 0; font-size: 1.2rem;">🧬 08. Arrays y Colecciones lineales</h3>
+      <h3 style="margin: 0; font-size: 1.2rem;">📁 08. Ficheros y streams</h3>
       <span class="unit-badge-unavailable">🔒 No disponible</span>
     </div>
-    <p>Arrays unidimensionales y bidimensionales, manipulación de vectores, y colecciones del JCF: <code>List</code>, <code>ArrayList</code>, Pilas y Colas.</p>
+    <p><strong>RA2, RA3, RA4, RA5 (22 h)</strong> — Flujos de datos de entrada/salida, sistema de archivos con Java NIO.2 (<code>Path</code>, <code>Files</code>), lectura/escritura de texto y binarios, y serialización de objetos.</p>
     <span class="unit-link-disabled">🔒 No disponible</span>
   </div>
 
   <div class="unit-card unit-card-disabled" style="border: 1px dashed var(--sl-color-gray-4); border-radius: 8px; padding: 1.25rem;">
     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem;">
-      <h3 style="margin: 0; font-size: 1.2rem;">📚 09. Genéricos y Mapas</h3>
+      <h3 style="margin: 0; font-size: 1.2rem;">🖼️ 09. Aplicaciones controladas por eventos</h3>
       <span class="unit-badge-unavailable">🔒 No disponible</span>
     </div>
-    <p>Tipos genéricos <code>&lt;T&gt;</code>, conjuntos (<code>Set</code>), mapas asociativos (<code>Map</code>, <code>HashMap</code>), y ordenación con <code>Comparator</code>.</p>
+    <p><strong>RA5 (22 h)</strong> — Interfaces gráficas de usuario con Swing y AWT, despachador de eventos (EDT), gestores de diseño (layouts), manejadores de eventos (listeners) y patrón MVC.</p>
     <span class="unit-link-disabled">🔒 No disponible</span>
   </div>
 
   <div class="unit-card unit-card-disabled" style="border: 1px dashed var(--sl-color-gray-4); border-radius: 8px; padding: 1.25rem;">
     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem;">
-      <h3 style="margin: 0; font-size: 1.2rem;">🗺️ 10. Programación Funcional y Streams</h3>
+      <h3 style="margin: 0; font-size: 1.2rem;">🗄️ 10. Trabajar con bases de datos relacionales</h3>
       <span class="unit-badge-unavailable">🔒 No disponible</span>
     </div>
-    <p>Expresiones lambda, interfaces funcionales, operaciones en la API Streams y colectores avanzados.</p>
+    <p><strong>RA9 (20 h)</strong> — Conectividad de aplicaciones con JDBC, drivers de base de datos, consultas con <code>PreparedStatement</code>, transacciones ACID y patrón DAO.</p>
     <span class="unit-link-disabled">🔒 No disponible</span>
   </div>
 
   <div class="unit-card unit-card-disabled" style="border: 1px dashed var(--sl-color-gray-4); border-radius: 8px; padding: 1.25rem;">
     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem;">
-      <h3 style="margin: 0; font-size: 1.2rem;">📁 11. Ficheros y Expresiones Regulares</h3>
+      <h3 style="margin: 0; font-size: 1.2rem;">🌐 11. Trabajar con bases de datos orientadas a objetos</h3>
       <span class="unit-badge-unavailable">🔒 No disponible</span>
     </div>
-    <p>Entrada/salida avanzada, validación con expresiones regulares (<code>Pattern</code>/<code>Matcher</code>), Java NIO.2 y serialización.</p>
-    <span class="unit-link-disabled">🔒 No disponible</span>
-  </div>
-
-  <div class="unit-card unit-card-disabled" style="border: 1px dashed var(--sl-color-gray-4); border-radius: 8px; padding: 1.25rem;">
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem;">
-      <h3 style="margin: 0; font-size: 1.2rem;">🗄️ 12. Programación por Eventos y GUI</h3>
-      <span class="unit-badge-unavailable">🔒 No disponible</span>
-    </div>
-    <p>Construcción de interfaces gráficas de escritorio con Swing y AWT, despachador EDT, gestores de diseño y patrón MVC.</p>
-    <span class="unit-link-disabled">🔒 No disponible</span>
-  </div>
-
-  <div class="unit-card unit-card-disabled" style="border: 1px dashed var(--sl-color-gray-4); border-radius: 8px; padding: 1.25rem;">
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem;">
-      <h3 style="margin: 0; font-size: 1.2rem;">🌐 13. Acceso a Datos y JDBC</h3>
-      <span class="unit-badge-unavailable">🔒 No disponible</span>
-    </div>
-    <p>Conectividad con bases de datos relacionales, drivers JDBC, <code>PreparedStatement</code>, transacciones y patrón DAO.</p>
-    <span class="unit-link-disabled">🔒 No disponible</span>
-  </div>
-
-  <div class="unit-card unit-card-disabled" style="border: 1px dashed var(--sl-color-gray-4); border-radius: 8px; padding: 1.25rem;">
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem;">
-      <h3 style="margin: 0; font-size: 1.2rem;">🎯 14. Proyecto Final Integrador</h3>
-      <span class="unit-badge-unavailable">🔒 No disponible</span>
-    </div>
-    <p>Desarrollo de una aplicación completa de escritorio conectada a base de datos aplicando arquitectura en capas y buenas prácticas.</p>
+    <p><strong>RA8 (17 h)</strong> — Persistencia orientada a objetos, bases de datos no relacionales / orientadas a objetos (ODB/NoSQL), mapeo objeto-relacional y estrategias de persistencia.</p>
     <span class="unit-link-disabled">🔒 No disponible</span>
   </div>
 

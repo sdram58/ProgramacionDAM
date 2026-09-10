@@ -1,6 +1,6 @@
 ---
-title: "Unidad 4. Metodos y recursividad"
-description: "Diseno modular de aplicaciones, signatura de metodos, paso de parametros por valor, ambito de variables, pila de llamadas y recursividad."
+title: "🏗️ Unidad 4. Clases y objetos"
+description: "Fundamentos de la programación orientada a objetos, instanciación, constructores, atributos, métodos, encapsulamiento, visibilidad y referencia this."
 ---
 
 :::note[🚧 Unidad Didáctica en desarrollo activo]
@@ -8,5 +8,5 @@ Esta unidad se encuentra actualmente en proceso de generación y redacción téc
 :::
 
 ## Información Curricular
-* **Resultados de Aprendizaje cubiertos:** RA 2, RA 3
-* **Descripción sintética:** Diseno modular de aplicaciones, signatura de metodos, paso de parametros por valor, ambito de variables, pila de llamadas y recursividad.
+* **Resultados de Aprendizaje cubiertos:** RA1, RA2, RA3, RA4 (28 horas)
+* **Descripción sintética:** Fundamentos de la programación orientada a objetos, instanciación, constructores, atributos, métodos, encapsulamiento, visibilidad y referencia this.
