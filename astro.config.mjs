@@ -4,7 +4,7 @@ import starlight from '@astrojs/starlight';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://sdram58.github.io',
-  base: '/ApuntesProgramacion',
+  base: '/ProgramacionDAM',
   integrations: [
     starlight({
       title: 'Programación Java — DAM',

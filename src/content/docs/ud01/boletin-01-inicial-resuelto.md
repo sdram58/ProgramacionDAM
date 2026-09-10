@@ -3,7 +3,7 @@ title: 📝 Boletín 01 Inicial (Resuelto) — Algorítmica y Pseudocódigo
 description: Soluciones detalladas y paso a paso para los 8 ejercicios del Boletín Inicial de la Unidad 1.
 ---
 
-A continuación se detallan las soluciones completas y razonadas de cada uno de los ejercicios propuestos en el [Boletín Inicial](/ApuntesProgramacion/ud01/boletin-01-inicial/).
+A continuación se detallan las soluciones completas y razonadas de cada uno de los ejercicios propuestos en el [Boletín Inicial](/ProgramacionDAM/ud01/boletin-01-inicial/).
 
 ---
 
