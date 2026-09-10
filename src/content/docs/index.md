@@ -12,10 +12,15 @@ hero:
       link: /ProgramacionDAM/ud01/
       icon: right-arrow
       variant: primary
+    - text: 📽️ Ver Presentación
+      link: /ProgramacionDAM/presentacion.html
+      icon: open-book
+      variant: secondary
 ---
 
 <div class="download-bar">
-  <strong>📦 Descargas del curso:</strong>
+  <strong>📦 Descargas y Recursos:</strong>
+  <a class="download-btn" href="/ProgramacionDAM/presentacion.html" target="_blank">📽️ Presentación del Módulo</a>
   <a class="download-btn" href="/ProgramacionDAM/pdf/ProgramacionDAM-es.pdf" target="_blank">📄 Descargar PDF Completo</a>
   <a class="download-btn" href="/ProgramacionDAM/epub/ProgramacionDAM-cast.epub" target="_blank">📱 Descargar EPUB</a>
 </div>

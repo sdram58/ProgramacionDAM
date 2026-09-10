@@ -20,26 +20,13 @@ export default defineConfig({
       ],
       sidebar: [
         {
-          label: 'Temario Oficial',
+          label: '🚀 01. Introducción a la programación',
+          collapsed: true,
           items: [
-            { label: '🚀 01. Introducción a la programación', link: '/ud01/' },
-            { label: '🔤 02. Primeros pasos con Java', link: '/ud02/' },
-            { label: '🔀 03. Excepciones, bucles, arrays y métodos', link: '/ud03/', badge: { text: 'Próximamente', variant: 'note' } },
-            { label: '🏗️ 04. Clases y objetos', link: '/ud04/', badge: { text: 'Próximamente', variant: 'note' } },
-            { label: '🧬 05. Programación orientada a objetos avanzada', link: '/ud05/', badge: { text: 'Próximamente', variant: 'note' } },
-            { label: '📚 06. Genéricos y colecciones de datos', link: '/ud06/', badge: { text: 'Próximamente', variant: 'note' } },
-            { label: '⚡ 07. La API Stream', link: '/ud07/', badge: { text: 'Próximamente', variant: 'note' } },
-            { label: '📁 08. Ficheros y streams', link: '/ud08/', badge: { text: 'Próximamente', variant: 'note' } },
-            { label: '🖼️ 09. Aplicaciones controladas por eventos', link: '/ud09/', badge: { text: 'Próximamente', variant: 'note' } },
-            { label: '🗄️ 10. Trabajar con bases de datos relacionales', link: '/ud10/', badge: { text: 'Próximamente', variant: 'note' } },
-            { label: '🌐 11. Trabajar con bases de datos orientadas a objetos', link: '/ud11/', badge: { text: 'Próximamente', variant: 'note' } },
-          ],
-        },
-        {
-          label: '📝 Boletines de Ejercicios',
-          items: [
+            { label: '📖 Teoría y Contenidos', link: '/ud01/' },
             {
-              label: 'Unidad 01',
+              label: '📝 Boletines de Ejercicios',
+              collapsed: true,
               items: [
                 { label: 'Boletín Inicial', link: '/ud01/boletin-01-inicial/' },
                 { label: 'Boletín Inicial (Resuelto)', link: '/ud01/boletin-01-inicial-resuelto/' },
@@ -48,8 +35,16 @@ export default defineConfig({
                 { label: 'Retos y Extras', link: '/ud01/boletin-01-extras/' },
               ],
             },
+          ],
+        },
+        {
+          label: '🔤 02. Primeros pasos con Java',
+          collapsed: true,
+          items: [
+            { label: '📖 Teoría y Contenidos', link: '/ud02/' },
             {
-              label: 'Unidad 02',
+              label: '📝 Boletines de Ejercicios',
+              collapsed: true,
               items: [
                 { label: 'Boletín Inicial', link: '/ud02/boletin-02-inicial/' },
                 { label: 'Boletín Inicial (Resuelto)', link: '/ud02/boletin-02-inicial-resuelto/' },
@@ -60,6 +55,15 @@ export default defineConfig({
             },
           ],
         },
+        { label: '🔀 03. Excepciones, bucles, arrays y métodos', link: '/ud03/', badge: { text: 'Próximamente', variant: 'note' } },
+        { label: '🏗️ 04. Clases y objetos', link: '/ud04/', badge: { text: 'Próximamente', variant: 'note' } },
+        { label: '🧬 05. Programación orientada a objetos avanzada', link: '/ud05/', badge: { text: 'Próximamente', variant: 'note' } },
+        { label: '📚 06. Genéricos y colecciones de datos', link: '/ud06/', badge: { text: 'Próximamente', variant: 'note' } },
+        { label: '⚡ 07. La API Stream', link: '/ud07/', badge: { text: 'Próximamente', variant: 'note' } },
+        { label: '📁 08. Ficheros y streams', link: '/ud08/', badge: { text: 'Próximamente', variant: 'note' } },
+        { label: '🖼️ 09. Aplicaciones controladas por eventos', link: '/ud09/', badge: { text: 'Próximamente', variant: 'note' } },
+        { label: '🗄️ 10. Trabajar con bases de datos relacionales', link: '/ud10/', badge: { text: 'Próximamente', variant: 'note' } },
+        { label: '🌐 11. Trabajar con bases de datos orientadas a objetos', link: '/ud11/', badge: { text: 'Próximamente', variant: 'note' } },
       ],
     }),
   ],
