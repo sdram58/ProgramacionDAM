@@ -20,7 +20,8 @@ hero:
 
 <div class="download-bar">
   <strong>📦 Descargas y Recursos:</strong>
-  <a class="download-btn" href="/ProgramacionDAM/presentacion.html" target="_blank">📽️ Presentación del Módulo</a>
+  <a class="download-btn" href="/ProgramacionDAM/presentacion.html" target="_blank">📽️ Presentación Web</a>
+  <a class="download-btn" href="/ProgramacionDAM/presentacion.pdf" target="_blank">📑 Presentación (PDF Claro)</a>
   <a class="download-btn" href="/ProgramacionDAM/pdf/ProgramacionDAM-es.pdf" target="_blank">📄 Descargar PDF Completo</a>
   <a class="download-btn" href="/ProgramacionDAM/epub/ProgramacionDAM-cast.epub" target="_blank">📱 Descargar EPUB</a>
 </div>
