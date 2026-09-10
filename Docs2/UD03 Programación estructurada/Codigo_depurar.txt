@@ -1,0 +1,45 @@
+public void mian(String[] args)
+        int numero, valor;
+        Scanner leer = new Scanner(System.in));
+        
+        System.out.println("Esta es una aplicación de prueba.");
+        System.out.pintln("Trataremos de depurar el programa y observar...")
+        System.out.println("los errores más comunes...");
+        contador = 5;
+        System.out.println("Introduce un número de mes:");
+        numero = leer.nextIn();
+        
+        for(i=0;i<=contador){
+            valor = leer.nextDouble();
+            valor = 2* valor * valor;
+           
+            if(numero > 0)
+                System.out.printf("El número %d introducido es positivo.",numero);
+            else{
+                out.printf("El número %d introducido es negativo.",numero);
+                System.in.println("¿Seguro, en todos los casos lo es...?");        
+            }
+            
+            System.out.println("La estación del mes corresponde a: ");
+            
+            switch(valor){
+                case 1:
+                case 2: System.out.print("Invierno");
+                        break;
+                case 3:
+                case 4:
+                case 5: System.out.print("Primavera");
+                        break;
+                case 6:
+                case 7:
+                case 8: System.out.print("Verano");
+                        break;
+                case 9:
+                case 10:
+                case 11: System.out.print("Otoño");
+                         break;
+                case 12: System.out.print("Invierno");
+            }
+            
+            System.out.println(valor);
+    }

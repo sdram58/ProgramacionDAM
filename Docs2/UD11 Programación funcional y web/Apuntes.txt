@@ -1,0 +1,29 @@
+https://javiergarciaescobedo.es/despliegue-de-aplicaciones-web/86-servidores-de-aplicaciones/308-introduccion-a-jsp-a-traves-de-ejemplos
+
+
+https://docs.oracle.com/javase/tutorial/collections/interfaces/collection.html
+
+Aggregate Operations
+In JDK 8 and later, the preferred method of iterating over a collection is to obtain a stream and perform aggregate operations on it. Aggregate operations are often used in conjunction with lambda expressions to make programming more expressive, using less lines of code. The following code sequentially iterates through a collection of shapes and prints out the red objects:
+
+myShapesCollection.stream()
+.filter(e -> e.getColor() == Color.RED)
+.forEach(e -> System.out.println(e.getName()));
+Likewise, you could easily request a parallel stream, which might make sense if the collection is large enough and your computer has enough cores:
+
+myShapesCollection.parallelStream()
+.filter(e -> e.getColor() == Color.RED)
+.forEach(e -> System.out.println(e.getName()));
+There are many different ways to collect data with this API. For example, you might want to convert the elements of a Collection to String objects, then join them, separated by commas:
+
+    String joined = elements.stream()
+    .map(Object::toString)
+    .collect(Collectors.joining(", "));
+Or perhaps sum the salaries of all employees:
+
+int total = employees.stream()
+.collect(Collectors.summingInt(Employee::getSalary)));
+
+https://www.mclibre.org/consultar/python/
+
+https://www.north-47.com/java-8-streams/

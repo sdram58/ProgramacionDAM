@@ -1,0 +1,101 @@
+:root {
+  --sl-color-accent-low: #1c3d2b;
+  --sl-color-accent: #2d8a4e;
+  --sl-color-accent-high: #7ee0a1;
+  --sl-color-white: #ffffff;
+  --sl-color-gray-1: #eef2ef;
+  --sl-color-gray-2: #c5d1c8;
+  --sl-color-gray-3: #8a9e90;
+  --sl-color-gray-4: #4f6355;
+  --sl-color-gray-5: #28382d;
+  --sl-color-gray-6: #18241c;
+  --sl-color-black: #0e1711;
+  --sl-font-family: 'Geist Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+:root[data-theme='light'] {
+  --sl-color-accent-low: #c7edd4;
+  --sl-color-accent: #2d8a4e;
+  --sl-color-accent-high: #19522e;
+  --sl-color-white: #0e1711;
+  --sl-color-gray-1: #18241c;
+  --sl-color-gray-2: #28382d;
+  --sl-color-gray-3: #4f6355;
+  --sl-color-gray-4: #8a9e90;
+  --sl-color-gray-5: #c5d1c8;
+  --sl-color-gray-6: #eef2ef;
+  --sl-color-black: #ffffff;
+}
+
+/* Botón estilo enlace degradado verde para las cards */
+.unit-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #2d8a4e 0%, #1e6137 100%);
+  color: #ffffff !important;
+  text-decoration: none !important;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin-top: 0.75rem;
+}
+
+.unit-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(45, 138, 78, 0.35);
+  color: #ffffff !important;
+}
+
+/* Download bar */
+.download-bar {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: rgba(45, 138, 78, 0.08);
+  border: 1px solid rgba(45, 138, 78, 0.25);
+  border-radius: 8px;
+}
+
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  background: var(--sl-color-accent);
+  color: #fff !important;
+  text-decoration: none !important;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 4px;
+}
+
+/* Asides y Callouts Premium */
+.starlight-aside {
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin: 1.5rem 0 !important;
+  padding: 1rem 1.25rem !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.starlight-aside:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.starlight-aside__title {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  font-weight: 700 !important;
+  font-size: 1.05rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.starlight-aside__icon {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+}

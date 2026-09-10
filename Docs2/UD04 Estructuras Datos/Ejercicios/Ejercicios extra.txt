@@ -1,0 +1,36 @@
+1) Desarrollar un programa que, para cada venta que se realice, actualice la información almacenada en una matriz (Nx3), la cual representará una tabla con los siguientes datos:
+
+"código postal", "cantidad de ventas", "coste total de ventas en euros"
+
+Ejemplo:
+
+46002, 3, 136.8
+
+El programa deberá mostrar un menú con estas opciones: introducir venta, obtener código postal con más ventas, obtener código postal con mayor coste de ventas, obtener código postal con mayor coste por venta.
+
+2) Programa que, dado un nombre de fichero extraiga su extensión. Luego, la buscará en una matriz y devolverá el tipo de archivo y con qué programa se puede abrir.
+
+3) Supongamos que M es una matriz bidimensional que tiene R filas y C columnas. La transpuesta de M se define como una matriz T que tiene C filas y R columnas tales que T[i][j] = M[j][i] para cada i y j. Escribe un programa que, a partir de una matriz de tipo int[][] obtenga la transposición de esa matriz.
+
+4) Dada una cadena (en formato String), elimina los caracteres duplicados adyacentes. En otras palabras, elimina todos los mismos caracteres consecutivos excepto el primero.
+
+Ejemplo:
+
+Cadena de entrada:  AABCDDDEE
+Salida del programa: ABCDE
+
+--------------------
+5) A partir de una frase, almacenada en un String que le pediremos al usuario. invertir el orden de los caracteres de las palabras que sean posición impar en la frase.
+
+Ejemplo:
+
+Cadena de entrada: El árbol es muy grande
+Salida del programa: lE árbol se muy ednarg
+
+-----------
+6) Escribe un algoritmo eficiente para encontrar el prefijo común más largo (longest common prefix) entre un conjunto dado de cadenas introducidas por el usuario separadas por espacios. No debe tener en cuenta acentos:
+
+Ejemplo:
+
+Entrada: técnica, técnico, tecnología, técnológico
+Salida: tecn

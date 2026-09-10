@@ -1,0 +1,14 @@
+# Dependencias
+node_modules/
+
+# Builds y temporales
+dist/
+.astro/
+
+# Variables de entorno
+.env
+.env.*
+
+# Sistema
+.DS_Store
+Thumbs.db

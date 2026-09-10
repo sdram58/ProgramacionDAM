@@ -1,0 +1,516 @@
+﻿/**
+ * 5: Programa que lee un número positivo N y calcule y visualice su factorial
+ */
+    public static void main(String[] args) {
+        Scanner leer = new Scanner(System.in);
+        int num, fact = 1;
+
+        System.out.print("Introduce el número: ");
+        num = leer.nextInt();
+
+        while (num > 1) {
+            fact = fact * num;
+            num--;
+        }
+
+        System.out.println("El factorial es " + fact);
+    }
+	
+/**
+ * 6: Programa que lee 10 números no nulos y visualice un mensaje de si ha leído algún número negativo o no.
+ */	
+public static void main(String[] args) {
+	Scanner leer = new Scanner(System.in);
+	int cont, num;
+	boolean negativo;
+	
+	negativo = false; //se podría inicializar directamente al declarar el boolean
+
+	for (cont = 1; cont <= 10; cont++){
+		System.out.print("Introduce el número " + cont + " de " + 10 + ": ");
+		num = leer.nextInt();
+
+		if (num < 0) {
+			negativo = true;
+		}
+	}
+
+	if (negativo == true){
+		System.out.print("Se ha introducido algún número negativo.");
+	} else {
+		System.out.println("NO se han introducido números negativos.");
+	}	   
+}
+	
+/**
+ * 7: Programa que lee 10 números no nulos y visualice un mensaje indicando cuántos son positivos y cuantos negativos.
+ * Cuando lo revises, observa que la solución es muy similar a la anterior, sólo cambia el condicional que hay dentro del bucle
+ */
+
+public static void main(String[] args) {
+
+	Scanner entrada = new Scanner(System.in);
+
+	int cont, num, pos, neg;
+
+	pos = 0;
+	neg = 0;
+
+	for (cont = 1; cont <= 10; cont++){
+		System.out.print("Introduce el número " + cont + " de " + 10 + ": ");
+		num = entrada.nextInt();
+
+		if (num < 0) {
+			neg++;
+		} else {
+			pos++;
+		}
+	}
+	System.out.println("Se han introducido " + pos + " número/s positivo/s.");
+	System.out.println("Se han introducido " + neg + " número/s negativo/s.");
+}
+
+
+/**
+ * 8: Programa que lee una secuencia de números no nulos, terminada con la introducción de un 0, y obtiene e imprime si ha leído algún número
+ * negativo, cuantos positivos y cuantos negativos.
+ */
+public static void main(String[] args) {
+	Scanner leer = new Scanner(System.in);
+	int n, pos = 0, neg = 0;
+
+	System.out.print("Introduce un número (0 para acabar): ");
+	n = leer.nextInt();
+
+	while (n != 0) {
+		if (n < 0) {
+			neg++;
+		} else {
+			pos++;
+		}
+
+		System.out.print("Introduce un número: ");
+		n = leer.nextInt();
+	}
+
+	if (neg > 0) {
+		System.out.println("Se han introducido números negativos.");
+	}
+
+	System.out.println("Se han introducido " + pos + " número/s positivo/s.");
+	System.out.println("Se han introducido " + neg + " número/s negativo/s.");
+}
+
+/**
+ * 9: Programa que calcula y escribe la suma y el producto de los 10 primeros números naturales.
+ */
+
+public static void main(String[] args) {
+	int i, suma, producto;
+
+	suma = 0;
+	producto = 1;
+
+	for (i = 1; i <= 10; i++) {
+		suma = suma + i;
+		producto = producto * i;
+	}
+
+	System.out.println("La suma es " + suma + " y el producto es " + producto);
+}
+
+
+/**
+ * 10: Programa que lee una secuencia de notas (con valores que van de 0 a 10) que termina con el valor -1 y nos dice si hubo 
+ * o no alguna nota con valor 10.
+ */
+public static void main(String[] args) {
+
+	Scanner entrada = new Scanner(System.in);
+
+	float nota;
+	boolean hay10 = false;
+
+	System.out.print("Introduce una nota entre 0 y 10 (-1 para salir): ");
+	nota = entrada.nextFloat();
+
+	while (nota != -1) {
+		if (nota == 10) {
+			hay10 = true;
+		}
+
+		System.out.print("Introduce una nota entre 0 y 10 (-1 para salir): ");
+		nota = entrada.nextFloat();
+	}
+
+	if (hay10) // equivalente a (hay10 == true)
+	{
+		System.out.println("Hay al menos una nota de 10");
+	} else {
+		System.out.println("No hay notas de 10");
+	}
+}
+
+// Ejercicio 11
+
+public static void main(String[] args) {
+        int pares, impares, cont;
+
+        pares = 0;
+        impares = 0;
+
+        for (cont = 100; cont <= 200; cont++) {
+            if (cont % 2 == 0) {
+                pares = pares + cont;
+            } else {
+                impares += cont; //equivalente a impares = impares + cont;
+            }
+        }
+
+        System.out.println("La suma total de los pares es " + pares);
+        System.out.println("La suma total de los impares es " + impares);
+    }
+	
+// Ejercicio 12
+
+public static void main(String[] args) {
+        
+        Scanner entrada = new Scanner(System.in);
+        
+        float numA, potencia;
+        int numB, cont, veces; // Utilizamos la variable veces para saber el número de iteraciones del bucle.
+
+        potencia = 1;
+
+        System.out.print("Introduce el número A (real): ");
+        numA = entrada.nextFloat();
+
+        System.out.print("Introduce el número B (entero): ");
+        numB = entrada.nextInt();
+
+        if (numB < 0) {
+            veces = -numB; // Si el exponente es negativo lo convertimos a positivo.
+        } else {
+            veces = numB;
+        }
+
+        for (cont = 1; cont <= veces; cont++) {
+            potencia = potencia * numA;
+        }
+
+        if (numB < 0) {
+            potencia = 1 / potencia;
+        }
+
+        System.out.println(numA + " elevado a " + numB + " es " + potencia);
+    }
+
+// Ejercicio 13
+
+ public static void main(String[] args) {
+
+        Scanner entrada = new Scanner(System.in);
+
+        int num, max, min, anterior;
+        boolean seguir;
+        char respuesta;
+
+        seguir = true;
+        max = 100;
+        min = 1;
+        anterior = 0;
+
+        while (seguir) // Equivalente a (seguir == true)
+        {
+            num = (max + min) / 2;
+
+            if (num == anterior) {
+                num++;
+            } // Entender para que se utiliza.
+
+            System.out.print("El número es " + num + "? (Escribe: =, < o >): ");
+            respuesta = entrada.nextLine().charAt(0); // Leemos un caracter.
+
+            switch (respuesta) {
+                case '<':
+                    max = num;
+                    anterior = num;
+                    break;
+                case '=':
+                    seguir = false;
+                    break;
+                case '>':
+                    min = num;
+                    anterior = num;
+                    break;
+            }
+        }
+
+        System.out.println("Lo acerte!!");
+    }
+
+// Ejercicio 14
+
+public static void main(String[] args) {
+        Scanner entrada = new Scanner(System.in);
+        int cantidad, numBilletes, billete;
+
+        billete = 500;
+
+        System.out.print("Introduce una cantidad (múltiplo de 5) en €: ");
+        cantidad = entrada.nextInt();
+
+        while (cantidad > 0) {
+            numBilletes = cantidad / billete;
+            cantidad = cantidad % billete;
+
+            System.out.println(numBilletes + " billetes de " + billete);
+
+            switch (billete) {
+                case 500:
+                    billete = 200;
+                    break;
+                case 200:
+                    billete = 100;
+                    break;
+                case 100:
+                    billete = 50;
+                    break;
+                case 50:
+                    billete = 20;
+                    break;
+                case 20:
+                    billete = 10;
+                    break;
+                case 10:
+                    billete = 5;
+                    break;
+            }
+
+        }
+    }
+
+// Ejercicio 15
+
+public static void main(String[] args) {
+        int cuenta, n;
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Dime un número: ");
+        n = sc.nextInt();
+        cuenta=0;
+
+        for (int i = 3; i <= n; i = i + 3) {
+            cuenta++;
+
+        }
+
+        System.out.println("Cantidad de multiplos de 3: " + cuenta);
+
+    }
+
+//16. Escribir un programa en java que pida un número entero positivo y nos diga si es primo o no.
+
+import java.util.Scanner;
+
+public class _16 {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        int n, contador;
+        boolean esprimo = true;;
+
+        do {
+            System.out.print("Dime un número: ");
+            n = sc.nextInt();
+            if (n <= 0) {
+                System.out.println("El número debe ser entero y positivo");
+            }
+        } while (n <= 0);
+
+        contador = n - 1;
+        while (esprimo == true && contador > 1) {
+            if (n % contador == 0) {
+                esprimo = false;
+            }
+            contador--;
+        }
+
+        if (esprimo) {
+            System.out.println("Es primo.");
+        } else {
+            System.out.println("No es primo.");
+        }
+
+    }
+
+}
+
+//17.-Diseña un algoritmo que lea y acepte únicamente aquellos 
+//que sean mayores que el último dado.
+//La introducción de números finaliza con la introducción
+//de un 0. Al final se mostrará:
+//a. El total de números introducidos, excluído el 0.
+//b. El número de fallos cometidos.
+
+import java.util.Scanner;
+
+public class _17 {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int n, total = 0, fallos = 0, ant = 0;
+
+        System.out.print("Dime un número inicial: ");
+        ant = sc.nextInt();
+        do {
+             total++;
+            System.out.print("Dime un número: ");
+            n = sc.nextInt();
+
+            if (n <= ant && n != 0) {
+                System.out.println("Fallo es menor.");
+                fallos++;            
+
+            }
+            ant=n;
+
+        } while (n != 0);
+
+        System.out.println("Total de números introducidos: " + total);
+        System.out.println("Números fallados: " + fallos);
+    }
+
+}
+
+//18. -Calcular la suma de los cuadrados de los 5 primeros números naturales.
+import java.util.Scanner;
+
+public class _18 {
+
+    public static void main(String[] args) {
+        int resultado = 0;
+        for (int i = 1; i <= 5; i++) {
+            resultado += i * i;
+        }
+
+        System.out.println("" + resultado);
+
+    }
+
+}
+
+//19.-Diseñar un algoritmo que lee un número y seguidamente escribe el carácter “*”, 
+//un número de veces igual al valor numérico leído.
+//En aquellos casos en que el valor leído no sea positivo
+//se deberá escribir un único asterisco.
+
+import java.util.Scanner;
+
+public class _19 {
+
+    public static void main(String[] args) {
+        int n;
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Dime un número: ");
+        n = sc.nextInt();
+
+        for (int i = 1; i <= n; i++) {
+            System.out.print("* ");
+        }
+        System.out.println("");
+
+        if (n < 0) {
+            System.out.println("*");
+        }
+
+    }
+
+}
+
+//20.Codifica un programa que pida un número entero, entre 0 y 20, 
+//y que muestre en pantalla una secuencia de números, repitiendo 
+//cada número tantas veces como el valor que representa.
+
+import java.util.Scanner;
+
+public class _20 {
+
+    public static void main(String[] args) {
+        int numero;
+
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Dime un número: ");
+        numero = sc.nextInt();
+        for (int i = 1; i <= numero; i++) {
+            for (int n = 1; n <= i; n++) {
+                System.out.print(i);
+            }
+            System.out.println();
+        }
+
+    }
+
+}
+
+
+//21. Introducir A y B (que sea mayor que A). Visualizar los números de A hasta B e indicar cuantos hay que sean pares.
+import java.util.Scanner;
+
+public class _21 {
+
+    public static void main(String[] args) {
+
+        int a, b, pares = 0;
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Dime un número: ");
+        a = sc.nextInt();
+        System.out.print("Dime otro número mayor al anterior: ");
+        b = sc.nextInt();
+        for (int i = a; i <= b; i++) {
+            System.out.print(i + " ");
+            if (i % 2 == 0) {
+                pares++;
+            }
+        }
+        System.out.println("\nLa cantidad de pares son: " + pares);
+    }
+
+}
+
+
+
+import java.util.Scanner;
+
+
+public class _22 {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n;
+        int x = 1, s = 1;
+        System.out.print("Dime un número para realizar su pirámide: ");
+        n = sc.nextInt();
+
+        for (int i = 1; i <= n; i++) { //para filas
+            for (int j = x; j <= n; j++) { //espacios en blanco en cada fila
+                System.out.print(" ");
+            }
+            for (int l = 1; l <= s; l++) { //asteriscos en cada fila
+                System.out.print("*");
+            }
+
+            s += 2;
+            x++;
+            System.out.println("");
+        }
+    }
+}
+
+

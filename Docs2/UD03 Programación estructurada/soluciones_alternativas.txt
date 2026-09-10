@@ -1,0 +1,75 @@
+// Solución alternativa ejercicio 14 boletín
+
+import java.util.Scanner;
+
+public class App {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Introduce una cantidad de euros (múltiplo de 5 €): ");
+        int cantidad = scanner.nextInt();
+        int bill500 = 0, bill200 = 0, bill100 = 0, bill50 = 0, bill20 = 0, bill10 = 0, bill5 = 0;
+
+        if (cantidad % 5 != 0) {
+            System.out.println("La cantidad introducida no es múltiplo de 5!");
+        } else {
+
+            while (cantidad > 0) {
+                if (cantidad >= 500) {
+                    bill500 = cantidad / 500; //¿cuántos billetes de ese tipo?
+                    cantidad %= 500; //restar cantidad de billetes de este valor
+                } else if (cantidad >= 200) {
+                    bill200 = cantidad / 200;
+                    cantidad %= 200;
+                } else if (cantidad >= 100) {
+                    bill100 = cantidad / 100;
+                    cantidad %= 100;
+                } else if (cantidad >= 50) {
+                    bill50 = cantidad / 50;
+                    cantidad %= 50;
+                } else if (cantidad >= 20) {
+                    bill20 = cantidad / 20;
+                    cantidad %= 20;
+                } else if (cantidad >= 10) {
+                    bill10 = cantidad / 10;
+                    cantidad %= 10;
+                } else if (cantidad >= 5) {
+                    bill5 = cantidad / 5;
+                    cantidad %= 5;
+                }
+            }
+
+            System.out.print((bill500 > 0 ? bill500 + " billetes de 500 ":""));
+            System.out.print((bill200 > 0 ? bill200 + " billetes de 200 ":""));
+            System.out.print((bill100 > 0 ? bill100 + " billetes de 100 ":""));
+            System.out.print((bill50 > 0 ? bill50 + " billetes de 50 ":""));
+            System.out.print((bill20 > 0 ? bill20 + " billetes de 20 ":""));
+            System.out.print((bill10 > 0 ? bill10 + " billetes de 10 ":""));
+            System.out.print((bill5 > 0 ? bill5 + " billetes de 5 ":""));
+        }
+    }
+}
+
+
+// Solución alternativa ejercicio 16 boletín
+
+import java.util.Scanner;
+
+public class Ej16 {
+    public static void main(String[] args) {
+        int n, i;
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Dime un número: ");
+        n = sc.nextInt();
+
+        for (i = 2; i < n; i++) {
+            if (n % i == 0) {
+                System.out.println("No es primo.");
+                break;
+            }
+        }
+        if (i == n) { //Investiga porqué
+            System.out.println("Es primo.");
+        }
+    }
+}

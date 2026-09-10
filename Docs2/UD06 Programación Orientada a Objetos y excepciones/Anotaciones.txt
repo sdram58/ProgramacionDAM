@@ -1,0 +1,18 @@
+MEJORAS PARA CURSO SIGUIENTE
+---------------------------------
+¿meter Genéricos?
+
+
+Pasar la parte de ArrayList al final del tema 6 y quitarlo del tema 7.
+
+Ejercicios
+https://www.discoduroderoer.es/ejercicios-propuestos-y-resueltos-programacion-orientado-a-objetos-java/
+-------------------------
+
+https://www.crehana.com/es/blog/desarrollo-web/programacion-orientada-objetos/
+
+https://desarrolloweb.com/articulos/499.php
+
+https://www.ciberaula.com/cursos/java/programacion_orientada_objetos.php
+
+Proponer este ejercicio: crear objeto de tipo "Fracción" e implementar métodos como multiplicar y dividir...

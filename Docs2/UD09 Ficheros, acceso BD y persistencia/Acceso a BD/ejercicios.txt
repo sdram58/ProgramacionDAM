@@ -1,0 +1,15 @@
+Realiza una aplicación que cargue y transforme información desde un fichero de texto a una tabla de base de datos. Para ello, tendrás que cargar los datos del fichero de prueba que está en "Documentos.zip" llamado "notas.txt". Esos datos deben cargarse en una tabla de una base de datos, la cual tendrás que crear con la estructura que consideres conveniente para la carga. 
+
+La aplicación tendrá interfaz gráfica. El diseño debe permitir seleccionar el fichero que se desee manualmente (es decir, no se hará la carga directa del fichero en código). Leerá la información y mostrará una previsualización en un control JTable. El usuario podrá entonces pulsar un botón, si está conforme con los datos que ve, para que se efectúe la carga en la base de datos.
+
+Ampliaciones. Busca soluciones para resolver las siguientes situaciones:
+* ¿Qué sucedería si la tabla de destino no estuviera vacía?
+* ¿y si ya tuviera alguna fila con los mismos datos?
+* ¿y si se intentara cargar el mismo fichero 2 veces seguidas?
+* ¿y si el fichero seleccionado no fuera "notas.txt"?
+* Permite "vacíar" el contenido de la tabla pulsando un botón (que solicitará confirmación al usuario vía JOptionPane).
+
+-------------------------------------------------------------
+
+Realiza una aplicación de gestión de nóminas (y de facturas, pedidos).
+

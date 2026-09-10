@@ -1,0 +1,25 @@
+Determinar el tiempo transcurrido entre dos horas del día (darlo en horas y minutos).
+
+Proceso Calcular_tiempo_dos_horas
+Escribir "Programa para clacular el Tiempo transcurrido entre dos horas";
+Escribir "Hora-1 (h1, m1)"; //H-1 expresado en Horas:minutos
+Leer h1; //introduce h1 por teclado
+Leer m1; //introduce m1 por teclado
+Escribir "Hora-2 (h2, m2)";
+Leer h2;
+Leer m2;
+dh<-(h2-h1); //operador diferencia_horas
+dm<-(m2-m1); //operador diferencia_minutos
+Si dh<0 Entonces //si dh es negativo (<0) volver positivo
+dh<-(-1*dh) // multiplicar por -1
+Sino
+dh<-dh // dh>0 positivo, no se 'hace ninguna operación'
+FinSi
+Si dm<0 Entonces //idem a la línea 12
+dm<-(-1*dm) //idem a la línea 13
+Sino
+dm<-dm //idem a la línea 15
+FinSi
+Escribir "La El tiempo trascurrido entre H-1 y H-2 es: ", dh, " horas ",
+dm, " minutos ";
+FinProceso

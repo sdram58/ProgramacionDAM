@@ -1,0 +1,23 @@
+public class Main
+{
+    public static void main(String[] args)
+    {
+        int hora, minuto;
+        hora = 11;
+        minuto = 59;
+        
+        System.out.print ("La hora actual es ");
+        System.out.print (hora);
+        System.out.print (":");
+        System.out.print (minuto);
+        System.out.println (".");
+        
+        //Optimizar código: la siguiente instrucción hace lo mismo, ¿cuál prefieres?
+        
+        System.out.println("La hora actual es " + hora + ":" + minuto + ".");
+    }
+}
+
+/*****************************************************/
+
+Hablar de PRINTF para formatear la salida

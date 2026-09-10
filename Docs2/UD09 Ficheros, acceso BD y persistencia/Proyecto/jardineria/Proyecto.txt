@@ -1,0 +1,39 @@
+Departamento de Jardinería de Meroy Lerlin
+
+La empresa en la que trabajas ha recibido el encargo de desarrollar una aplicación de gestión para el departamento de jardinería de Meroy Lerlin. Se trata de una aplicación grande, en la que vais a participar 18 desarrolladores, y por ello las tareas del proyecto se han dividido en pequeños equipos de trabajo de 2 desarrolladores.
+
+Cada equipo trabajará en una parte de la misma, que será dividida en las siguientes áreas (con sus operaciones básicas a realizar):
+
+* Gestión de clientes (y formas de pago)
+- Nuevo cliente
+- Borrar cliente
+- Actualizar datos de cliente
+- Buscar cliente por...
+
+* Gestión de pedidos (y detalles)
+- Nuevo pedido
+- Modificar pedido
+- Borrar pedido
+- Buscar pedido
+
+* Gestión de productos (y gamas)
+- Nuevo producto
+- Borrar producto
+- Modificar producto
+- Buscar producto
+
+* Gestión de empleados (y oficinas)
+- Nuevo empleado
+- Borrar empleado
+- Modificar empleado
+- Buscar empleado
+
+Los equipos estarán formados por 2 personas que tendrán que trabajar colaborativamente. Para controlar el seguimiento, y en pro de las buenas prácticas, se tendrá que trabajar en un entorno de control de versiones: GitHub.
+
+Para ello, os registraréis y uno de los integrantes creará un repositorio privado, al cual dará acceso al compañero y al profesor.
+
+La integración final la realizará el arquitecto de software, que es el profesor, y mostrará al final la aplicación conseguida entre todos.
+
+REQUISITOS
+---------------------
+Construye las 2 pantallas de gestión de cada apartado. Las pantallas tendrán que mostrar los campos a los que se debe poder acceder, y los botones u otros controles que permitan interactuar correctamente con la aplicación. La lógica de programación debe controlar y contemplar aspectos que violarían la integridad de la base de datos.

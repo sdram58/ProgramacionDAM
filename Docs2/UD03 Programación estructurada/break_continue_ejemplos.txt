@@ -1,0 +1,38 @@
+// Programa Java para ilustrar usando
+// break para salir del bucle
+class BreakLoopDemo
+{
+    public static void main(String args[])
+    {
+        // Inicialmente, el bucle está configurado para ejecutarse desde 0-9
+        for (int i = 0; i < 10; i++)
+        {
+            // termina el bucle cuando llega a 5.
+            if (i == 5)
+                break;
+ 
+            System.out.println("i: " + i);
+        }
+        System.out.println("Bucle completo.");
+    }
+}
+
+/*****************************************************/
+// Programa Java para ilustrar usando
+// continue en una declaración if
+class ContinueDemo
+{
+    public static void main(String args[])
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            // Si el número es par
+            // omitir y continuar
+            if (i%2 == 0)
+                continue;
+ 
+            // Si el número es impar, imprímalo
+            System.out.print(i + " ");
+        }
+    }
+}

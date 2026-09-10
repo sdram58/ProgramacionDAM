@@ -1,0 +1,53 @@
+private void jButtonSumaActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        try {
+		int num1 = Integer.parseInt(jTextFieldNumero.getText());
+                int num2 = Integer.parseInt(jTextFieldNumero2.getText());
+                int suma = num1 + num2;
+		jLabelResultado.setText(String.valueOf(suma));
+	
+        } catch (NumberFormatException nfe){
+		jLabelResultado.setText("No es un número entero!");
+	}
+    }                                           
+
+    private void jTextFieldNumero2ActionPerformed(java.awt.event.ActionEvent evt) {                                                  
+        // TODO add your handling code here:
+    }                                                 
+
+    private void jButtonRestaActionPerformed(java.awt.event.ActionEvent evt) {                                             
+        try {
+		int num1 = Integer.parseInt(jTextFieldNumero.getText());
+                int num2 = Integer.parseInt(jTextFieldNumero2.getText());
+                int resta = num1 - num2;
+		jLabelResultado.setText(String.valueOf(resta));
+	
+        } catch (NumberFormatException nfe){
+		jLabelResultado.setText("No es un número entero!");
+	}        // TODO add your handling code here:
+    }                                            
+
+    private void jButtonMultiplicaActionPerformed(java.awt.event.ActionEvent evt) {                                                  
+        try {
+		int num1 = Integer.parseInt(jTextFieldNumero.getText());
+                int num2 = Integer.parseInt(jTextFieldNumero2.getText());
+                int multiplicacion = num1 * num2;
+		jLabelResultado.setText(String.valueOf(multiplicacion));
+	
+        } catch (NumberFormatException nfe){
+		jLabelResultado.setText("No es un número entero!");
+	}        // TODO add your handling code here:
+    }                                                 
+
+    private void jButtonDividirActionPerformed(java.awt.event.ActionEvent evt) {                                               
+      try {
+		int num1 = Integer.parseInt(jTextFieldNumero.getText());
+                int num2 = Integer.parseInt(jTextFieldNumero2.getText());
+                int division = num1 / num2;
+		jLabelResultado.setText(String.valueOf(division));
+	
+        } catch (NumberFormatException nfe){
+		jLabelResultado.setText("No es un número entero!");
+	} catch (ArithmeticException e){
+                jLabelResultado.setText("No se puede dividir por cero!");
+        } 
+    }                              

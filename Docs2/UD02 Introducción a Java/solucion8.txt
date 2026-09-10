@@ -1,0 +1,27 @@
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.Scanner;
+
+public class Main
+{
+    public static void main(String[] args)
+    {
+        int a=2, b=5;
+        
+        double x, y, z;
+        
+        DecimalFormat decimales = new DecimalFormat("0.####");
+        decimales.setRoundingMode(RoundingMode.DOWN); 
+
+        x = ((double)(a+b)/(double)(b+a+1))*Math.sqrt(Math.pow(a,3));
+        y = (Math.pow(a,2)+2*a*b+Math.pow(b,2))/(1/(double)a+2);
+        z = Math.log(Math.pow(Math.E,2))-Math.pow((a+Math.pow(b,3)),2)+((2+b)/(Math.cbrt(Math.pow((a+2*b),2))));
+        
+        System.out.println("Programa del ejercicio 8. Fin de la UD02.");
+        System.out.println("Este ya tiene sustancia. Socorro.");
+        System.out.println("--------------------------------------------");        
+        System.out.println("El resultado de x es: " + decimales.format(x));
+        System.out.println("El resultado de y es: " + decimales.format(y));
+        System.out.println("El resultado de z es: " + decimales.format(z));
+    }
+}

@@ -1,0 +1,29 @@
+Solución A2
+-----------------
+AÑADIR ESTOS ELEMENTOS AL EJERCICIO A1	
+1. Añadir parámetro boolean con nombre "info" a la función muestraInfoRuta.
+2. Preguntarle al usuario si quiere más información o no, de la ruta que indique.
+3. Si el usuario indica "sí", llamamos a muestraInfoRuta pasando un true en el parámetro info; si indica "no" llamamos con false.
+4. Dentro de muestraInfoRuta, si "info" es true, mostramos tamaño y fecha de última modificación; si info es "false" lo dejamos con el ejercicio A1.
+
+Solución B2
+-----------------
+1. Crear stream de lectura para alumnos_notas.txt con Scanner o FileReader+BufferedReader
+2. Leer, mediante un bucle, el contenido del fichero cargándolo en un String.
+3. Separar los elementos del String usando "split", el delimitador espacio (" ") y volcando el resultado en un array de String.
+4. Ahora podemos procesar numéricamente las posiciones que hay tras la 0 y la 1 (esas contienen nombre y apellido), hasta el final de línea (se puede usar como final el tamaño - 2).
+5. Sería útil almacenar los datos en una nueva estructura con el formato ("Nombre Apellido NotaMedia"), y ordenar las filas basándonos en la NotaMedia. Si quieres usar .sort la situación se complica bastante, sería más recomendable ordenar la estructura manualmente mediante el método de la burbuja (ver ordenación en tema 4).
+6. Cuando esté ordenado, ya podemos recorrerlo y mostrar en pantalla el resultado.
+
+Solución B3
+-----------------
+Elementos básicos:
+1. Crear streams de lectura para usa_personas.txt con Scanner o FileReader+BufferedReader
+2. Leer, con un bucle, el contenido del fichero y cargarlo en un ArrayList de tipo String. Cada línea leída será un String diferente.
+2. Ordenar la estructura de datos con método .sort.
+3. Escribir el contenido del ArrayList, iterando con un bucle, en el fichero de salida usa_personas_sorted.txt mediante PrintWriter+FileWriter.
+4. Cerrar todos los streams abiertos.
+
+Elementos a añadir:
+a. Pedir nombre de fichero de lectura y de escritura, y operar con ellos.
+

@@ -1,0 +1,4 @@
+int a = 2;
+int v = ++a + ++a * ++a;
+
+¿resultado de v?

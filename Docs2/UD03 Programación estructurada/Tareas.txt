@@ -1,0 +1,57 @@
+Hablar de visibilidad de variables
+
+Explicar bucles anidados con este vídeo:
+https://www.youtube.com/watch?v=5v1w0V4GPrE
+-----------------------
+
+Explicar tipos de errores en tiempo de compilación.
+
+----------------------- EJERCICIO PARA DEPURAR ERRORES --------------------------------
+import java.util.Scanner;
+public class Main {
+    
+    public void mian(String[] args)
+        int numero;
+        Scanner leer = new Scanner(System.in));
+        
+        System.out.println("Esta es una aplicación de prueba.");
+        System.out.pintln("Trataremos de depurar el programa y observar...")
+        System.out.println("los errores más comunes en tiempo de compilación.");
+        
+        System.out.println("Introduce un número cualquiera:");
+        numero = leer.nextInt();
+        
+        if(numero > 0)
+            System.out.printf("El número %d introducido es positivo.",numero);
+        else{
+            out.printf("El número %d introducido es negativo.",numero);
+            System.out.println("¿Seguro, en todos los casos lo es...?");        
+    }
+    
+}
+------------------------------------------------------------------
+Explicar aspectos básicos de funciones dado que ya aparecen...
+pow(x,y)
+Similitud con funciones matemáticas...
+f(x) = x^2
+pow(x,y) = x^y
+-------------------------------------------------------------------
+Sentencias CONTINUE y BREAK en condicionales dentro de bucles
+
+while (x < 5) {
+   x = x + 1;
+   if (x == 3) continue;
+   System.out.println(x); 
+}  
+
+while (x < 5) {
+   x = x + 1; 
+   if (x == 3) break;
+   System.out.println(x); 
+}  
+--------------------------------------
+Lectura de la línea de comandos (String[] args)
+Ámbitos de variables:
+https://javadesdecero.es/basico/ambito-variables-scope/
+http://www.davidmarco.es/articulo/ambito-de-variables-en-java
+* Operadores desplazamiento de bits

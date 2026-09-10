@@ -1,0 +1,20 @@
+create database alumnos
+
+use alumnos
+
+CREATE TABLE notas (
+    nombre VARCHAR(50),
+    apellido VARCHAR(50),
+    nota1 INT,
+    nota2 INT,
+    nota3 INT,
+    nota4 INT,
+    nota5 INT,
+    nota6 INT,
+    nota7 INT,
+    nota8 INT,
+    nota9 INT,
+    nota10 INT,
+    nota11 INT,
+    nota12 INT
+);

@@ -1,0 +1,8 @@
+Crea una aplicación web basada en Java EE para mostrar en el navegador el contenido de una tabla de la base de datos "jardineria". Para ello:
+
+a) Crea un proyecto "Web Application" basado en el servidor GlassFish.
+
+b) El index.html debe ser una web sencilla pero con un poco de formato (colores, título, etc...) que contendrá un formulario para pedir al usuario el nombre de la tabla a mostrar (ejemplo: clientes). Al pulsar el botón "Consultar" se mandará una request con el valor del campo del formulario a un servlet.
+
+c) Crea el servlet que atenderá la petición y generará la respuesta. El servlet usará el valor recibido por la request para hacer la consulta a la tabla correspondiente. Procesa el ResultSet para construir una web de respuesta. Dicha web contendrá una tabla html (con un poco de formato aseado) con el contenido de la tabla de la base de datos consultada.
+

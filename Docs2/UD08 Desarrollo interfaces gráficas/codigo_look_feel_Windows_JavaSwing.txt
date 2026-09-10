@@ -1,0 +1,15 @@
+try{
+ 
+            InterfazSimple.setDefaultLookAndFeelDecorated(true);
+            //JDialog.setDefaultLookAndFeelDecorated(true);
+            
+	    javax.swing.UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+            //javax.swing.UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+            //javax.swing.UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            //javax.swing.UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+// OJO, PROBLEMA DE INCOMPATIBILIDAD CON OTRAS PLATAFORMAS...

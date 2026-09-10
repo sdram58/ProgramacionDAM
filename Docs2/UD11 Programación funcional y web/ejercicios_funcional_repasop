@@ -1,0 +1,23 @@
+//A partir de esta estructura, obtener con streams lo que se solicita
+List<Integer> number = Arrays.asList(2,3,4,5);
+
+//Obtener una nueva lista sólo con los números pares
+List<Integer> listapares = number.stream()
+                  .filter(i -> i % 2 == 0)
+                  .collect(Collectors.toList());
+                  
+//Obtener una nueva lista con los números incrementados en 1
+List<Integer> incrementados = number.stream()
+                  .map(i -> i + 1)
+                  .collect(Collectors.toList());
+                  
+//A partir de esta lista, obtener en pantalla los nombres que empiecen por J
+List<String> result = names.stream().filter(s->s.startsWith("S"))
+                    .collect(Collectors.toList());
+                    
+//Obtener los cuadrados de cada número
+Set<Integer> squareSet =   numbers.stream()
+                    .map(x->x*x)
+                    .collect(Collectors.toSet());
+    
+System.out.println(squareSet);

@@ -1,0 +1,23 @@
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
+public class Ejercicio9 {
+    public static void main(String[] args) {
+        int a = 2, b = 5;
+        float x, y, z;
+
+        DecimalFormat dec = new DecimalFormat("0.####");
+        dec.setRoundingMode(RoundingMode.DOWN);
+
+        x = (float)((a+b)/(b+a+1.0f)*Math.sqrt(a*a*a));
+        y = (a*a+2*a*b+b*b)/(1.0f/a+2);
+        z = (float)(Math.log(Math.pow(Math.E,2)) - Math.pow((a+Math.pow(b,3)),2) + (2+b)/(Math.cbrt(Math.pow(a+2*b,2))));
+        
+        System.out.println("Programa del ejercicio 9.");
+        System.out.println("Este se complica un poco...");
+        System.out.println("------------------------------------------");
+        System.out.println("El resultado de x es: " + dec.format(x));
+        System.out.println("El resultado de y es: " + y);
+        System.out.printf("El resultado de z es: %.4f", z);    
+    }
+}
