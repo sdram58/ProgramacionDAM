@@ -14,7 +14,9 @@ En esta primera unidad didáctica aprenderás a pensar de manera estructurada, a
 ## 1. Fundamentos: Programas, Procesos y Tipología del Software
 
 ### 1.1 El Enfoque de Caja Negra (*Black Box*)
-Desde el punto de vista de la ingeniería informática, cualquier programa informático puede modelarse conceptualmente como una **caja negra**: un sistema cerrado del cual nos interesa qué entra, qué sale y qué transformaciones realiza, aislando temporalmente la complejidad interna.
+La Real Academia Española define un programa como un *"conjunto de instrucciones que permite a un ordenador realizar funciones diversas"*. Dicho de forma más intuitiva: un programa es una **receta** que un ordenador sigue al pie de la letra, sin criterio propio. Hace exactamente lo que le indicas, ni más ni menos (y esa fidelidad ciega es la causa de que los errores o *bugs* existan).
+
+Desde el punto de vista de la ingeniería informática, cualquier programa puede modelarse conceptualmente como una **caja negra**: un sistema cerrado del cual nos interesa qué entra, qué sale y qué transformaciones realiza, aislando temporalmente la complejidad interna.
 
 ```text
 ┌─────────────────────────┐       ┌─────────────────────────────────┐       ┌─────────────────────────┐
@@ -40,9 +42,11 @@ En el ecosistema profesional actual, el software que desarrollamos adopta divers
 
 | Tipo de Aplicación | Descripción y Características | Ejemplos Habituales |
 |---|---|---|
-| **Aplicaciones de Escritorio (*Desktop*)** | Se instalan y ejecutan localmente en el sistema operativo del usuario (Windows, Linux, macOS). Tienen acceso directo al hardware, máxima fluidez gráfica y pueden funcionar desconectadas de la red. | IntelliJ IDEA, LibreOffice, Photoshop, VLC Media Player. |
+| **Aplicaciones de Consola (*CLI / Terminal*)** | Interactúan exclusivamente en modo texto a través de la terminal o símbolo del sistema, sin interfaz gráfica de ventanas. Es el formato idóneo para iniciarse en la programación y centrarse en la lógica pura sin distracciones visuales (el punto de partida de este curso). | Comandos del sistema operativo, scripts de administración, utilidades de diagnóstico. |
+| **Aplicaciones de Escritorio (*Desktop / GUI*)** | Se instalan y ejecutan localmente en el sistema operativo del usuario (Windows, Linux, macOS) ofreciendo ventanas, botones y menús gráficos interactivos. Tienen acceso directo al hardware, máxima fluidez y pueden funcionar desconectadas de la red. | IntelliJ IDEA, LibreOffice, Photoshop, VLC Media Player. |
 | **Aplicaciones Web** | Funcionan bajo la arquitectura cliente-servidor. El cliente (navegador web) ejecuta la interfaz (HTML, CSS, JavaScript) mientras que la lógica de negocio y los datos residen en servidores remotos (*backend*). | Gmail, Spotify Web, plataformas bancarias en línea. |
 | **Aplicaciones Móviles** | Diseñadas específicamente para dispositivos móviles (teléfonos, tablets) bajo Android o iOS. Pueden ser nativas (Java/Kotlin, Swift) o multiplataforma (Flutter, React Native). | WhatsApp, Instagram, Google Maps móvil. |
+| **Servicios / Demonios (*Daemons / Background Services*)** | Procesos que se ejecutan en segundo plano de manera desatendida, sin interacción directa con el usuario, procesando tareas programadas o eventos de sistema. | Servicios de sincronización en la nube, indexadores de búsqueda, servidores web en segundo plano. |
 | **Sistemas Embebidos / Empotrados (*Embedded*)** | Software integrado en dispositivos de hardware dedicados con recursos de memoria y procesador muy restringidos y requisitos de tiempo real estricto. | Centralitas de automóviles (ECU), microondas, routers domésticos, domótica IoT. |
 | **Servicios Web y APIs REST** | Aplicaciones sin interfaz visual que ofrecen servicios de procesamiento o intercambio de datos a otras aplicaciones a través de protocolos de red (JSON, XML). | Pasarelas de pago (Stripe, PayPal), APIs meteorológicas. |
 
@@ -67,7 +71,8 @@ Nivel de Hardware / Circuitos Físicos
 ```
 
 ### 2.1 Primera Generación (1GL): Lenguaje Máquina
-* Las instrucciones consisten exclusivamente en cadenas de dígitos binarios (`0` y `1`) o hexadecimales.
+* Las primeras computadoras de propósito único (como el COLOSSUS en la Segunda Guerra Mundial) se "programaban" modificando manualmente cables e interruptores en paneles físicos.
+* Con la llegada de la arquitectura Von Neumann (ENIAC), las instrucciones pasaron a residir en memoria como cadenas binarias de ceros y unos (`0` y `1`).
 * Cada instrucción codifica directamente la operación del microprocesador (*OpCode*) y las direcciones físicas de memoria de los operandos.
 * **Inconvenientes:** Extremadamente difícil de programar, nula legibilidad para humanos, facilidad pasmosa para cometer errores irreversibles y dependencia total de la arquitectura del chip: un programa máquina escrito para Intel x86 no funciona en procesadores ARM ni PowerPC.
 
@@ -77,12 +82,101 @@ Nivel de Hardware / Circuitos Físicos
 * **Inconvenientes:** Aunque mejora la legibilidad, sigue estando estrechamente acoplado a los registros físicos y a la arquitectura interna de un procesador específico. Escribir algoritmos matemáticos complejos requiere cientos de instrucciones de bajo nivel.
 
 ### 2.3 Tercera Generación (3GL): Lenguajes de Alto Nivel
-* Nacen en los años 50 y 60 (Fortran, COBOL, Algol, Pascal, y más adelante C, C++, Java y Python).
+* Nacen a finales de los años 50 con la aparición de **FORTRAN** (1957, considerado el primer lenguaje de alto nivel para cálculo científico), seguido por **LISP** (1958, cálculo simbólico e IA inicial), **COBOL** (1960, aplicaciones de gestión empresarial), **BASIC** (1964, diseñado con fines pedagógicos), **C** (1972, Dennis Ritchie en los Laboratorios Bell) y **Pascal** (Niklaus Wirth, concebido para la enseñanza rigurosa de la algorítmica).
+* Más adelante emergen los pioneros de la orientación a objetos: **Simula** (1967, primer lenguaje con noción de clase y objeto), **C++** (Bjarne Stroustrup, 1983), **Java** (James Gosling / Sun Microsystems, 1995) y **C#** (Microsoft, 2000).
 * Emplean estructuras lógicas comprensibles, palabras en inglés (`if`, `while`, `class`) y notación matemática estándar (`total = precio * 1.21`).
-* **Ventaja colosal:** Son **portables**; un mismo algoritmo puede ejecutarse en múltiples plataformas hardware sin reescribir la lógica, siempre que exista un traductor adaptado al sistema de destino.
+* **Ventaja colosal:** Son **portables**; un mismo algoritmo puede ejecutarse en múltiples plataformas hardware sin reescribir la lógica, siempre que exista un compilador o intérprete adaptado al sistema de destino.
+
+:::note[El mismo "Hola, mundo" a través de la historia]
+Compara cómo ha cambiado la forma de expresar la misma tarea elemental según la época y el nivel de abstracción del lenguaje:
+
+<details>
+<summary>Ensamblador (Intel 8086 con DOS int 21h)</summary>
+
+```asm
+DATOS SEGMENT
+  saludo db "Hola mundo!!!","$"
+DATOS ENDS
+CODE SEGMENT
+  mov ax, datos
+  mov ds, ax
+  mov dx, offset saludo
+  mov ah, 9        ; servicio de imprimir texto en pantalla
+  int 21h          ; interrupción del sistema operativo DOS
+CODE ENDS
+```
+</details>
+
+<details>
+<summary>FORTRAN (1957)</summary>
+
+```text
+PROGRAM HOLA
+PRINT *, '¡Hola, mundo!'
+END
+```
+</details>
+
+<details>
+<summary>COBOL (1960)</summary>
+
+```cobol
+IDENTIFICATION DIVISION.
+PROGRAM-ID. HOLA.
+PROCEDURE DIVISION.
+DISPLAY "Hola mundo!"
+STOP RUN.
+```
+</details>
+
+<details>
+<summary>C (1972)</summary>
+
+```c
+#include <stdio.h>
+int main() {
+    printf("¡Hola, mundo!\n");
+    return 0;
+}
+```
+</details>
+
+<details>
+<summary>Pascal</summary>
+
+```pascal
+PROGRAM HolaMundo;
+BEGIN
+  Writeln('¡Hola, mundo!');
+END.
+```
+</details>
+
+<details>
+<summary>Java (1995)</summary>
+
+```java
+public class Ejemplo {
+    public static void main(String[] args) {
+        System.out.println("¡Hola, mundo!");
+    }
+}
+```
+</details>
+
+<details>
+<summary>Python</summary>
+
+```python
+print("¡Hola, mundo!")
+```
+</details>
+
+Fíjate en la clara tendencia evolutiva: cada nueva generación de lenguajes necesita **menos líneas accesorias** y su código se aproxima **mucho más al lenguaje humano** para alcanzar exactamente el mismo resultado.
+:::
 
 ### 2.4 Cuarta Generación (4GL) y Quinta Generación (5GL)
-* **4GL (Lenguajes Declarativos):** Se centran en indicar **QUÉ** resultado se desea obtener y no **CÓMO** calcularlo paso a paso. El ejemplo paradigmático es **SQL** (*Structured Query Language*), donde especificamos qué filas queremos recuperar de una base de datos y el motor optimizador del SGBD decide la mejor estrategia interna de búsqueda.
+* **4GL (Lenguajes Declarativos):** Se centran en indicar **QUÉ** resultado se desea obtener y no **CÓMO** calcularlo paso a paso. El ejemplo paradigmático es **SQL** (*Structured Query Language*), donde especificamos qué registros deseamos recuperar de una base de datos y el motor optimizador decide la mejor estrategia interna de acceso.
 * **5GL (Inteligencia Artificial y Resolución Lógica):** Lenguajes basados en restricciones, hechos y motores de inferencia lógica formal (como **Prolog**), donde el programador suministra las reglas del dominio y el motor resuelve problemas deductivos.
 
 ---
@@ -126,6 +220,18 @@ JVM para Windows               JVM para Linux                 JVM para macOS
 2. Cada sistema operativo (Windows, Linux, macOS) cuenta con su propia implementación de la JVM.
 3. La JVM carga el fichero `.class`, verifica su seguridad y lo ejecuta mediante un motor mixto que combina interpretación inicial con un sofisticado compilador en tiempo de ejecución denominado **JIT (*Just-In-Time Compiler*)**, el cual detecta los fragmentos de código más ejecutados (*hotspots*) y los convierte en código máquina ultrarrápido idéntico al de un lenguaje compilado nativo.
 
+### 3.4 Las Herramientas del Desarrollador
+Para transformar una idea abstracta en una aplicación plenamente operativa y libre de errores, un programador recurre a un ecosistema de herramientas especializadas:
+
+* **Editor de código fuente:** Aplicación de texto avanzada con coloreado sintáctico, autocompletado inteligente de palabras clave, indentación automática y detección temprana de erratas.
+* **Compilador / Intérprete:** El motor de traducción que convierte el código de alto nivel en binario nativo o bytecode.
+* **Depurador (*Debugger*):** Herramienta crucial que permite detener la ejecución en cualquier punto (*breakpoints* o puntos de interrupción), avanzar instrucción por instrucción inspeccionando el contenido exacto de las variables en la memoria RAM y verificar el flujo del programa en tiempo real.
+* **Entorno de Desarrollo Integrado (IDE - *Integrated Development Environment*):** Una suite profesional unificada que aglutina editor, compilador, depurador, herramientas de refactorización de código, gestor de dependencias, terminal integrada y control de versiones (Git) bajo una misma interfaz de trabajo.
+
+:::tip[Nuestro IDE Oficial: IntelliJ IDEA]
+En este curso utilizaremos **IntelliJ IDEA** como IDE oficial. Todas las explicaciones prácticas, capturas de pantalla, navegación por menús, atajos de teclado, refactorizaciones y sesiones de depuración (*debugging*) estarán basadas exclusivamente en IntelliJ IDEA. Es una de las herramientas profesionales más potentes y demandadas en la industria del software empresarial internacional.
+:::
+
 ---
 
 ## 4. Paradigmas de Programación
@@ -133,32 +239,98 @@ JVM para Windows               JVM para Linux                 JVM para macOS
 Un paradigma de programación es un enfoque metodológico, un estilo fundamental o una filosofía para estructurar y conceptualizar la resolución de problemas mediante software:
 
 ### 4.1 Paradigma Imperativo / Estructurado
-* Concibe el programa como una serie secuencial de instrucciones que van alterando progresivamente el estado global de la memoria (variables).
-* Se fundamenta en el **Teorema de la Programación Estructurada** (Böhm y Jacopini), que demostró que cualquier algoritmo computable puede resolverse combinando únicamente tres estructuras: **secuencia**, **selección** e **iteración**.
-* Destierran definitivamente la instrucción de salto incondicional `GOTO`, responsable del ininteligible *código espagueti*. Lenguajes: C, Pascal, BASIC estructurado.
+Concibe el programa como una serie secuencial de instrucciones que van alterando progresivamente el estado global de la memoria (variables), describiendo al milímetro **CÓMO** resolver el problema.
+
+* **Programación Desestructurada (Histórica):** Predominaba en los primeros lenguajes comerciales. Carecía de bloques formales y abusaba de la instrucción de salto incondicional `GOTO`. Conforme el código crecía, el flujo saltaba erráticamente de una línea a otra, creando el temido **código espagueti**, imposible de mantener o depurar:
+  ```text
+  10 SUMA = 0
+  20 PRINT "Introduce un número positivo para sumar (negativo para salir):"
+  30 INPUT N
+  40 IF N < 0 THEN GOTO 70
+  50 SUMA = SUMA + N
+  60 GOTO 20
+  70 PRINT "La suma acumulada es: " SUMA
+  ```
+
+* **Programación Estructurada:** Se fundamenta en el **Teorema de la Programación Estructurada** (Böhm y Jacopini), que demostró que cualquier algoritmo computable puede resolverse combinando únicamente tres estructuras de control: **secuencia**, **selección** e **iteración**, eliminando definitivamente los saltos `GOTO`:
+  ```pascal
+  PROGRAM SumadorEstructurado;
+  VAR
+    suma, n: INTEGER;
+  BEGIN
+    suma := 0;
+    REPEAT
+      WRITE('Introduce un número positivo: ');
+      READ(n);
+      IF n >= 0 THEN
+        suma := suma + n;
+    UNTIL n < 0;
+    WRITELN('La suma acumulada es: ', suma);
+  END.
+  ```
+
+* **Programación Modular:** Da un paso más allá al descomponer el algoritmo en subprogramas o funciones independientes especializadas (apartado 11).
 
 ### 4.2 Paradigma Orientado a Objetos (POO)
-* El pilar central de nuestro curso y de Java. En lugar de separar los datos por un lado y las funciones por otro, la POO encapsula **estado** (atributos/variables) y **comportamiento** (métodos/funciones) dentro de entidades coherentes llamadas **Objetos**, que interactúan entre sí enviándose mensajes.
-* Sus cuatro pilares fundamentales son: **Abstracción**, **Encapsulamiento**, **Herencia** y **Polimorfismo**. Lenguajes: Java, C++, C#, Kotlin.
+El pilar central de nuestro curso y de Java. En lugar de mantener datos por un lado y funciones sueltas por otro, la POO encapsula **estado** (atributos/variables) y **comportamiento** (métodos/funciones) dentro de entidades coherentes llamadas **Objetos**, que dialogan enviándose mensajes:
 
-### 4.3 Paradigma Funcional
-* Trata la computación como la evaluación de funciones matemáticas formales.
-* Evita el estado mutable y los efectos colaterales (*side effects*): dada una misma entrada, una función pura siempre devuelve la misma salida sin alterar variables externas.
-* Emplea funciones de orden superior (funciones que reciben o devuelven otras funciones), recursividad y composición. Java incorporó este paradigma a partir de Java 8 mediante expresiones lambda y la API Streams. Lenguajes: Haskell, Lisp, Clojure, Scala.
+```java
+public class EjemploPOO {
+    public static void main(String[] args) {
+        // Creamos una instancia u objeto con su propio estado
+        Saludo saludoEspanol = new Saludo("Hola");
+        saludoEspanol.saludar("María"); // Salida: ¡Hola, María!
+    }
+}
+
+class Saludo {
+    private String prefijo; // Estado interno encapsulado
+
+    public Saludo(String prefijo) {
+        this.prefijo = prefijo;
+    }
+
+    public void saludar(String nombrePersona) { // Comportamiento
+        System.out.println("¡" + this.prefijo + ", " + nombrePersona + "!");
+    }
+}
+```
+
+Sus cuatro pilares fundamentales son: **Abstracción**, **Encapsulamiento**, **Herencia** y **Polimorfismo** (profundizaremos en ellos exhaustivamente en las Unidades 4 y 5).
+
+### 4.3 Paradigma Declarativo
+En contraposición al imperativo, aquí no indicamos *cómo* realizar el cálculo paso a paso, sino **QUÉ** resultado o condición final deseamos obtener; el motor interno se encarga de determinar el plan de ejecución óptimo:
+
+* **Lenguajes de Consulta (SQL):** En lugar de escribir bucles manuales para recorrer tablas y comparar celdas en memoria, declaramos el conjunto deseado:
+  ```sql
+  SELECT nombre, departamento, salario 
+  FROM empleados 
+  WHERE salario > 2500.00 
+  ORDER BY salario DESC;
+  ```
+* **Programación Funcional:** Trata la computación como la evaluación de funciones matemáticas puras sin estado mutable ni efectos colaterales. A partir de Java 8, Java incorporó expresiones lambda y la API Streams para adoptar este paradigma (Unidad 7).
+* **Programación Lógica (Prolog):** Define una base de conocimiento basada en hechos y reglas lógicas, delegando en un motor de inferencia la resolución de hipótesis.
 
 ### 4.4 Paradigma Reactivo
-* Se basa en flujos de datos asíncronos (*streams*) y en la propagación automática de cambios (patrón observador). Los componentes se suscriben a eventos o emisiones de información y reaccionan en tiempo real ante su llegada.
-* Muy popular en arquitecturas web y móviles con alta concurrencia (RxJava, Project Reactor, Angular con RxJS).
+Se basa en flujos de datos asíncronos (*streams*) y en la propagación automática de cambios (patrón observador). Los componentes se suscriben a eventos o emisiones de información y reaccionan en tiempo real ante su llegada (muy utilizado en arquitecturas de alta concurrencia con RxJava o Project Reactor).
 
 :::note[☕ Java es un lenguaje multiparadigma]
-Aunque Java es principalmente orientado a objetos, en versiones modernas integra con naturalidad programación imperativa, componentes declarativos y programación funcional con lambdas.
+Aunque Java es fundamentalmente orientado a objetos, en sus versiones LTS actuales combina con total fluidez programación imperativa estructurada, componentes declarativos y programación funcional con lambdas y streams.
 :::
 
 ---
 
 ## 5. El Ciclo de Vida del Software y Modelado con UML
 
-Crear software comercial de calidad no consiste en lanzarse a escribir código desordenado. Requiere seguir un **ciclo de vida de ingeniería**:
+Crear software comercial de calidad no consiste en sentarse a teclear código improvisado. Requiere seguir un riguroso **ciclo de vida de ingeniería**. 
+
+Una analogía muy gráfica para comprender este proceso es **el encargo de una tarta de bodas**:
+1. **Análisis de Requisitos:** Hablas en profundidad con los novios: *"¿Cuántos invitados vendrán?", "¿Qué sabores prefieren?", "¿Hay alérgicos al gluten?"*. Es la fase que los programadores novatos más tienden a ignorar, y la que más caro cuesta si se hace mal.
+2. **Diseño y Arquitectura:** Dibujas el boceto, calculas los pisos, la estructura de soporte y la combinación de ingredientes antes de tocar la cocina. Es el plano técnico de la solución.
+3. **Implementación (Codificación):** Por fin mezclas los ingredientes, horneas y montas la tarta en la cocina siguiendo fielmente la receta y el plano (traducción al lenguaje de programación).
+4. **Pruebas y Verificación (QA):** Pruebas una porción de prueba, verificas la textura, la estabilidad y la temperatura antes del evento.
+5. **Despliegue y Entrega:** Transportas la tarta y la presentas impecablemente en el salón de bodas ante los comensales.
+6. **Mantenimiento:** Te aseguras de que el corte se realice sin incidencias y atiendes peticiones de última hora.
 
 ```text
 1. Análisis de Requisitos ──► 2. Diseño y Arquitectura ──► 3. Implementación (Codificación)
@@ -167,12 +339,13 @@ Crear software comercial de calidad no consiste en lanzarse a escribir código d
 6. Mantenimiento y Evolución ◄── 5. Despliegue y Entrega ◄── 4. Pruebas y Validación (QA)
 ```
 
-1. **Análisis de Requisitos:** Reunirse con los usuarios y clientes para determinar qué problema se desea solucionar, qué restricciones operativas existen y qué requisitos funcionales y no funcionales debe cumplir el sistema.
-2. **Diseño y Arquitectura:** Definir la estructura global de la solución: qué módulos o capas existirán, cómo se modelarán las clases y cómo fluirán los datos. En esta fase se emplean diagramas de arquitectura y algoritmos.
-3. **Implementación / Codificación:** Traducción del diseño a código fuente en el lenguaje seleccionado, siguiendo convenciones de estilo y buenas prácticas.
-4. **Pruebas y Verificación (QA):** Ejecución exhaustiva del sistema con datos de prueba para certificar que cumple todos los requisitos y localizar errores ocultos (*bugs*). Incluye pruebas unitarias, de integración y de carga.
-5. **Despliegue (*Deployment*):** Instalación, configuración y puesta en producción del software en los servidores o dispositivos de los usuarios.
-6. **Mantenimiento:** Corrección de incidencias reportadas tras el lanzamiento, adaptación a nuevos sistemas operativos o normativas y adición de nuevas funcionalidades.
+:::tip[⭐ Be the Code: La importancia de la documentación y el código limpio]
+La inmensa mayoría del código que vas a mantener y depurar a lo largo de tu trayectoria profesional **no lo habrás escrito tú**. Escribir código limpio, usar identificadores claros y documentar concienzudamente no es un capricho académico: es pensar con empatía en tu compañero de equipo (o en ti mismo dentro de seis meses, cuando ya no recuerdes por qué pusiste esa condición).
+
+En un proyecto profesional se distinguen dos tipos de documentación:
+* **Documentación Interna:** Comentarios dentro del propio código fuente (`//`, `/* */` y comentarios de documentación `javadoc /** */`) explicando el *porqué* de las decisiones complejas y las interfaces de los métodos.
+* **Documentación Externa:** Manuales de usuario, especificaciones técnicas de requisitos, diagramas de arquitectura UML y guías de despliegue.
+:::
 
 ### 5.1 Tipología de Errores en Programación
 Durante las fases de codificación y pruebas nos enfrentamos inevitablemente a tres tipos de errores cualitativamente muy distintos:
@@ -198,15 +371,32 @@ Para plasmar el diseño de un sistema informático de forma universal e inequív
 
 Un **algoritmo** es un conjunto ordenado, no ambiguo y finito de instrucciones que describe el procedimiento necesario para transformar los datos de partida en el resultado deseado.
 
-### 6.1 Propiedades Obligatorias de un Algoritmo Correcto
-Para que una secuencia de pasos califique formalmente como un algoritmo, debe satisfacer cinco propiedades ineludibles:
+Para visualizarlo, una analogía clásica y tangible es una receta de cocina de la vida diaria:
+> **Freír un huevo perfecto**
+> * **Entrada (Input):** 1 huevo, 50 ml de aceite de oliva, una pizca de sal, sartén, fuente de calor (fuego).
+> * **Procesamiento:**
+>   1. Verter el aceite en la sartén.
+>   2. Encender el fuego y calentar la sartén.
+>   3. Cuando el aceite alcance la temperatura adecuada, cascar el huevo y verterlo con cuidado.
+>   4. Bañar la yema con aceite caliente usando una espumadera durante 40 segundos.
+>   5. Cuando la clara esté cuajada, retirar el huevo del fuego y añadir la sal.
+> * **Salida (Output):** Huevo frito listo para servir.
 
-1. **Precisión:** Cada instrucción debe estar especificada con total exactitud, sin ambigüedades interpretativas. No puede haber pasos vagos como *"revolver hasta que esté listo"* o *"añadir un poco de sal"*.
-2. **Determinismo:** Ante los mismos datos iniciales de entrada, el algoritmo debe arrojar exactamente el mismo resultado en todas y cada una de las ejecuciones.
-3. **Finitud:** El algoritmo debe terminar obligatoriamente tras un número finito y computable de pasos. No puede quedar atrapado en un ciclo infinito de operaciones.
-4. **Entrada claramente definida:** Dispone de cero o más datos externos que condicionan el cálculo.
-5. **Salida claramente definida:** Produce al menos un dato o efecto observable que responde a la cuestión formulada.
-6. **Eficiencia:** Un buen algoritmo no solo llega a la solución correcta, sino que lo hace optimizando el consumo de tiempo de cómputo y de memoria RAM.
+### 6.1 Propiedades de un Algoritmo Correcto
+En la teoría computacional, distinguimos entre condiciones **obligatorias** (sin las cuales la secuencia no califica como algoritmo) y cualidades **deseables**:
+
+#### Condiciones Obligatorias:
+1. **Resuelve el problema planteado:** Produce la solución exacta y esperada según los requisitos iniciales.
+2. **Independencia de la plataforma:** No depende de ningún sistema operativo, arquitectura de procesador ni lenguaje de programación específico.
+3. **Precisión:** Cada instrucción debe estar especificada con total exactitud matemática, sin ambigüedades interpretativas.
+4. **Finitud:** El algoritmo debe terminar obligatoriamente tras un número finito y computable de pasos; no puede quedar atrapado en un ciclo infinito.
+5. **Determinismo (Repetibilidad):** Ante los mismos datos de entrada, el algoritmo debe arrojar exactamente el mismo resultado en todas y cada una de sus ejecuciones.
+6. **Entrada y Salida bien delimitadas:** Define con claridad qué datos recibe del exterior y qué información o efecto observable devuelve.
+
+#### Cualidades Deseables:
+* **Válido:** Ausencia de defectos lógicos y robustez probada ante entradas límite o atípicas (*edge cases*).
+* **Eficiente:** Resuelve el problema optimizando el tiempo de procesamiento de la CPU y reduciendo el consumo de memoria RAM.
+* **Óptimo:** Es la solución más rápida y ligera matemáticamente demostrable de entre todos los algoritmos conocidos para ese problema.
 
 ### 6.2 Reglas de Nombrado de Identificadores (*Naming Conventions*)
 Los nombres que asignamos a nuestras variables, constantes y subalgoritmos se denominan **identificadores**. Un código profesional debe ser autoexplicativo (*código limpio*):
@@ -264,13 +454,15 @@ En nuestro curso nos basamos en las convenciones formales de **PSeInt** con perf
 * **Lógico (Booleano):** Tipo algebraico binario que solo puede admitir uno de dos valores posibles: `Verdadero` o `Falso`.
 
 ### 8.2 Operadores Aritméticos y División
-* Suma (`+`) y Resta (`-`).
-* Multiplicación (`×` o `*`).
-* División real (`/`): Produce siempre un resultado real con decimales.
-* División entera (`/` truncado) y Módulo / Resto (`MOD` o `%`):
+* **Potencia:** `^` (ejemplo: `2 ^ 3 = 8`).
+* **Multiplicación:** `*` o `×`.
+* **División real:** `/` (produce siempre un resultado con decimales: `7.0 / 2.0 = 3.5`).
+* **División entera truncada:** `/` sobre operandos enteros (`7 / 2 = 3`).
+* **Módulo / Resto:** `MOD` o `%`:
   * La operación `A MOD B` calcula el residuo que sobra tras realizar la división entera entre `A` y `B`.
   * *Ejemplo:* Si dividimos `17` entre `5`, el cociente entero es `3` (5 × 3 = 15) y el resto que sobra es `2`. Por tanto: `17 MOD 5 = 2`.
-  * El operador módulo es crucial en programación para detectar números pares/impares (`n MOD 2 = 0`), comprobar divisibilidad o reiniciar contadores circulares.
+  * El operador módulo es crucial en programación para detectar números pares o impares (`n MOD 2 = 0`), comprobar divisibilidad o reiniciar contadores circulares.
+* **Suma (`+`) y Resta (`-`).**
 
 ### 8.3 Operadores Relacionales (Comparación)
 Permiten comparar dos valores del mismo tipo de dato, produciendo siempre un resultado de tipo `Lógico`:
@@ -295,6 +487,19 @@ Permiten combinar condiciones lógicas complejas:
 | `Verdadero` | `Falso` | `Falso` | `Falso` | `Verdadero` | `Verdadero` |
 | `Verdadero` | `Verdadero` | `Falso` | `Verdadero` | `Verdadero` | `Falso` |
 
+:::note[Un caso clásico que engaña: La hora de tutoría]
+Imaginemos la siguiente regla de un centro educativo: *"La tutoría del profesor es los lunes y martes a las 16 horas"*. ¿Cuál de las siguientes expresiones lógicas traduce fielmente la norma?
+
+* **Opción A:** `dia = "lunes" O dia = "martes" Y hora = 16`
+* **Opción B:** `(dia = "lunes" O dia = "martes") Y hora = 16`
+
+Aunque en el lenguaje cotidiano suenen parecidas, en programación son radicalmente distintas. Como el operador lógico `Y` tiene mayor precedencia que `O` (exactamente igual que la multiplicación prima sobre la suma), la Opción A se evalúa como:
+
+`dia = "lunes" O (dia = "martes" Y hora = 16)`
+
+¡Lo que significa que la condición sería válida **a cualquier hora de los lunes**! La opción correcta es la **Opción B**, usando paréntesis explícitos para agrupar los días lectivos. Ante la menor duda en una expresión lógica compuesta, utiliza siempre paréntesis.
+:::
+
 #### Leyes de De Morgan
 Son dos reglas lógicas fundamentales para simplificar condiciones complejas y diseñar pruebas unitarias:
 1. `NO (A Y B)` es lógicamente equivalente a `(NO A) O (NO B)`.
@@ -304,12 +509,17 @@ Son dos reglas lógicas fundamentales para simplificar condiciones complejas y d
 Cuando una expresión contiene múltiples operadores, el computador los evalúa siguiendo un estricto orden matemático:
 
 1. **Paréntesis:** Expresiones delimitadas por `(...)`, evaluadas desde el par más interno hacia el exterior.
-2. **Operadores unarios:** Signo negativo unario (`-x`) y negación lógica (`NO`).
-3. **Multiplicación, División y Módulo:** `*`, `/`, `MOD` (se evalúan de izquierda a derecha en caso de empate).
-4. **Suma y Resta:** `+`, `-` (de izquierda a derecha).
-5. **Operadores Relacionales:** `<`, `>`, `≤`, `≥`, `=`, `≠`.
-6. **Conjunción Lógica:** `Y`.
-7. **Disyunción Lógica:** `O` y `XOR`.
+2. **Potenciación:** `^`.
+3. **Operadores unarios:** Signo negativo unario (`-x`) y negación lógica (`NO`).
+4. **Multiplicación, División y Módulo:** `*`, `/`, `MOD` (se evalúan de izquierda a derecha en caso de empate).
+5. **Suma y Resta:** `+`, `-` (de izquierda a derecha).
+6. **Operadores Relacionales:** `<`, `>`, `≤`, `≥`, `=`, `≠`.
+7. **Conjunción Lógica:** `Y`.
+8. **Disyunción Lógica:** `O` y `XOR`.
+
+:::caution[¡Cuidado con la precedencia!]
+La expresión `9 + 6 / 3` evalúa a **11**, no a **5**, porque la división tiene prioridad estricta sobre la suma. Si deseamos sumar primero, es indispensable forzarlo con paréntesis: `(9 + 6) / 3 = 5`. Emplear paréntesis siempre que tengas dudas cuesta una sola pulsación de tecla y previene fallos lógicos muy difíciles de rastrear.
+:::
 
 ---
 
@@ -570,7 +780,11 @@ Cuando un programa produzca un resultado inesperado durante este curso, no cambi
 
 ## 11. Programación Modular y Subalgoritmos
 
-Conforme un problema real crece en envergadura, escribir cientos de líneas en un único bloque lineal desemboca en un código monolítico, redundante y frágil. Para solucionarlo aplicamos el principio de la ingeniería clásica **"Divide y Vencerás"** (*Top-Down Design* o descomposición modular descendente).
+Conforme un problema real crece en envergadura, escribir cientos de líneas en un único bloque lineal desemboca en un código monolítico, redundante y frágil. 
+
+Imagina una tarea de 20 instrucciones que necesitas repetir en 7 lugares distintos de tu aplicación. Copiar y pegar esas 20 líneas siete veces puede parecer rápido al principio, pero es una pésima práctica de ingeniería: el código se vuelve kilométrico, ilegible y, si dentro de dos meses descubres un fallo o cambia la normativa fiscal, tendrás que localizar y modificar los 7 puntos idénticos (arriesgándote a olvidar uno).
+
+Para solucionarlo aplicamos el principio de la ingeniería clásica **"Divide y Vencerás"** (*Top-Down Design* o descomposición modular descendente):
 
 ```text
                                ┌────────────────────────────────┐
@@ -584,6 +798,10 @@ Conforme un problema real crece en envergadura, escribir cientos de líneas en u
       │ (Cálculo Impuestos)│         │ (Validar Factura)  │         │ (Imprimir Reporte) │
       └────────────────────┘         └────────────────────┘         └────────────────────┘
 ```
+
+:::caution[El error más habitual al empezar]
+Cuando se empieza a programar, la tentación inmediata es escribirlo todo en un único bloque continuo enorme. Aunque "funcione" en ejercicios sencillos de diez líneas, se vuelve inmanejable y propenso a catástrofes en proyectos reales. Acostúmbrate desde el primer día a pensar en subalgoritmos pequeños, cada uno con una única responsabilidad clara y bien delimitada.
+:::
 
 ### 11.1 Procedimientos vs Funciones
 Un subalgoritmo es un módulo de código independiente dotado de un nombre propio que resuelve una tarea especializada:
@@ -664,6 +882,13 @@ El diseño de software modular se guía por dos métricas de calidad esenciales:
 ### ¿Por qué los bucles `Mientras` pueden no ejecutarse ninguna vez y los `Repetir` siempre se ejecutan al menos una?
 > Porque el bucle `Mientras` es de **pre-condición**: comprueba la puerta de entrada antes de franquear el paso. Si la condición es falsa antes de empezar, el ordenador salta el bloque completo. Por el contrario, el bucle `Repetir` (o `do-while` en Java) es de **post-condición**: entra al cuerpo del bucle, ejecuta las instrucciones y solo cuando llega al final evalúa si debe repetir o salir. Por esta razón, `Repetir` garantiza siempre un mínimo de una ejecución.
 
+### ¿`Repetir...Hasta Que` y `Mientras` no son lo mismo pero al revés?
+> Casi, pero con una diferencia esencial: **cuándo se evalúa la condición**.
+> * `Mientras` pregunta primero y actúa después (puede que no actúe ninguna vez si la condición inicial ya es falsa).
+> * `Repetir...Hasta Que` actúa primero y pregunta después (se ejecuta siempre como mínimo una vez).
+> 
+> Además, en pseudocódigo estándar, `Mientras` continúa iterando mientras su expresión evaluada sea **Verdadera**, mientras que `Repetir...Hasta Que` se mantiene iterando mientras sea **Falsa** y se detiene en el momento justo en que la condición se vuelve **Verdadera**. Por lo tanto, para transformar un bucle en el otro no basta con mover la sentencia: ¡hay que invertir toda la lógica booleana de la expresión!
+
 ---
 
 ## 13. Resumen de la Unidad y Enlace con Java
@@ -672,9 +897,10 @@ En esta extensa unidad has adquirido los cimientos sólidos de la ingeniería de
 * Cómo procesa información un computador bajo el modelo de **caja negra**.
 * La evolución de los lenguajes de programación desde el código binario 1GL hasta los lenguajes declarativos 4GL y lógicos 5GL.
 * Las diferencias operativas entre **compilación**, **interpretación** y el innovador modelo híbrido de **Java (Bytecode + JVM + JIT)**.
-* Los cuatro grandes paradigmas computacionales: imperativo, orientado a objetos, funcional y reactivo.
-* El **ciclo de vida del software**, la tipología de errores (sintácticos, de ejecución y de lógica) y los diagramas estructurales y de comportamiento de **UML**.
-* Las propiedades formales de un algoritmo: precisión, determinismo, finitud, entrada, salida y eficiencia.
+* El ecosistema de herramientas: editores, depuradores, compiladores y el IDE oficial **IntelliJ IDEA**.
+* Los cuatro grandes paradigmas computacionales: imperativo estructurado, orientado a objetos, funcional y reactivo.
+* El **ciclo de vida del software** (analogía de la tarta de bodas), la importancia de la documentación interna y externa, y la tipología de errores (sintácticos, de ejecución y lógicos).
+* Las propiedades formales de un algoritmo: obligatorias (precisión, determinismo, finitud) y deseables (validez, eficiencia, optimización).
 * La simbología oficial **ANSI/ISO** para construir diagramas de flujo claros.
 * Los tipos primitivos, operadores aritméticos, relacionales y lógicos con sus tablas de verdad y leyes de De Morgan.
 * Las tres estructuras de control canónicas: secuencia, selección (`Si-Entonces`, `Segun`) e iteración (`Mientras`, `Repetir`, `Para`).
@@ -683,4 +909,27 @@ En esta extensa unidad has adquirido los cimientos sólidos de la ingeniería de
 
 En la **Unidad 2**, nos trasladaremos a nuestro entorno de desarrollo oficial **IntelliJ IDEA**, configuraremos el Java Development Kit (**JDK**) y traduciremos todos estos fundamentos a la sintaxis real de **Java LTS**.
 
-¡Consolida ahora tu agilidad mental resolviendo los 5 boletines de ejercicios asociados a esta unidad!
+---
+
+## 14. Relación Curricular: Resultados de Aprendizaje y Criterios de Evaluación
+
+Esta unidad cubre los contenidos troncales del currículo oficial del módulo **0485 - Programación (DAM)**:
+
+| Resultado de Aprendizaje (RA) | Criterios de Evaluación Oficiales Cubiertos |
+|---|---|
+| **RA1.** Reconoce la estructura de un programa informático, identificando y relacionando los elementos propios del lenguaje de programación utilizado. | **CE 1.a)** Se ha reconocido la estructura de un programa informático.<br/>**CE 1.c)** Se han utilizado entornos integrados de desarrollo (IntelliJ IDEA).<br/>**CE 1.i)** Se han introducido comentarios explicativos y documentación adecuada en el código fuente. |
+
+---
+
+## 15. Boletines de Ejercicios y Retos Prácticos
+
+Pon a prueba tu pensamiento algorítmico y consolida lo aprendido con el repertorio de actividades prácticas de la Unidad 1:
+
+<div class="ejercicio-links">
+  <a class="elink" href="./boletin-01-inicial/">🟢 Boletín Inicial (Propuestos)</a>
+  <a class="elink" href="./boletin-01-inicial-resuelto/">✅ Boletín Inicial (Resueltos)</a>
+  <a class="elink" href="./boletin-01-intermedio/">⭐ Boletín Intermedio (Propuestos)</a>
+  <a class="elink" href="./boletin-01-intermedio-resuelto/">✅ Boletín Intermedio (Resueltos)</a>
+  <a class="elink" href="./boletin-01-extras/">🔥 Retos y Plataformas Externas</a>
+</div>
+

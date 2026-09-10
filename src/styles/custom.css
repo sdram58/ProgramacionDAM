@@ -163,3 +163,33 @@
   border: 1px solid rgba(140, 150, 145, 0.25);
   user-select: none;
 }
+
+/* Enlaces a boletines y ejercicios */
+.ejercicio-links {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin: 1.75rem 0;
+}
+
+.elink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #2d8a4e 0%, #1e6137 100%);
+  color: #ffffff !important;
+  text-decoration: none !important;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 6px rgba(45, 138, 78, 0.2);
+}
+
+.elink:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(45, 138, 78, 0.35);
+  color: #ffffff !important;
+}
+
