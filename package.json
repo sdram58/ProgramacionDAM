@@ -6,7 +6,9 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "pdf:ud01": "python scripts/generate_ud01_pdfs.py",
+    "pdf:all": "python scripts/generate_ud01_pdfs.py"
   },
   "dependencies": {
     "@astrojs/starlight": "^0.32.6",

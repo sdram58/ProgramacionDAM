@@ -5,6 +5,10 @@ description: Soluciones completas, razonadas y verificadas paso a paso para los 
 
 A continuación se detallan las soluciones exhaustivas de los 10 ejercicios propuestos en el [Boletín Inicial](./boletin-01-inicial/).
 
+:::tip[📥 Descarga en PDF]
+Puedes [descargar este boletín resuelto en PDF](/ProgramacionDAM/pdf/ud01/Boletin-01-Inicial-Resuelto.pdf) para conservarlo como material de consulta y estudio.
+:::
+
 ---
 
 ### Solución al Ejercicio 1: Traza manual con variables en memoria y truco del intercambio (*Swap*)

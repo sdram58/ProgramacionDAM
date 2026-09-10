@@ -5,6 +5,10 @@ description: 10 retos algorítmicos aplicados que combinan bucles centinela, val
 
 Este boletín contiene **10 ejercicios de nivel intermedio** para poner a prueba tu capacidad de estructurar algoritmos modulares, robustos y eficientes en pseudocódigo. Intenta resolverlos antes de consultar el [Boletín Intermedio Resuelto](./boletin-01-intermedio-resuelto/).
 
+:::tip[📥 Descarga en PDF]
+Puedes [descargar este boletín intermedio en PDF](/ProgramacionDAM/pdf/ud01/Boletin-01-Intermedio.pdf) para imprimirlo o trabajar sin conexión. También dispones del [PDF con las soluciones completas](/ProgramacionDAM/pdf/ud01/Boletin-01-Intermedio-Resuelto.pdf).
+:::
+
 ---
 
 ### Ejercicio 1: Validación estricta de entrada con bucle Repetir

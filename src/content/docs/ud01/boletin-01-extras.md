@@ -6,6 +6,10 @@ next: false
 
 En las primeras unidades aún no disponemos de sintaxis Java suficiente para enviar soluciones automáticas a jueces en línea como CodeWars o Acepta el Reto (lo cual iniciaremos a partir de la **Unidad 3**). Sin embargo, este boletín presenta **retos clásicos de lógica algorítmica y optimización** que entrenarán tu agilidad mental para la resolución de problemas en competición.
 
+:::tip[📥 Descarga en PDF]
+Puedes [descargar este boletín de retos y extras en PDF](/ProgramacionDAM/pdf/ud01/Boletin-01-Extras-Retos.pdf) para resolverlos en papel o en tus sesiones de entrenamiento lógico.
+:::
+
 ---
 
 ### Reto 1: La Conjetura de Collatz (Secuencia del Granizo)

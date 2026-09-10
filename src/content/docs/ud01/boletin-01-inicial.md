@@ -5,6 +5,10 @@ description: Colección de 10 ejercicios prácticos fundamentales para dominar l
 
 Este boletín contiene **10 ejercicios prácticos** diseñados para afianzar los conceptos fundamentales de la Unidad 1. Resuélvelos sobre el papel o en la herramienta **PSeInt** antes de consultar el [Boletín Inicial Resuelto](./boletin-01-inicial-resuelto/).
 
+:::tip[📥 Descarga en PDF]
+Puedes [descargar este boletín en PDF](/ProgramacionDAM/pdf/ud01/Boletin-01-Inicial.pdf) para imprimirlo o trabajar sin conexión. También dispones del [PDF con las soluciones completas](/ProgramacionDAM/pdf/ud01/Boletin-01-Inicial-Resuelto.pdf).
+:::
+
 ---
 
 ### Ejercicio 1: Traza manual con variables en memoria y truco del intercambio (*Swap*)

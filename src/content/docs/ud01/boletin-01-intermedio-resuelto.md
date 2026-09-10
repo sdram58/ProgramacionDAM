@@ -5,6 +5,10 @@ description: Soluciones completas, razonadas y verificadas en pseudocódigo PSeI
 
 A continuación se detallan las soluciones exhaustivas de los 10 ejercicios planteados en el [Boletín Intermedio](./boletin-01-intermedio/).
 
+:::tip[📥 Descarga en PDF]
+Puedes [descargar este boletín resuelto en PDF](/ProgramacionDAM/pdf/ud01/Boletin-01-Intermedio-Resuelto.pdf) para conservarlo como material de consulta y estudio.
+:::
+
 ---
 
 ### Solución al Ejercicio 1: Validación estricta de entrada con bucle Repetir

@@ -9,6 +9,14 @@ Antes de abrir el entorno de desarrollo IntelliJ IDEA y sumergirnos en la sintax
 
 En esta primera unidad didáctica aprenderás a pensar de manera estructurada, analítica y modular, transformando problemas del mundo real en algoritmos rigurosos, verificables e independientes del lenguaje final.
 
+:::tip[📥 Recursos y Descargas en PDF de la Unidad 1]
+Puedes estudiar esta unidad tanto en la plataforma web como en formato documento digital/impreso:
+* 📄 **[Descargar Teoría Completa de la Unidad 1 en PDF](/ProgramacionDAM/pdf/ud01/UD01-Teoria-Introduccion-Programacion.pdf)** (25 páginas)
+* 📝 **Boletín Inicial:** [Descargar Propuestos (PDF)](/ProgramacionDAM/pdf/ud01/Boletin-01-Inicial.pdf) · [Descargar Resueltos (PDF)](/ProgramacionDAM/pdf/ud01/Boletin-01-Inicial-Resuelto.pdf)
+* 📝 **Boletín Intermedio:** [Descargar Propuestos (PDF)](/ProgramacionDAM/pdf/ud01/Boletin-01-Intermedio.pdf) · [Descargar Resueltos (PDF)](/ProgramacionDAM/pdf/ud01/Boletin-01-Intermedio-Resuelto.pdf)
+* 🧠 **Retos y Extras:** [Descargar Retos (PDF)](/ProgramacionDAM/pdf/ud01/Boletin-01-Extras-Retos.pdf)
+:::
+
 ---
 
 ## 1. Fundamentos: Programas, Procesos y Tipología del Software
@@ -932,4 +940,11 @@ Pon a prueba tu pensamiento algorítmico y consolida lo aprendido con el reperto
   <a class="elink" href="./boletin-01-intermedio-resuelto/">✅ Boletín Intermedio (Resueltos)</a>
   <a class="elink" href="./boletin-01-extras/">🔥 Retos y Plataformas Externas</a>
 </div>
+
+:::tip[📥 Versiones en PDF para imprimir]
+* 📄 [Boletín Inicial (PDF)](/ProgramacionDAM/pdf/ud01/Boletin-01-Inicial.pdf) · [Con Soluciones (PDF)](/ProgramacionDAM/pdf/ud01/Boletin-01-Inicial-Resuelto.pdf)
+* 📄 [Boletín Intermedio (PDF)](/ProgramacionDAM/pdf/ud01/Boletin-01-Intermedio.pdf) · [Con Soluciones (PDF)](/ProgramacionDAM/pdf/ud01/Boletin-01-Intermedio-Resuelto.pdf)
+* 📄 [Retos y Extras (PDF)](/ProgramacionDAM/pdf/ud01/Boletin-01-Extras-Retos.pdf)
+:::
+
 

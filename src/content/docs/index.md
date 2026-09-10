@@ -137,9 +137,9 @@ hero:
 
 Accede a las relaciones de problemas prácticos clasificados por nivel de dificultad para afianzar cada concepto:
 
-* **[Unidad 01: Boletín Inicial](/ProgramacionDAM/ud01/boletin-01-inicial/)** | **[Resuelto](/ProgramacionDAM/ud01/boletin-01-inicial-resuelto/)**
-* **[Unidad 01: Boletín Intermedio](/ProgramacionDAM/ud01/boletin-01-intermedio/)** | **[Resuelto](/ProgramacionDAM/ud01/boletin-01-intermedio-resuelto/)**
-* **[Unidad 01: Retos Extras](/ProgramacionDAM/ud01/boletin-01-extras/)**
+* **[Unidad 01: Boletín Inicial](/ProgramacionDAM/ud01/boletin-01-inicial/)** | **[Resuelto](/ProgramacionDAM/ud01/boletin-01-inicial-resuelto/)** · *(Descargar: [PDF](/ProgramacionDAM/pdf/ud01/Boletin-01-Inicial.pdf) · [PDF Soluciones](/ProgramacionDAM/pdf/ud01/Boletin-01-Inicial-Resuelto.pdf))*
+* **[Unidad 01: Boletín Intermedio](/ProgramacionDAM/ud01/boletin-01-intermedio/)** | **[Resuelto](/ProgramacionDAM/ud01/boletin-01-intermedio-resuelto/)** · *(Descargar: [PDF](/ProgramacionDAM/pdf/ud01/Boletin-01-Intermedio.pdf) · [PDF Soluciones](/ProgramacionDAM/pdf/ud01/Boletin-01-Intermedio-Resuelto.pdf))*
+* **[Unidad 01: Retos Extras](/ProgramacionDAM/ud01/boletin-01-extras/)** · *(Descargar: [PDF](/ProgramacionDAM/pdf/ud01/Boletin-01-Extras-Retos.pdf))*
 
 ---
 
