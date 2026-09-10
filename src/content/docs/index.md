@@ -1,9 +1,9 @@
 ---
-title: Programación Java — CFGS DAM
+title: Programacion - 1º DAM semipresencial
 description: Apuntes completos del módulo profesional de Programación (0485) para el CFGS de Desarrollo de Aplicaciones Multiplataforma.
 template: splash
 hero:
-  title: Programación Java
+  title: Programacion - 1º DAM semipresencial
   tagline: Apuntes completos del módulo 0485 (CFGS DAM) — Curso oficial actualizado y práctico con IntelliJ IDEA.
   image:
     file: /portada.svg
@@ -12,10 +12,6 @@ hero:
       link: /ProgramacionDAM/ud01/
       icon: right-arrow
       variant: primary
-    - text: Ver en GitHub
-      link: https://github.com/sdram58/ProgramacionDAM.git
-      icon: external
-      variant: minimal
 ---
 
 <div class="download-bar">

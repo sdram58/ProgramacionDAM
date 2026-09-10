@@ -7,7 +7,7 @@ export default defineConfig({
   base: '/ProgramacionDAM',
   integrations: [
     starlight({
-      title: 'Programación Java — DAM',
+      title: 'Programacion - 1º DAM semipresencial',
       defaultLocale: 'root',
       locales: {
         root: {
@@ -18,9 +18,6 @@ export default defineConfig({
       customCss: [
         './src/styles/custom.css',
       ],
-      social: {
-        github: 'https://github.com/sdram58/ProgramacionDAM.git',
-      },
       sidebar: [
         {
           label: 'Temario Oficial',
