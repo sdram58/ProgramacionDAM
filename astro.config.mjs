@@ -23,7 +23,7 @@ export default defineConfig({
           label: 'Temario Oficial',
           items: [
             { label: '🚀 01. Introducción a la programación', link: '/ud01/' },
-            { label: '🔤 02. Primeros pasos con Java', link: '/ud02/', badge: { text: 'Próximamente', variant: 'note' } },
+            { label: '🔤 02. Primeros pasos con Java', link: '/ud02/' },
             { label: '🔀 03. Excepciones, bucles, arrays y métodos', link: '/ud03/', badge: { text: 'Próximamente', variant: 'note' } },
             { label: '🏗️ 04. Clases y objetos', link: '/ud04/', badge: { text: 'Próximamente', variant: 'note' } },
             { label: '🧬 05. Programación orientada a objetos avanzada', link: '/ud05/', badge: { text: 'Próximamente', variant: 'note' } },
@@ -46,6 +46,16 @@ export default defineConfig({
                 { label: 'Boletín Intermedio', link: '/ud01/boletin-01-intermedio/' },
                 { label: 'Boletín Intermedio (Resuelto)', link: '/ud01/boletin-01-intermedio-resuelto/' },
                 { label: 'Retos y Extras', link: '/ud01/boletin-01-extras/' },
+              ],
+            },
+            {
+              label: 'Unidad 02',
+              items: [
+                { label: 'Boletín Inicial', link: '/ud02/boletin-02-inicial/' },
+                { label: 'Boletín Inicial (Resuelto)', link: '/ud02/boletin-02-inicial-resuelto/' },
+                { label: 'Boletín Intermedio', link: '/ud02/boletin-02-intermedio/' },
+                { label: 'Boletín Intermedio (Resuelto)', link: '/ud02/boletin-02-intermedio-resuelto/' },
+                { label: 'Retos y Extras', link: '/ud02/boletin-02-extras/' },
               ],
             },
           ],
