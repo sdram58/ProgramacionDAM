@@ -40,6 +40,7 @@ export default defineConfig({
         {
           label: '🔤 02. Primeros pasos con Java',
           collapsed: true,
+          badge: { text: 'Próximamente', variant: 'note' },
           items: [
             { label: '📖 Teoría y Contenidos', link: '/ud02/' },
             {
