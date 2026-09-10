@@ -45,7 +45,7 @@ hero:
       <span class="unit-badge-unavailable">🔒 No disponible</span>
     </div>
     <p><strong>RA1, RA4 (24 h)</strong> — Estructura de un programa en Java, entorno IntelliJ IDEA, compilación y JVM, tipos primitivos, variables, constantes, operadores, clases estándar (String, Math, java.time), estructuras condicionales (if/else, switch moderno) y entrada/salida por consola.</p>
-    <a class="unit-link-disabled" href="/ProgramacionDAM/ud02/" style="cursor: pointer;">🔒 Próximamente (Acceso de revisión) →</a>
+    <span class="unit-link-disabled">🔒 No disponible</span>
   </div>
 
   <div class="unit-card unit-card-disabled" style="border: 1px dashed var(--sl-color-gray-4); border-radius: 8px; padding: 1.25rem;">

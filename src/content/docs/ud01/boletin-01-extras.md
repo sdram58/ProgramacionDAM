@@ -1,6 +1,7 @@
 ---
 title: 🧠 Boletín 01 Extras — Retos de Pensamiento Computacional
 description: Retos algorítmicos avanzados, acertijos de lógica computacional y preparación para plataformas de programación competitiva.
+next: false
 ---
 
 En las primeras unidades aún no disponemos de sintaxis Java suficiente para enviar soluciones automáticas a jueces en línea como CodeWars o Acepta el Reto (lo cual iniciaremos a partir de la **Unidad 3**). Sin embargo, este boletín presenta **retos clásicos de lógica algorítmica y optimización** que entrenarán tu agilidad mental para la resolución de problemas en competición.
