@@ -10,20 +10,20 @@ En las primeras unidades aún no disponemos de sintaxis Java suficiente para env
 ### Reto 1: La Conjetura de Collatz (Secuencia del Granizo)
 
 #### Enunciado
-El matemático Lothar Collatz propuso en 1937 la siguiente regla para cualquier número entero positivo NNN:
-* Si el número es **par**, se divide entre 2 (NN \leftarrow N / 2N).
-* Si el número es **impar**, se multiplica por 3 y se le suma 1 (NN \leftarrow 3 \times N + 1N).
+El matemático Lothar Collatz propuso en 1937 la siguiente regla para cualquier número entero positivo `N`:
+* Si el número es **par**, se divide entre 2 (`N ← N / 2`).
+* Si el número es **impar**, se multiplica por 3 y se le suma 1 (`N ← 3 × N + 1`).
 * El proceso se repite con el nuevo valor obtenido hasta que el número llegue irremediablemente al valor **1**.
 
 Diseña un algoritmo en pseudocódigo que:
-1. Pida un número entero positivo inicial NNN.
+1. Pida un número entero positivo inicial `N`.
 2. Imprima toda la secuencia de números generados hasta alcanzar el 1.
 3. Cuente y muestre la cantidad total de pasos necesarios (longitud de la órbita) y el valor pico más alto alcanzado durante la trayectoria.
 
 :::tip[💡 Pistas para la resolución]
 * Utiliza un bucle `Mientras N ≠ 1 Hacer`.
 * Mantén una variable `pasos ← 0` y una variable `picoMaximo ← N`.
-* Actualiza `picoMaximo` en cada iteración comparando si el nuevo NNN supera el récord anterior.
+* Actualiza `picoMaximo` en cada iteración comparando si el nuevo `N` supera el récord anterior.
 :::
 ---
 
@@ -40,8 +40,8 @@ El ordenador genera un número secreto entero aleatorio entre 1 y 100 (en PSeInt
 ¿Cuál es el número máximo de intentos que un jugador necesitaría para adivinar **siempre** el número si juega de manera óptima utilizando la técnica de **búsqueda binaria** (dividir el intervalo a la mitad en cada paso)?
 
 :::tip[💡 Pistas para la resolución]
-* Como el rango es de 1 a 100, la búsqueda binaria evalúa N100 / 2 = 50N, luego N25N, N12N, etc.
-* ¿Qué potencia de 2 supera a 100? N2^6 = 64 < 100N, mientras que N2^7 = 128 \geq 100N. ¡El número máximo de intentos necesarios es siempre N\leq 7N!
+* Como el rango es de 1 a 100, la búsqueda binaria evalúa `100 / 2 = 50`, luego `25`, `12`, etc.
+* ¿Qué potencia de 2 supera a 100? `2⁶ = 64 < 100`, mientras que `2⁷ = 128 ≥ 100`. ¡El número máximo de intentos necesarios es siempre ≤ 7!
 :::
 ---
 

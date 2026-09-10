@@ -212,7 +212,7 @@ Para que una secuencia de pasos califique formalmente como un algoritmo, debe sa
 Los nombres que asignamos a nuestras variables, constantes y subalgoritmos se denominan **identificadores**. Un código profesional debe ser autoexplicativo (*código limpio*):
 
 * Deben comenzar obligatoriamente por una letra del alfabeto (o guion bajo `_`), nunca por un número.
-* No deben contener espacios en blanco, operadores matemáticos (`+`, `-`, `*`, `/`) ni caracteres especiales conflictivos (`!`, `@`, `#`, `signo dolar`, `%`).
+* No deben contener espacios en blanco, operadores matemáticos (`+`, `-`, `*`, `/`) ni caracteres especiales conflictivos (`!`, `@`, `#`, `$`, `%`).
 * Se desaconseja el uso de tildes y eñes para evitar problemas de codificación de caracteres al exportar código entre distintos sistemas operativos.
 * **Convención camelCase:** Si el identificador está formado por varias palabras, la primera palabra va en minúsculas y las subsiguientes con su inicial en mayúscula: `salarioNetoMensual`, `horasTrabajadas`, `precioUnitario`.
 * **Convención UPPER_SNAKE_CASE para constantes:** Las constantes se escriben íntegramente en mayúsculas separadas por guiones bajos: `PI`, `TASA_IVA_GENERAL`, `MAX_INTENTOS_ACCESO`.
@@ -269,7 +269,7 @@ En nuestro curso nos basamos en las convenciones formales de **PSeInt** con perf
 * División real (`/`): Produce siempre un resultado real con decimales.
 * División entera (`/` truncado) y Módulo / Resto (`MOD` o `%`):
   * La operación `A MOD B` calcula el residuo que sobra tras realizar la división entera entre `A` y `B`.
-  * *Ejemplo:* Si dividimos `17` entre `5`, el cociente entero es `3` (signo dolar5 \times 3 = 15signo dolar) y el resto que sobra es `2`. Por tanto: `17 MOD 5 = 2`.
+  * *Ejemplo:* Si dividimos `17` entre `5`, el cociente entero es `3` (5 × 3 = 15) y el resto que sobra es `2`. Por tanto: `17 MOD 5 = 2`.
   * El operador módulo es crucial en programación para detectar números pares/impares (`n MOD 2 = 0`), comprobar divisibilidad o reiniciar contadores circulares.
 
 ### 8.3 Operadores Relacionales (Comparación)
@@ -552,11 +552,11 @@ FinAlgoritmo
 | **1** | `a ← 30` | **30** | *indefinido* | *indefinido* | — | Asignación inicial de variable `a` |
 | **2** | `b ← 12` | 30 | **12** | *indefinido* | — | Asignación inicial de variable `b` |
 | **3** | `Mientras b ≠ 0` | 30 | 12 | *indefinido* | `12 ≠ 0` (**Verdadero**) | La condición se cumple: entramos a la **Iteración 1** |
-| **4** | `resto ← a MOD b` | 30 | 12 | **6** | — | `30 MOD 12 = 6` (porque signo dolar30 = 12 \times 2 + 6signo dolar) |
+| **4** | `resto ← a MOD b` | 30 | 12 | **6** | — | `30 MOD 12 = 6` (porque 30 = 12 × 2 + 6) |
 | **5** | `a ← b` | **12** | 12 | 6 | — | `a` adopta el valor de `b` (pasa a valer 12) |
 | **6** | `b ← resto` | 12 | **6** | 6 | — | `b` adopta el valor de `resto` (pasa a valer 6) |
 | **7** | `Mientras b ≠ 0` | 12 | 6 | 6 | `6 ≠ 0` (**Verdadero**) | La condición se cumple: entramos a la **Iteración 2** |
-| **8** | `resto ← a MOD b` | 12 | 6 | **0** | — | `12 MOD 6 = 0` (división exacta: signo dolar12 = 6 \times 2 + 0signo dolar) |
+| **8** | `resto ← a MOD b` | 12 | 6 | **0** | — | `12 MOD 6 = 0` (división exacta: 12 = 6 × 2 + 0) |
 | **9** | `a ← b` | **6** | 6 | 0 | — | `a` adopta el valor de `b` (pasa a valer 6) |
 | **10** | `b ← resto` | 6 | **0** | 0 | — | `b` adopta el valor de `resto` (pasa a valer 0) |
 | **11** | `Mientras b ≠ 0` | 6 | 0 | 0 | `0 ≠ 0` (**Falso**) | La condición falla: **sale inmediatamente del bucle** |
@@ -659,7 +659,7 @@ El diseño de software modular se guía por dos métricas de calidad esenciales:
 > En los ordenadores, los tipos de datos condicionan el tipo de operación aritmética. Si ambos operandos son de tipo **Entero**, la máquina aplica **división entera truncada**, descartando la fracción decimal: `17 / 4 = 4`. Para obtener el resultado decimal exacto (`4.25`), al menos uno de los operandos debe declararse explícitamente como número **Real** (`17.0 / 4` o `17 / 4.0`). El residuo exacto que se descartó en la división entera se recupera mediante la operación módulo: `17 MOD 4 = 1`.
 
 ### ¿Cuál es la diferencia fundamental entre el operador `=` y el operador `←` o `==`?
-> En matemáticas, el símbolo `=` representa una equivalencia simétrica y pasiva: si decimos que signo dolarx = 5signo dolar, estamos afirmando un hecho invariable. En programación, la **asignación** (`←` o `=` en Java) es una acción direccional y destructiva: significa *"toma el valor calculado a la derecha y guárdalo dentro de la celda de memoria identificada a la izquierda, sobrescribiendo cualquier dato previo"*. Por eso una instrucción como `x ← x + 1` tiene perfecto sentido en informática (incrementar `x`), mientras que en matemáticas sería una aberración insoluble (signo dolarx = x + 1 \implies 0 = 1signo dolar). Para contrastar si dos variables son iguales sin modificarlas, se emplea la comparación de igualdad (`=` en pseudocódigo o `==` en Java).
+> En matemáticas, el símbolo `=` representa una equivalencia simétrica y pasiva: si decimos que `x = 5`, estamos afirmando un hecho invariable. En programación, la **asignación** (`←` o `=` en Java) es una acción direccional y destructiva: significa *"toma el valor calculado a la derecha y guárdalo dentro de la celda de memoria identificada a la izquierda, sobrescribiendo cualquier dato previo"*. Por eso una instrucción como `x ← x + 1` tiene perfecto sentido en informática (incrementar `x`), mientras que en matemáticas sería una aberración insoluble (`x = x + 1 → 0 = 1`). Para contrastar si dos variables son iguales sin modificarlas, se emplea la comparación de igualdad (`=` en pseudocódigo o `==` en Java).
 
 ### ¿Por qué los bucles `Mientras` pueden no ejecutarse ninguna vez y los `Repetir` siempre se ejecutan al menos una?
 > Porque el bucle `Mientras` es de **pre-condición**: comprueba la puerta de entrada antes de franquear el paso. Si la condición es falsa antes de empezar, el ordenador salta el bloque completo. Por el contrario, el bucle `Repetir` (o `do-while` en Java) es de **post-condición**: entra al cuerpo del bucle, ejecuta las instrucciones y solo cuando llega al final evalúa si debe repetir o salir. Por esta razón, `Repetir` garantiza siempre un mínimo de una ejecución.
