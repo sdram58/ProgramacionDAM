@@ -1,9 +1,9 @@
 ---
 title: 📝 Boletín 01 Intermedio (Resuelto) — Algorítmica y Pseudocódigo
-description: Soluciones completas, código PSeInt probado y explicaciones lógicas de los 10 ejercicios del Boletín Intermedio de la Unidad 1.
+description: Soluciones completas, razonadas y verificadas en pseudocódigo PSeInt para los 10 ejercicios del Boletín Intermedio de la Unidad 1.
 ---
 
-A continuación se detallan las soluciones exhaustivas de los ejercicios planteados en el [Boletín Intermedio](/ProgramacionDAM/ud01/boletin-01-intermedio/).
+A continuación se detallan las soluciones exhaustivas de los 10 ejercicios planteados en el [Boletín Intermedio](./boletin-01-intermedio/).
 
 ---
 
@@ -15,27 +15,27 @@ Algoritmo CalificacionCualitativa
     
     // Filtro de validación mediante bucle con post-condición
     Repetir
-        Escribir "Introduce la nota del alumno [0.0 - 10.0]:"
+        Escribir "Introduce la nota académica del alumno [0.0 - 10.0]:"
         Leer nota
         Si nota < 0 O nota > 10 Entonces
-            Escribir "Error: La nota debe encontrarse entre 0 y 10. Inténtalo de nuevo."
+            Escribir "Error: La nota debe encontrarse obligatoriamente entre 0.0 y 10.0."
         FinSi
     Hasta Que nota ≥ 0 Y nota ≤ 10
     
     // Clasificación cualitativa mediante condicionales anidadas
     Si nota < 5.0 Entonces
-        Escribir "Calificación: Suspenso"
+        Escribir "Calificación obtenida: Suspenso"
     SiNo
         Si nota < 6.0 Entonces
-            Escribir "Calificación: Aprobado"
+            Escribir "Calificación obtenida: Aprobado"
         SiNo
             Si nota < 7.0 Entonces
-                Escribir "Calificación: Bien"
+                Escribir "Calificación obtenida: Bien"
             SiNo
                 Si nota < 9.0 Entonces
-                    Escribir "Calificación: Notable"
+                    Escribir "Calificación obtenida: Notable"
                 SiNo
-                    Escribir "Calificación: Sobresaliente"
+                    Escribir "Calificación obtenida: Sobresaliente"
                 FinSi
             FinSi
         FinSi
@@ -45,231 +45,261 @@ FinAlgoritmo
 
 ---
 
-### Solución al Ejercicio 2: Intercambio de dos variables (Swap)
+### Solución al Ejercicio 2: Bucle con centinela: Contador de pares e impares
 
-#### Método 1: Utilizando una variable auxiliar `TEMP` (Estándar y seguro)
 ```text
-Algoritmo IntercambioAuxiliar
-    Definir A, B, TEMP Como Real
-    Escribir "Introduce A:"
-    Leer A
-    Escribir "Introduce B:"
-    Leer B
+Algoritmo ContadorParesImparesCentinela
+    Definir n, pares, impares Como Entero
     
-    Escribir "Valores antes: A = ", A, " | B = ", B
+    pares ← 0
+    impares ← 0
     
-    TEMP ← A    // 1. Respaldamos el valor original de A
-    A ← B       // 2. Sobrescribimos A con el valor de B
-    B ← TEMP    // 3. Restauramos en B el valor respaldado de A
+    Escribir "Introduce números enteros (introduce 0 para finalizar):"
+    Leer n
     
-    Escribir "Valores después: A = ", A, " | B = ", B
-FinAlgoritmo
-```
-
-#### Método 2: Sin variable auxiliar (mediante operaciones aritméticas)
-```text
-Algoritmo IntercambioSinAuxiliar
-    Definir A, B Como Real
-    A ← 15
-    B ← 40
+    // El bucle Mientras se ejecuta hasta que el usuario introduzca el centinela 0
+    Mientras n ≠ 0 Hacer
+        Si n MOD 2 = 0 Entonces
+            pares ← pares + 1
+        SiNo
+            impares ← impares + 1
+        FinSi
+        
+        Escribir "Siguiente número (0 para terminar):"
+        Leer n
+    FinMientras
     
-    A ← A + B   // A contiene 55 (suma acumulada)
-    B ← A - B   // B = 55 - 40 = 15 (B adopta el valor original de A)
-    A ← A - B   // A = 55 - 15 = 40 (A adopta el valor original de B)
-    
-    Escribir "A = ", A, " | B = ", B  // Muestra: A = 40 | B = 15
+    Escribir "=============================="
+    Escribir "   RECUENTO FINAL DE DATOS    "
+    Escribir "=============================="
+    Escribir "Total de números pares:   ", pares
+    Escribir "Total de números impares: ", impares
 FinAlgoritmo
 ```
 
 ---
 
-### Solución al Ejercicio 3: Determinación del número mayor entre tres valores
+### Solución al Ejercicio 3: Búsqueda de mayor y menor de 5 números sin arrays
 
 ```text
-Algoritmo MayorDeTres
-    Definir N1, N2, N3, mayor Como Real
+Algoritmo MayorYMenorDeCinco
+    Definir i, n, mayor, menor Como Entero
     
-    Escribir "Introduce el primer número:"
-    Leer N1
-    Escribir "Introduce el segundo número:"
-    Leer N2
-    Escribir "Introduce el tercer número:"
-    Leer N3
+    Escribir "Introduce el 1º número:"
+    Leer n
     
-    Si N1 ≥ N2 Y N1 ≥ N3 Entonces
-        mayor ← N1
+    // ¡CRÍTICO! Inicializamos mayor y menor con el PRIMER valor real introducido.
+    // Si hubiéramos puesto "mayor ← 0" y todos los números fuesen negativos (-10, -5, -20),
+    // el algoritmo diría falsamente que el mayor es 0 cuando el usuario jamás lo introdujo.
+    mayor ← n
+    menor ← n
+    
+    Para i ← 2 Hasta 5 Con Paso 1 Hacer
+        Escribir "Introduce el ", i, "º número:"
+        Leer n
+        
+        Si n > mayor Entonces
+            mayor ← n
+        FinSi
+        
+        Si n < menor Entonces
+            menor ← n
+        FinSi
+    FinPara
+    
+    Escribir "------------------------------"
+    Escribir "El número MAYOR introducido es: ", mayor
+    Escribir "El número MENOR introducido es: ", menor
+FinAlgoritmo
+```
+
+---
+
+### Solución al Ejercicio 4: Subalgoritmo Factorial iterativo y análisis de traza
+
+#### 1. Código PSeInt del subalgoritmo y algoritmo principal:
+```text
+Funcion resultado ← factorial(n)
+    Definir resultado, i Como Entero
+    resultado ← 1
+    Para i ← 1 Hasta n Con Paso 1 Hacer
+        resultado ← resultado × i
+    FinPara
+FinFuncion
+
+Algoritmo PruebaFactorial
+    Definir num Como Entero
+    Escribir "Introduce un entero positivo para calcular su factorial:"
+    Leer num
+    Si num ≥ 0 Entonces
+        Escribir num, "! = ", factorial(num)
     SiNo
-        Si N2 ≥ N1 Y N2 ≥ N3 Entonces
-            mayor ← N2
+        Escribir "El factorial no está definido para números negativos."
+    FinSi
+FinAlgoritmo
+```
+
+#### 2. Tabla de traza para la invocación `factorial(4)`:
+
+| Ciclo | Variable `i` | Operación realizada | Valor de `resultado` |
+|:---:|:---:|---|:---:|
+| *Inicio* | *indefinido* | `resultado ← 1` | **1** |
+| **Iteración 1** | `1` | `resultado ← 1 × 1` | **1** |
+| **Iteración 2** | `2` | `resultado ← 1 × 2` | **2** |
+| **Iteración 3** | `3` | `resultado ← 2 × 3` | **6** |
+| **Iteración 4** | `4` | `resultado ← 6 × 4` | **24** |
+| *Fin bucle* | — | Retorno del subalgoritmo | **24** |
+
+---
+
+### Solución al Ejercicio 5: Introducción a la recursividad (`factorialRecursivo`)
+
+```text
+Funcion resultado ← factorialRecursivo(n)
+    Definir resultado Como Entero
+    
+    // CASO BASE: Detiene la recursión cuando n alcanza 0 o 1
+    Si n ≤ 1 Entonces
+        resultado ← 1
+    SiNo
+        // CASO RECURSIVO: n! = n × (n - 1)!
+        resultado ← n × factorialRecursivo(n - 1)
+    FinSi
+FinFuncion
+```
+
+#### Comparativa teórica (Iterativo vs Recursivo):
+* **Legibilidad y elegancia:** La versión recursiva es prácticamente idéntica a la definición matemática formal (`n! = n × (n-1)!`). Una vez dominada la recursividad, resulta conceptualmente muy limpia.
+* **Consumo de memoria:** La versión iterativa (`Para`) utiliza un único espacio de memoria fijo. La versión recursiva crea un **marco de pila (*stack frame*)** en la memoria RAM por cada llamada activa, esperando a que los casos más pequeños retornen su valor. Para valores grandes de `n`, una función recursiva sin optimizar puede desbordar la pila (*StackOverflowError*).
+
+---
+
+### Solución al Ejercicio 6: Diseño modular integral: Calculadora de IMC con validación
+
+```text
+// 1. Subalgoritmo para pedir y validar el peso
+SubProceso p ← pedirPeso()
+    Definir p Como Real
+    Repetir
+        Escribir "Introduce el peso en kilogramos (ejemplo: 72.5):"
+        Leer p
+        Si p ≤ 0 Entonces
+            Escribir "Error: El peso debe ser un número estrictamente positivo."
+        FinSi
+    Hasta Que p > 0
+FinSubProceso
+
+// 2. Subalgoritmo para pedir y validar la altura
+SubProceso a ← pedirAltura()
+    Definir a Como Real
+    Repetir
+        Escribir "Introduce la altura en metros (ejemplo: 1.75):"
+        Leer a
+        Si a ≤ 0 O a > 2.80 Entonces
+            Escribir "Error: La altura debe ser válida y positiva [0.5 - 2.80 m]."
+        FinSi
+    Hasta Que a > 0 Y a ≤ 2.80
+FinSubProceso
+
+// 3. Algoritmo principal coordinador
+Algoritmo CalculoIMCModular
+    Definir peso, altura, imc Como Real
+    
+    Escribir "=== SISTEMA CLÍNICO DE CÁLCULO DE IMC ==="
+    peso ← pedirPeso()
+    altura ← pedirAltura()
+    
+    imc ← peso / (altura × altura)
+    
+    Escribir "-----------------------------------------"
+    Escribir "Tu Índice de Masa Corporal (IMC) es: ", imc
+    
+    Si imc < 18.5 Entonces
+        Escribir "Diagnóstico OMS: Bajo peso (insuficiencia ponderal)."
+    SiNo
+        Si imc < 25.0 Entonces
+            Escribir "Diagnóstico OMS: Intervalo normal / Peso saludable."
         SiNo
-            mayor ← N3
+            Si imc < 30.0 Entonces
+                Escribir "Diagnóstico OMS: Sobrepeso."
+            SiNo
+                Escribir "Diagnóstico OMS: Obesidad."
+            FinSi
         FinSi
     FinSi
-    
-    Escribir "El mayor de los tres números introducidos es: ", mayor
 FinAlgoritmo
 ```
 
 ---
 
-### Solución al Ejercicio 4: Nómina semanal con horas extras e IRPF
+### Solución al Ejercicio 7: Comprobador de números primos optimizado (`esPrimo`)
 
 ```text
-Algoritmo CalculoNominaSemanal
-    Definir horasTrabajadas Como Real
-    Definir PRECIO_ORDINARIA, PRECIO_EXTRA Como Real
-    Definir salarioBruto, retencion, salarioNeto, exceso Como Real
+Funcion esP ← esPrimo(n)
+    Definir esP Como Logico
+    Definir divisor Como Entero
     
-    PRECIO_ORDINARIA ← 15.0
-    PRECIO_EXTRA ← 15.0 × 1.5   // 22.50 €/hora
-    
-    Escribir "Introduce el número total de horas trabajadas en la semana:"
-    Leer horasTrabajadas
-    
-    // Cálculo del salario bruto
-    Si horasTrabajadas ≤ 35 Entonces
-        salarioBruto ← horasTrabajadas × PRECIO_ORDINARIA
+    Si n < 2 Entonces
+        esP ← Falso
     SiNo
-        salarioBruto ← (35 × PRECIO_ORDINARIA) + ((horasTrabajadas - 35) × PRECIO_EXTRA)
-    FinSi
-    
-    // Cálculo de la retención fiscal
-    Si salarioBruto > 500 Entonces
-        exceso ← salarioBruto - 500
-        retencion ← exceso × 0.12
-    SiNo
-        retencion ← 0
-    FinSi
-    
-    salarioNeto ← salarioBruto - retencion
-    
-    Escribir "--- DESGLOSE DE NÓMINA ---"
-    Escribir "Horas trabajadas: ", horasTrabajadas
-    Escribir "Salario Bruto: ", salarioBruto, " €"
-    Escribir "Retención IRPF (12% sobre exceso >500€): ", retencion, " €"
-    Escribir "Salario Neto a percibir: ", salarioNeto, " €"
-FinAlgoritmo
-```
-
----
-
-### Solución al Ejercicio 5: Generador de tablas de multiplicar anidadas
-
-```text
-Algoritmo TablasMultiplicar
-    Definir tabla, factor, producto Como Entero
-    
-    Para tabla ← 1 Hasta 5 Con Paso 1 Hacer
-        Escribir "=============================="
-        Escribir "       TABLA DEL ", tabla
-        Escribir "=============================="
-        
-        Para factor ← 1 Hasta 10 Con Paso 1 Hacer
-            producto ← tabla × factor
-            Escribir tabla, " × ", factor, " = ", producto
-        FinPara
-        
-        Escribir "" // Línea en blanco separadora
-    FinPara
-FinAlgoritmo
-```
-
----
-
-### Solución al Ejercicio 6: Cálculo de potencias sin operador de exponenciación
-
-```text
-Algoritmo CalculoPotencia
-    Definir base, exponente, i Como Entero
-    Definir potencia Como Real
-    
-    Escribir "Introduce la base (número entero):"
-    Leer base
-    Escribir "Introduce el exponente (entero ≥ 0):"
-    Leer exponente
-    
-    Si exponente < 0 Entonces
-        Escribir "Error: Este algoritmo solo admite exponentes enteros mayores o iguales a cero."
-    SiNo
-        potencia ← 1  // Todo número elevado a 0 es 1
-        
-        Para i ← 1 Hasta exponente Con Paso 1 Hacer
-            potencia ← potencia × base
-        FinPara
-        
-        Escribir base, " elevado a ", exponente, " = ", potencia
-    FinSi
-FinAlgoritmo
-```
-
----
-
-### Solución al Ejercicio 7: Contador y sumador de dígitos de un número
-
-```text
-Algoritmo DescomposicionDigitos
-    Definir numeroOriginal, numeroTemporal, digito, contadorDigitos, sumaDigitos Como Entero
-    
-    Escribir "Introduce un número entero positivo:"
-    Leer numeroOriginal
-    
-    Si numeroOriginal < 0 Entonces
-        numeroOriginal ← -numeroOriginal // Convertir a positivo si fuera negativo
-    FinSi
-    
-    Si numeroOriginal = 0 Entonces
-        Escribir "El número tiene 1 dígito y su suma es 0."
-    SiNo
-        numeroTemporal ← numeroOriginal
-        contadorDigitos ← 0
-        sumaDigitos ← 0
-        
-        Mientras numeroTemporal > 0 Hacer
-            digito ← numeroTemporal MOD 10             // Extraemos el último dígito
-            sumaDigitos ← sumaDigitos + digito         // Acumulamos el dígito
-            contadorDigitos ← contadorDigitos + 1      // Contabilizamos el dígito
-            numeroTemporal ← trunc(numeroTemporal / 10)// Descartamos el último dígito
-        FinMientras
-        
-        Escribir "Número analizado: ", numeroOriginal
-        Escribir "Cantidad total de dígitos: ", contadorDigitos
-        Escribir "Suma de sus dígitos: ", sumaDigitos
-    FinSi
-FinAlgoritmo
-```
-
----
-
-### Solución al Ejercicio 8: Comprobador de números primos
-
-```text
-Algoritmo ComprobadorPrimo
-    Definir N, divisor Como Entero
-    Definir esPrimo Como Logico
-    
-    Escribir "Introduce un número entero mayor que 1:"
-    Leer N
-    
-    Si N ≤ 1 Entonces
-        Escribir "Por definición matemática, los números primos son mayores estrictos que 1."
-    SiNo
-        esPrimo ← Verdadero
+        esP ← Verdadero
         divisor ← 2
-        
-        // Optimización: Solo hace falta comprobar divisores hasta la raíz cuadrada de N
-        Mientras divisor × divisor ≤ N Y esPrimo = Verdadero Hacer
-            Si N MOD divisor = 0 Entonces
-                esPrimo ← Falso // Encontramos un divisor exacto: no es primo
+        // Optimización matemática: Si no tiene divisores hasta su raíz cuadrada, es primo
+        Mientras divisor × divisor ≤ n Y esP = Verdadero Hacer
+            Si n MOD divisor = 0 Entonces
+                esP ← Falso // Divisor exacto encontrado: no es primo
             FinSi
             divisor ← divisor + 1
         FinMientras
-        
-        Si esPrimo Entonces
-            Escribir "El número ", N, " es PRIMO."
-        SiNo
-            Escribir "El número ", N, " es COMPUESTO (no es primo)."
-        FinSi
     FinSi
+FinFuncion
+
+Algoritmo ProbarPrimalidad
+    Definir num Como Entero
+    Escribir "Introduce un número entero:"
+    Leer num
+    Si esPrimo(num) Entonces
+        Escribir "El número ", num, " es PRIMO."
+    SiNo
+        Escribir "El número ", num, " es COMPUESTO (no es primo)."
+    FinSi
+FinAlgoritmo
+```
+
+---
+
+### Solución al Ejercicio 8: Contador y sumador de dígitos de un número entero
+
+```text
+Algoritmo ContadorYSumadorDigitos
+    Definir numOriginal, numCopia, ultimoDigito, totalDigitos, sumaDigitos Como Entero
+    
+    Escribir "Introduce un número entero positivo:"
+    Leer numOriginal
+    
+    Si numOriginal < 0 Entonces
+        numCopia ← -numOriginal // Tomamos valor absoluto si fuese negativo
+    SiNo
+        numCopia ← numOriginal
+    FinSi
+    
+    totalDigitos ← 0
+    sumaDigitos ← 0
+    
+    Si numCopia = 0 Entonces
+        totalDigitos ← 1
+        sumaDigitos ← 0
+    SiNo
+        Mientras numCopia > 0 Hacer
+            ultimoDigito ← numCopia MOD 10         // Extraemos el dígito de las unidades
+            sumaDigitos ← sumaDigitos + ultimoDigito
+            totalDigitos ← totalDigitos + 1
+            numCopia ← trunc(numCopia / 10)         // Recortamos el último dígito
+        FinMientras
+    FinSi
+    
+    Escribir "El número ", numOriginal, " tiene ", totalDigitos, " dígitos."
+    Escribir "La suma de todos sus dígitos es: ", sumaDigitos
 FinAlgoritmo
 ```
 
@@ -278,58 +308,40 @@ FinAlgoritmo
 ### Solución al Ejercicio 9: Determinación de Año Bisiesto (Regla Gregoriana)
 
 ```text
-Algoritmo AnioBisiesto
+Algoritmo AnioBisiestoGregoriano
     Definir anio Como Entero
     Definir esBisiesto Como Logico
     
     Escribir "Introduce el año a comprobar:"
     Leer anio
     
-    // Condición gregoriana unificada:
+    // Regla gregoriana unificada:
     // Divisible por 4 Y NO por 100, O BIEN divisible por 400
     esBisiesto ← (anio MOD 4 = 0 Y anio MOD 100 ≠ 0) O (anio MOD 400 = 0)
     
     Si esBisiesto Entonces
-        Escribir "El año ", anio, " es BISIESTO (tiene 366 días, febrero cuenta con 29)."
+        Escribir "El año ", anio, " es BISIESTO (febrero tiene 29 días, total 366 días)."
     SiNo
-        Escribir "El año ", anio, " es COMÚN (tiene 365 días, febrero cuenta con 28)."
+        Escribir "El año ", anio, " es COMÚN (febrero tiene 28 días, total 365 días)."
     FinSi
 FinAlgoritmo
 ```
 
 ---
 
-### Solución al Ejercicio 10: Desglose óptimo de billetes en cajero automático
+### Solución al Ejercicio 10: Diagnóstico de errores y arquitectura de la JVM
 
-```text
-Algoritmo CajeroAutomaticoBilletes
-    Definir importe, b50, b20, b10, b5, resto Como Entero
-    
-    Escribir "Introduce el importe a retirar en euros (múltiplo de 5):"
-    Leer importe
-    
-    Si importe ≤ 0 O importe MOD 5 ≠ 0 Entonces
-        Escribir "Error: La cantidad debe ser un entero positivo y múltiplo de 5 €."
-    SiNo
-        b50 ← trunc(importe / 50)
-        resto ← importe MOD 50
-        
-        b20 ← trunc(resto / 20)
-        resto ← resto MOD 20
-        
-        b10 ← trunc(resto / 10)
-        resto ← resto MOD 10
-        
-        b5 ← trunc(resto / 5)
-        resto ← resto MOD 5
-        
-        Escribir "=========================================="
-        Escribir " DESGLOSE ÓPTIMO DE BILLETES PARA: ", importe, " €"
-        Escribir "=========================================="
-        Escribir "Billetes de 50 €: ", b50
-        Escribir "Billetes de 20 €: ", b20
-        Escribir "Billetes de 10 €: ", b10
-        Escribir "Billetes de 5 €:  ", b5
-    FinSi
-FinAlgoritmo
-```
+#### 1. Diagnóstico y clasificación de errores:
+* **(a) Olvidar una palabra reservada como `FinSi` o un punto y coma:**
+  * **Tipo:** Error **Sintáctico** (de compilación).
+  * **Momento de detección:** En tiempo de análisis léxico/sintáctico por parte del compilador o del intérprete antes de iniciar la ejecución del programa. El compilador rechaza el archivo y reporta la línea y columna del fallo gramatical.
+* **(b) Calcular el área de un círculo usando la fórmula del perímetro (`2 × PI × r`):**
+  * **Tipo:** Error **Semántico o Lógico** (*bug*).
+  * **Momento de detección:** Durante la fase de pruebas (QA) o en producción. El programa compila sin advertencias y se ejecuta con total normalidad, pero el valor numérico obtenido es incorrecto. Requiere depuración manual o trazado sobre papel.
+* **(c) Dividir entre cero cuando la variable tiempo vale `0`:**
+  * **Tipo:** Error **en Tiempo de Ejecución** (*Runtime Exception*).
+  * **Momento de detección:** En pleno funcionamiento del programa, en el instante exacto en que la CPU intenta ejecutar la operación aritmética inválida. Provoca el cierre abrupto de la aplicación si no se gestiona mediante control de excepciones (`try-catch`).
+
+#### 2. Ventajas del modelo híbrido de Java:
+* **Frente a un lenguaje compilado nativo como C:** Ofrece **portabilidad total** (*Write Once, Run Anywhere*). En C, el código binario generado está atado a la arquitectura de CPU (x86, ARM) y al sistema operativo; en Java, el mismo fichero binario intermedio (`.class` o `.jar`) se ejecuta idénticamente en cualquier plataforma sin necesidad de recompilar el proyecto, requiriendo únicamente la JVM de dicho entorno.
+* **Frente a un lenguaje puramente interpretado como Python:** Ofrece **mayor rendimiento y verificación temprana**. Al compilarse previamente a Bytecode, se descartan los errores sintácticos y de tipado antes de la ejecución. Además, el motor **JIT** de la JVM compila los métodos más ejecutados a código máquina nativo ultrarrápido en caliente, alcanzando velocidades cercanas a las de C++.

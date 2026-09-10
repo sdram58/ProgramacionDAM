@@ -1,40 +1,52 @@
 ---
 title: 📝 Boletín 01 Inicial — Algorítmica y Pseudocódigo
-description: Colección de 8 ejercicios prácticos fundamentales para dominar la lógica booleana, el trazado de variables y las estructuras básicas en pseudocódigo.
+description: Colección de 10 ejercicios prácticos fundamentales para dominar la lógica booleana, el trazado de variables en memoria, estructuras de control básicas y modularidad en pseudocódigo.
 ---
 
-Este boletín contiene **8 ejercicios prácticos** diseñados para afianzar los conceptos fundamentales de la Unidad 1. Resuélvelos sobre el papel o en la herramienta PSeInt antes de consultar las soluciones.
+Este boletín contiene **10 ejercicios prácticos** diseñados para afianzar los conceptos fundamentales de la Unidad 1. Resuélvelos sobre el papel o en la herramienta **PSeInt** antes de consultar el [Boletín Inicial Resuelto](./boletin-01-inicial-resuelto/).
 
 ---
 
-### Ejercicio 1: Traza manual con variables en memoria
+### Ejercicio 1: Traza manual con variables en memoria y truco del intercambio (*Swap*)
 Dadas tres variables enteras `A`, `B` y `C`, cuyos valores iniciales son `A ← 5`, `B ← 2` y `C ← 10`:
-Indica el valor que contendrá cada una de las tres variables tras ejecutar secuencialmente las siguientes instrucciones:
 
-1. `A ← A + B`
-2. `B ← C - A`
-3. `C ← A × B`
-4. `A ← C MOD B`
-5. `B ← B + 1`
+1. Indica el valor que contendrá cada una de las tres variables tras ejecutar secuencialmente las siguientes instrucciones rellenando una tabla de traza de variables paso a paso:
+   ```text
+   A ← A + B
+   B ← C - A
+   C ← A × B
+   A ← C MOD B
+   B ← B + 1
+   ```
 
-Presenta tu respuesta rellenando una tabla de traza de variables paso a paso.
+2. Analiza ahora el siguiente algoritmo de tres pasos con dos variables iniciales `X ← 7` e `Y ← 4`:
+   ```text
+   X ← X + Y
+   Y ← X - Y
+   X ← X - Y
+   ```
+   * Elabora la tabla de traza indicando el valor de `X` e `Y` en cada línea.
+   * ¿Qué efecto final ha tenido esta secuencia sobre los valores de ambas variables? ¿Por qué es un truco célebre en la historia de la algorítmica?
 
 ---
 
 ### Ejercicio 2: Evaluación de expresiones aritméticas y precedencia
-Evalúa manualmente el resultado exacto de las siguientes expresiones aritméticas respetando la jerarquía de operadores:
+Evalúa manualmente el resultado exacto de las siguientes expresiones aritméticas respetando la jerarquía universal de operadores (sin utilizar calculadora ni ordenador):
 
-* a) `25 % 4`
+* a) `25 MOD 4`
 * b) `7 / 2 + 2.5`
 * c) `(4 + 6) × 3 + 2 × (5 - 1)`
-* d) `5 / 2 + 17 % 3`
-* e) `27 % 4 + 15 / 4`
-* f) `37 / 4 × 4 - 2`
+* d) `5 / 2 + 17 MOD 3`
+* e) `3 + 4 × 2`
+* f) `(3 + 4) × 2`
+* g) `10 MOD 3 + 1`
+* h) `2 ^ 3 + 1`
+* i) `37 / 4 × 4 - 2`
 
 ---
 
-### Ejercicio 3: Evaluación de expresiones lógicas y booleanas
-Determina si cada una de las siguientes expresiones lógicas se evalúa a `Verdadero` o `Falso`:
+### Ejercicio 3: Evaluación de expresiones lógicas y álgebra booleana
+Determina si cada una de las siguientes expresiones lógicas se evalúa a `Verdadero` o `Falso`, indicando el orden de evaluación:
 
 * a) `7 ≥ 5 O 27 ≠ 8`
 * b) `(45 ≤ 7) O NO (5 ≥ 7)`
@@ -46,30 +58,60 @@ Determina si cada una de las siguientes expresiones lógicas se evalúa a `Verda
 
 ---
 
-### Ejercicio 4: Algoritmo de la vida cotidiana en lenguaje natural estructurado
-Describe un algoritmo detallado, preciso y finito para **cambiar una rueda pinchada de un vehículo**. 
-El algoritmo debe contemplar medidas de seguridad (freno de mano, triángulos/luz de emergencia), el uso de herramientas (gato, llave de cruz, rueda de repuesto) y el orden correcto de aflojar y apretar los tornillos.
+### Ejercicio 4: Algoritmo de la vida cotidiana en lenguaje estructurado
+Describe un algoritmo en lenguaje natural estructurado, no ambiguo, preciso y finito para realizar una de las siguientes tareas cotidianas:
+* **Opción A:** Cambiar una rueda pinchada de un vehículo (contemplando seguridad, elevación con gato y orden de afloje/apriete en cruz).
+* **Opción B:** La preparación completa de una tortilla de patatas tradicional.
+
+Identifica con claridad cuáles son los datos de **Entrada (Input)**, los pasos ordenados del **Procesamiento** y el resultado de **Salida (Output)**.
 
 ---
 
 ### Ejercicio 5: Cálculo de área y perímetro de un rectángulo
-Diseña un algoritmo en pseudocódigo (PSeInt) que solicite al usuario por teclado la base y la altura de un rectángulo (números reales). El algoritmo debe calcular y mostrar por pantalla:
+Diseña un algoritmo en pseudocódigo (compatible con PSeInt con perfil estricto) que solicite al usuario por teclado la base y la altura de un rectángulo (números reales positivos). El algoritmo debe calcular y mostrar por pantalla:
 1. El perímetro del rectángulo: `2 × (base + altura)`.
 2. El área del rectángulo: `base × altura`.
 
 ---
 
-### Ejercicio 6: Clasificador de número par o impar
-Diseña un algoritmo en pseudocódigo que pida un número entero al usuario. Utilizando el operador módulo (`MOD`), debe determinar si el número introducido es **par** o **impar**, mostrando el mensaje correspondiente por pantalla. Si el número introducido es cero, debe indicar además que es neutro.
+### Ejercicio 6: Estructuras condicionales simples y dobles (`Si - Entonces - SiNo`)
+Diseña dos algoritmos en pseudocódigo:
+1. **Mayor de dos números:** Solicita dos números distintos por teclado (`num1` y `num2`) y muestra por pantalla cuál de los dos es el mayor.
+2. **Control de mayoría de edad:** Solicita la edad de una persona (entero) y muestra por pantalla `"Es mayor de edad"` si tiene 18 años o más, o `"Es menor de edad"` en caso contrario.
 
 ---
 
-### Ejercicio 7: Conversor de tiempo (segundos a horas, minutos y segundos)
-Diseña un algoritmo en pseudocódigo que reciba una cantidad total de segundos (entero positivo) y la descomponga en su equivalente en **horas**, **minutos** y **segundos sobrantes**.
-*Ejemplo:* Si el usuario introduce `3665` segundos, el programa debe mostrar: `1 hora, 1 minuto y 5 segundos`.
+### Ejercicio 7: Selección múltiple (`Según...Hacer`) para días de la semana
+Diseña un algoritmo en pseudocódigo que solicite al usuario un número entero del `1` al `7` correspondiente a un día de la semana y muestre su nombre en texto:
+* `1` → Lunes
+* `2` → Martes
+* `3` → Miércoles
+* `4` → Jueves
+* `5` → Viernes
+* `6` → Sábado
+* `7` → Domingo
+
+Si el usuario introduce cualquier otro número fuera de ese rango, el bloque `De Otro Modo` debe mostrar el mensaje de error: `"Error: El valor introducido no corresponde a ningún día válido [1-7]"`.
 
 ---
 
-### Ejercicio 8: Contador y acumulador con bucle Mientras
-Diseña un algoritmo en pseudocódigo que calcule la suma de los primeros `N` números enteros positivos (desde `1` hasta `N`), donde `N` es un valor solicitado al usuario por teclado. Debes utilizar obligatoriamente una estructura iterativa `Mientras`.
-*Ejemplo:* Si `N = 5`, el resultado debe ser `1 + 2 + 3 + 4 + 5 = 15`.
+### Ejercicio 8: Comparativa de bucles: Conteo y acumulador (`Mientras` vs `Para`)
+1. Escribe un algoritmo en pseudocódigo que, utilizando un bucle `Mientras`, muestre por pantalla los números correlativos del `1` al `10`.
+2. Reescribe el mismo algoritmo sustituyendo el bucle `Mientras` por un bucle `Para`. Reflexiona: ¿qué ventajas ofrece el bucle `Para` cuando conocemos de antemano el número exacto de iteraciones?
+3. Amplía el algoritmo para que calcule la **suma acumulada** de los primeros `N` números enteros positivos (desde `1` hasta `N`), solicitando el valor de `N` al usuario.
+
+---
+
+### Ejercicio 9: Diseño modular y funciones (`esPar`)
+Diseña un programa modular en pseudocódigo compuesto por:
+1. Una función o subalgoritmo llamado `esPar` que reciba como parámetro formal un número entero `n` y devuelva el valor booleano `Verdadero` si el número es par o `Falso` si es impar (empleando el operador `MOD`).
+2. El algoritmo principal consumidor que, mediante un bucle `Para`, recorra los números del `1` al `5`, invoque a la función `esPar` en cada vuelta y muestre por pantalla mensajes del estilo:
+   * `"El número 1 es impar"`
+   * `"El número 2 es par"`
+
+---
+
+### Ejercicio 10: Fundamentos de ingeniería del software
+Responde brevemente a las siguientes cuestiones conceptuales:
+1. **Clasificación de lenguajes:** Clasifica los siguientes tres lenguajes según su nivel de abstracción (alto o bajo nivel) y según su modelo de ejecución (compilado, interpretado o híbrido): **Ensamblador**, **Python** y **Java**.
+2. **Ciclo de vida del software:** Ordena cronológicamente las cinco fases clásicas del desarrollo de software: *Pruebas (QA)*, *Análisis de Requisitos*, *Despliegue y Mantenimiento*, *Diseño y Arquitectura*, *Implementación (Codificación)*.
