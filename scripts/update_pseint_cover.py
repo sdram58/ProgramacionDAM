@@ -5,7 +5,8 @@ import pymupdf as fitz
 
 # Paths
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-PDF_PATH = os.path.join(BASE_DIR, 'Docs2', 'UD01 Fundamentos Programación', 'Ejercicios_PSeInt.pdf')
+PDF_SRC = os.path.join(BASE_DIR, 'Docs2', 'UD01 Fundamentos Programación', 'Ejercicios_PSeInt.pdf')
+PDF_DEST = os.path.join(BASE_DIR, 'public', 'pdf', 'ud01', 'Ejercicios_PSeInt.pdf')
 PORTADA_IMG = os.path.join(BASE_DIR, 'portada.png')
 
 EDGE_PATH = r'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
@@ -178,13 +179,16 @@ def generate_cover_html():
     return html
 
 def main():
-    print(f"Target PDF: {PDF_PATH}")
-    if not os.path.exists(PDF_PATH):
-        print(f"Error: {PDF_PATH} does not exist!")
+    print(f"Source PDF: {PDF_SRC}")
+    print(f"Destination PDF: {PDF_DEST}")
+    if not os.path.exists(PDF_SRC):
+        print(f"Error: {PDF_SRC} does not exist!")
         sys.exit(1)
 
+    os.makedirs(os.path.dirname(PDF_DEST), exist_ok=True)
+
     # 1. Open original PDF
-    orig_doc = fitz.open(PDF_PATH)
+    orig_doc = fitz.open(PDF_SRC)
     orig_len = len(orig_doc)
     print(f"Original PDF opened: {orig_len} pages. First page rect: {orig_doc[0].rect}")
 
@@ -227,26 +231,20 @@ def main():
 
     print(f"New PDF page count: {len(new_doc)} (expected {orig_len})")
 
-    # 6. Save new PDF
-    temp_target = PDF_PATH + ".new.pdf"
+    # 6. Save new PDF to destination
+    temp_target = PDF_DEST + ".new.pdf"
     new_doc.save(temp_target, garbage=4, deflate=True)
-    
-    # Save a preview of page 0 for verification
-    pix = new_doc[0].get_pixmap(dpi=150)
-    preview_path = os.path.join(BASE_DIR, 'scripts', 'cover_preview.png')
-    pix.save(preview_path)
-    print(f"Cover preview saved to {preview_path}")
 
     # Close documents
     orig_doc.close()
     cover_doc.close()
     new_doc.close()
 
-    # Replace original file
-    if os.path.exists(PDF_PATH):
-        os.remove(PDF_PATH)
-    os.rename(temp_target, PDF_PATH)
-    print(f"Successfully replaced {PDF_PATH}!")
+    # Replace destination file
+    if os.path.exists(PDF_DEST):
+        os.remove(PDF_DEST)
+    os.rename(temp_target, PDF_DEST)
+    print(f"Successfully saved {PDF_DEST}!")
 
     # Clean up temp files
     if os.path.exists(cover_html_path):
