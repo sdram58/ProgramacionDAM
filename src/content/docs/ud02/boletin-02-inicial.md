@@ -1,11 +1,12 @@
---- 
+---
 title: 📝 Boletín 02 Inicial — Primeros Pasos con Java
-description: 10 ejercicios fundamentales en Java LTS con IntelliJ IDEA sobre tipos primitivos, variables, operadores aritméticos y lógicos, entrada/salida por consola y sentencias condicionales.
+description: 13 ejercicios prácticos fundamentales en Java 21 LTS con IntelliJ IDEA sobre tipos primitivos, variables, operadores aritméticos y lógicos, entrada/salida por consola y sentencias condicionales.
 draft: true
-
+prev: false
+next: false
 ---
 
-Este boletín reúne **10 ejercicios prácticos fundamentales** diseñados para familiarizarte con el entorno de desarrollo **IntelliJ IDEA**, la sintaxis del lenguaje **Java** (versión 21 LTS), el uso de la clase `Scanner`, la salida formateada con `printf` y las bifurcaciones condicionales `if-else` y `switch`.
+Este boletín reúne **13 ejercicios prácticos fundamentales** diseñados para consolidar tu soltura con el entorno de desarrollo **IntelliJ IDEA**, la sintaxis básica del lenguaje **Java** (versión moderna 21 LTS), el uso de la clase `Scanner`, la salida formateada con `printf` y las bifurcaciones condicionales `if-else` y `switch`.
 
 Antes de consultar el [Boletín Inicial Resuelto](./boletin-02-inicial-resuelto/), implementa y ejecuta cada solución en tu propio proyecto de IntelliJ IDEA.
 
@@ -16,7 +17,7 @@ Escribe un programa en Java que solicite al usuario a través del teclado:
 1. Su nombre de pila.
 2. Su primer apellido.
 3. Su edad (número entero).
-4. La inicial de su grupo de DAM (un solo carácter: 'A', 'B', etc.).
+4. La inicial de su grupo de DAM (un solo carácter: `'A'`, `'B'`, etc.).
 5. La cuota mensual del centro en euros (número con decimales).
 
 El programa debe imprimir una ficha resumen limpia y tabulada empleando **únicamente una llamada a `System.out.printf()`** con los especificadores de formato `%s`, `%d`, `%c` y `%.2f`.
@@ -85,7 +86,7 @@ Escribe un programa que solicite al usuario una cantidad entera de segundos (por
 * **Minutos restantes**
 * **Segundos finales**
 
-*Ejemplo de salida:* `7534 segundos equivalen a: 2 horas, 5 minutos y 34 segundos.`
+*Ejemplo de salida:* `7534 segundos equivalen a: 2 horas, 5 minutos y 34 segundos.`  
 Debes utilizar exclusivamente los operadores de división entera (`/`) y módulo (`%`).
 
 ---
@@ -106,12 +107,11 @@ Escribe un programa que pida al usuario el número de un mes (un entero del 1 al
 ---
 
 ### Ejercicio 9: El Misterio del Salto de Línea en Scanner
-Escribe un programa para registrar la matrícula de un vehículo y el nombre completo de su titular:
+Escribe un programa para registrar el número de matrícula de un vehículo y el nombre completo de su titular:
 1. Solicita primero el número de bastidor (un número entero `int` leído con `nextInt()`).
 2. A continuación, solicita el nombre completo del titular (una cadena leída con `nextLine()`).
 
-Implementa el programa prestando atención a limpiar el carácter de salto de línea residual (`
-`) que queda en el buffer del teclado tras leer el número. Muestra por pantalla los datos leídos para verificar que el nombre no se ha saltado.
+Implementa el programa prestando atención a limpiar el carácter de salto de línea residual (`\n`) que queda en el búfer del teclado tras leer el número. Muestra por pantalla los datos leídos para verificar que el nombre no se ha saltado.
 
 ---
 
@@ -120,8 +120,40 @@ Escribe un programa que simule el lanzamiento de dos dados de juego:
 * Dado 1: Un dado tradicional de 6 caras (valores del 1 al 6).
 * Dado 2: Un dado de rol de 20 caras (D20, valores del 1 al 20).
 
-Utiliza la función `Math.random()` con la fórmula general `(int)(Math.random() * (max - min + 1)) + min`.
+Utiliza la función `Math.random()` con la fórmula general `(int)(Math.random() * (max - min + 1)) + min`.  
 El programa debe:
 1. Generar la tirada de ambos dados.
 2. Calcular y mostrar la suma total de ambos.
-3. Si en el dado de 20 caras se obtiene un `20`, debe imprimir: *"¡Éxito Crítico!"*. Si se obtiene un `1`, debe imprimir: *"¡Pifia Crítica!"*.\n
+3. Si en el dado de 20 caras se obtiene un `20`, debe imprimir: *"¡Éxito Crítico!"*. Si se obtiene un `1`, debe imprimir: *"¡Pifia Crítica!"*.
+
+---
+
+### Ejercicio 11: Traducción y Evaluación de Condiciones Lógicas Complejas
+El modelado de reglas de negocio en software exige traducir especificaciones en lenguaje natural a expresiones booleanas rigurosas. Escribe un programa que solicite los datos necesarios y evalúe las siguientes tres condiciones del mundo real:
+
+1. **Concesión de Beca de Estudios:** Un alumno obtiene beca si su nota media es mayor o igual a `8.5` O BIEN si sus ingresos familiares anuales son inferiores a `15.000 €` y su nota media es al menos de `6.0`.
+2. **Autorización de Despegue de Aeronave:** Un avión puede despegar si la velocidad del viento es inferior a `20 m/s`, la pista disponible mide al menos `2.500 metros` y la visibilidad es superior a `1.000 metros`.
+3. **Control de Acceso a Sala Exclusiva:** Se autoriza la entrada si la persona es mayor de edad (`edad >= 18`) y (posee invitación VIP O está acompañada por un miembro premium).
+
+Muestra el resultado booleano (`true` o `false`) de cada evaluación y explica qué regla determinó el veredicto.
+
+---
+
+### Ejercicio 12: Valor Absoluto y Mayor de Números sin Sentencias de Control
+Escribe un programa que:
+1. Pida por teclado un número decimal `x` (positivo o negativo) y calcule su valor absoluto `|x|`:
+   - Primero, utilizando una estructura condicional `if-else`.
+   - Segundo, utilizando el **operador ternario `?:`**.
+   - Tercero, utilizando el método matemático oficial `Math.abs(x)`.
+2. Pida dos números enteros `a` y `b` e imprima cuál es el mayor de los dos **sin utilizar ninguna sentencia `if` ni `switch`**, empleando exclusivamente el método `Math.max(a, b)` y el operador ternario.
+
+---
+
+### Ejercicio 13: Resolución de la Ecuación de Primer Grado `ax + b = 0`
+Escribe un programa que solicite por consola los coeficientes `a` y `b` (números reales con decimales) de una ecuación lineal de primer grado:
+`a·x + b = 0`
+
+El programa debe calcular y clasificar rigurosamente la solución según los siguientes casos algebraicos:
+1. Si `a ≠ 0`: Existe una solución única dada por `x = -b / a`. Muestra el valor de `x` con exactamente 4 decimales de precisión.
+2. Si `a = 0` y `b ≠ 0`: La ecuación se reduce a `b = 0` (falso), por lo que **no existe ninguna solución**.
+3. Si `a = 0` y `b = 0`: La igualdad `0 = 0` es siempre cierta, por lo que existen **infinitas soluciones**.

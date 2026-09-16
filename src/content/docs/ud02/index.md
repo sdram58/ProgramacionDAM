@@ -1668,6 +1668,8 @@ Esta unidad cubre de manera directa y exhaustiva los siguientes **Resultados de 
 
 Para afianzar cada uno de los conceptos aprendidos, dispones de una batería progresiva de ejercicios prácticos especialmente diseñados para este nivel:
 
-1. **Boletín 2.1 — Inicial**: Ejercicios guiados paso a paso sobre declaración de variables, cálculos aritméticos elementales, conversiones de tipos y salida formateada por consola.
-2. **Boletín 2.2 — Intermedio**: Ejercicios sobre sentencias condicionales `if-else` y `switch`, manipulación de cadenas con `String`, uso de `Math` y control de la entrada de datos con `Scanner`.
-3. **Boletín 2.3 — Retos y Extras**: Desafíos algorítmicos procedentes de plataformas de competición como *Acepta el Reto* y *CodeWars*, diseñados para desarrollar pensamiento crítico y resolución de problemas complejos.
+1. **[Boletín 2.1 — Inicial](./boletin-02-inicial/)**: 13 ejercicios guiados paso a paso sobre declaración de variables, cálculos aritméticos elementales, conversiones de tipos, entrada/salida formateada por consola y evaluación de condiciones lógicas.
+   - Consulta también el **[Boletín Inicial (Resuelto)](./boletin-02-inicial-resuelto/)** con explicaciones y código fuente completo en Java 21 LTS.
+2. **[Boletín 2.2 — Intermedio](./boletin-02-intermedio/)**: 13 ejercicios aplicados sobre sentencias condicionales `if-else` y `switch`, manipulación avanzada de cadenas con `String`, funciones de `Math`, tipos `enum`, cálculo temporal con `java.time` y geometría computacional.
+   - Consulta también el **[Boletín Intermedio (Resuelto)](./boletin-02-intermedio-resuelto/)** con soluciones detalladas.
+3. **[Boletín 2.3 — Retos y Extras](./boletin-02-extras/)**: 6 grandes desafíos algorítmicos competitivos (verificación oficial de DNI, año bisiesto gregoriano, simulación probabilística de dados, factoriales astronómicos con `BigInteger`, algoritmo voraz de cambio monetario exacto y resolución de ecuaciones de segundo grado con análisis de discriminante).
