@@ -138,7 +138,7 @@ El IDE oficial para todas las explicaciones, prácticas y proyectos de este curs
 │  │                    │ }                                                  │ │
 │  ├────────────────────┴────────────────────────────────────────────────────┤ │
 │  │ Terminal / Run / Debugger Console                                       │ │
-│  │ "C:\Program Files\Java\jdk-21in\java.exe" HolaMundo                  │ │
+│  │ "C:\Program Files\Java\jdk-21\bin\java.exe" HolaMundo                  │ │
 │  │ ¡Hola Mundo!                                                            │ │
 │  └─────────────────────────────────────────────────────────────────────────┘ │
 └──────────────────────────────────────────────────────────────────────────────┘
@@ -148,7 +148,7 @@ El IDE oficial para todas las explicaciones, prácticas y proyectos de este curs
 
 Aunque IntelliJ IDEA automatiza la detección del JDK, cualquier técnico superior en informática debe conocer los tres mecanismos con los que el sistema operativo localiza las herramientas de Java:
 
-1. **`PATH`:** Es una variable de entorno del sistema que contiene una lista de directorios donde el sistema operativo busca programas ejecutables cuando se invoca su nombre en la consola (como `javac` o `java`). Para que funcionen desde cualquier carpeta, se debe añadir al PATH la ruta a la subcarpeta `bin` del JDK (por ejemplo, `C:\Program Files\Java\jdk-21in` en Windows o `/usr/lib/jvm/jdk-21/bin` en Linux).
+1. **`PATH`:** Es una variable de entorno del sistema que contiene una lista de directorios donde el sistema operativo busca programas ejecutables cuando se invoca su nombre en la consola (como `javac` o `java`). Para que funcionen desde cualquier carpeta, se debe añadir al PATH la ruta a la subcarpeta `bin` del JDK (por ejemplo, `C:\Program Files\Java\jdk-21\bin` en Windows o `/usr/lib/jvm/jdk-21/bin` en Linux).
 2. **`JAVA_HOME`:** Variable de entorno utilizada por servidores de aplicaciones (Tomcat, WildFly) y herramientas de compilación (Maven, Gradle) para saber exactamente en qué carpeta raíz reside el JDK principal del sistema.
 3. **`CLASSPATH`:** Variable que indica a la JVM en qué directorios o librerías empaquetadas (`.jar`) debe buscar las clases que necesita un programa para funcionar. Por defecto, siempre incluye el directorio actual representado por un punto (`.`).
 
