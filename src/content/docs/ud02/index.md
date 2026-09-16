@@ -1,858 +1,1251 @@
 ---
 draft: true
 title: 🔤 Unidad 2. Primeros pasos con Java
-description: El ecosistema Java (JDK, JVM, Bytecode), instalación y configuración de IntelliJ IDEA, estructura canónica de un programa, tipos de datos primitivos, variables, constantes, operadores, clases estándar (String, Math, java.time), sentencias condicionales y entrada/salida por consola.
+description: El ecosistema Java (JDK, JVM, Bytecode), instalación y configuración de IntelliJ IDEA, estructura canónica de un programa, tipos de datos primitivos, variables, constantes, operadores, clases estándar (String, Math, java.time, BigDecimal), sentencias condicionales y entrada/salida por consola.
 prev: false
 next: false
 ---
 
-¡Enhorabuena por haber superado la Unidad 1! Ya dominas los cimientos del pensamiento algorítmico, la representación mediante diagramas de flujo y el diseño estructurado con pseudocódigo. Ahora ha llegado el momento más esperado por todo estudiante de informática: **traducir esa lógica conceptual a un lenguaje de programación real, industrial y de propósito general**.
+¡Enhorabuena por haber superado la Unidad 1! Ya dominas los cimientos del pensamiento algorítmico, la representación mediante diagramas de flujo ANSI y el diseño estructurado con pseudocódigo. Ahora ha llegado el momento más esperado por todo estudiante de desarrollo de software: **traducir esa lógica conceptual a un lenguaje de programación real, industrial y de propósito general**.
 
 En esta unidad nos sumergiremos en **Java** (en su versión estándar moderna **Java 21 LTS**), uno de los lenguajes más robustos, seguros y demandados del panorama tecnológico mundial. Utilizaremos como entorno de trabajo oficial **IntelliJ IDEA**, la herramienta de referencia en la industria del desarrollo de software profesional.
 
-Aprenderás cómo viaja tu código desde el editor hasta los transistores del procesador a través de la Máquina Virtual de Java (JVM), dominarás los 8 tipos primitivos de datos, comprenderás cómo manipular texto y números con precisión matemática, aprenderás a interactuar con el usuario mediante la consola y controlarás el flujo de ejecución mediante sentencias condicionales modernas.
+Aprenderás cómo viaja tu código desde el editor hasta los transistores del procesador a través de la Máquina Virtual de Java (JVM), dominarás los 8 tipos primitivos de datos, comprenderás cómo manipular texto, números y fechas con precisión matemática, interactuarás con el usuario mediante la consola y controlarás el flujo de ejecución mediante sentencias condicionales clásicas y modernas.
 
 ---
 
 ## 1. El Ecosistema de la Plataforma Java
 
-A diferencia de lenguajes como C o C++ (cuyo código se compila directamente a código binario específico de una arquitectura de hardware y sistema operativo concreto), Java nació en 1995 de la mano de Sun Microsystems con una premisa revolucionaria:
+### 1.1 Breve Historia y Filosofía de Diseño
+Java nació a principios de los años 90 en **Sun Microsystems**, liderado por el ingeniero **James Gosling**. Inicialmente bautizado como *Oak* (por un roble que Gosling veía desde la ventana de su despacho), el proyecto buscaba crear un lenguaje para programar dispositivos electrónicos inteligentes (el proyecto *Star7*). Posteriormente, con el auge de Internet y la World Wide Web en 1995, el lenguaje fue renombrado como **Java** (en homenaje al café originario de la isla de Java en Indonesia) y presentado al mundo con una promesa revolucionaria:
 
-> **"Write Once, Run Anywhere" (WORA): Escribe una vez, ejecuta en cualquier parte.**
+> **WORA (*Write Once, Run Anywhere*)**  
+> *"Escribe tu código una sola vez y ejecútalo en cualquier lugar."*
 
-Para hacer realidad este principio sin sacrificar el rendimiento, Java no compila a lenguaje máquina nativo ni se interpreta línea a línea como un script de bash o Python. En su lugar, utiliza una **arquitectura híbrida de dos fases** basada en tres pilares conceptuales:
+A diferencia de lenguajes como C o C++, cuyos programas debían recompilarse específicamente para cada sistema operativo y procesador (generando binarios dependientes de la arquitectura x86, ARM, etc.), Java introdujo un nivel de abstracción intermedio: la **Máquina Virtual de Java (JVM)**.
 
-```text
-┌─────────────────────────┐          javac          ┌─────────────────────────┐
-│     Código Fuente       │ ──────────────────────► │      Java Bytecode      │
-│     (MiClase.java)      │       (Compilador)      │     (MiClase.class)     │
-└─────────────────────────┘                         └─────────────────────────┘
-                                                                 │
-                                                                 ▼
-                                                    ┌─────────────────────────┐
-                                                    │  Máquina Virtual (JVM)  │
-                                                    │  ├── Intérprete rápido  │
-                                                    │  └── Compilador JIT     │
-                                                    └─────────────────────────┘
-                                                                 │
-                                           ┌─────────────────────┴─────────────────────┐
-                                           ▼                                           ▼
-                                ┌─────────────────────┐                     ┌─────────────────────┐
-                                │   Windows (x86_64)  │                     │     Linux (ARM64)   │
-                                │   Código Máquina    │                     │    Código Máquina   │
-                                └─────────────────────┘                     └─────────────────────┘
-```
+En 2010, **Oracle Corporation** adquirió Sun Microsystems, asumiendo la administración y liderazgo del ecosistema Java, junto con el proceso comunitario abierto **JCP (*Java Community Process*)** y el proyecto de código abierto **OpenJDK**.
 
-### 1.1 La Tríada Fundamental: JDK, JRE y JVM
-
-Es muy frecuente que los principiantes confundan estas tres siglas. Cada una de ellas engloba a la anterior en capas concéntricas de funcionalidad:
-
-1. **JVM (Java Virtual Machine — Máquina Virtual de Java):**
-   * Es el software encargado de ejecutar el código binario intermedio de Java, denominado **Bytecode** (archivos con extensión `.class`).
-   * La JVM es abstracta y neutral respecto al hardware. Existe una implementación específica de la JVM para cada sistema operativo y arquitectura (Windows x64, Linux ARM, macOS Apple Silicon, etc.).
-   * Incorpora dos motores de ejecución: un **intérprete** que arranca de inmediato y un **compilador JIT (*Just-In-Time*)**, que detecta qué fragmentos de código se ejecutan repetidamente ("puntos calientes" o *hotspots*) y los compila al vuelo a instrucciones nativas de la CPU con optimizaciones extremas.
-   * Administra la memoria de forma autónoma mediante el **Garbage Collector (Recolector de Basura)**, liberando automáticamente los objetos que el programa ya no utiliza.
-
-2. **JRE (Java Runtime Environment — Entorno de Ejecución de Java):**
-   * Es el paquete mínimo necesario para que un usuario final pueda **ejecutar** aplicaciones Java en su ordenador.
-   * Contiene la **JVM** junto con las **bibliotecas de clases estándar de la API de Java** (`java.lang`, `java.util`, `java.io`, etc.) y los archivos de configuración requeridos.
-   * *Nota:* A partir de Java 11, Oracle y OpenJDK ya no distribuyen un instalador independiente de JRE; para desarrollar o ejecutar se instala directamente el JDK o se empaqueta un runtime ligero a medida con la herramienta `jlink`.
-
-3. **JDK (Java Development Kit — Kit de Desarrollo de Java):**
-   * Es el paquete integral que necesita cualquier **programador**.
-   * Incluye la **JVM**, todas las librerías de la API y el conjunto completo de herramientas de desarrollo por línea de comandos:
-     * `javac`: el compilador que transforma archivos `.java` en Bytecode `.class`.
-     * `java`: el lanzador que inicializa la JVM y ejecuta la clase principal de la aplicación.
-     * `javadoc`: el generador automático de documentación técnica en formato HTML a partir de comentarios en el código.
-     * `jar`: empaquetador de clases y recursos en ficheros comprimidos `.jar` (*Java Archive*).
-     * `jdb`: el depurador (*debugger*) para inspeccionar la ejecución paso a paso.
-
-```text
-┌──────────────────────────────────────────────────────────────────────────┐
-│  JDK (Java Development Kit)                                              │
-│  Herramientas de desarrollo: javac, javadoc, jar, jlink, jdb...          │
-│  ┌────────────────────────────────────────────────────────────────────┐  │
-│  │  JRE (Java Runtime Environment)                                    │  │
-│  │  Bibliotecas del API de Java (java.base, java.sql, etc.)           │  │
-│  │  ┌──────────────────────────────────────────────────────────────┐  │  │
-│  │  │  JVM (Java Virtual Machine)                                  │  │  │
-│  │  │  Cargador de clases, Intérprete, Compilador JIT, GC          │  │  │
-│  │  └──────────────────────────────────────────────────────────────┘  │  │
-│  └────────────────────────────────────────────────────────────────────┘  │
-└──────────────────────────────────────────────────────────────────────────┘
-```
-
-### 1.2 Versiones de Java y Filosofía LTS
-
-El ecosistema Java se rige por un calendario de publicaciones semestral (una nueva versión en marzo y otra en septiembre de cada año). Existen dos tipos de lanzamientos:
-
-* **Versiones STS (*Short Term Support*):** Tienen soporte y actualizaciones de seguridad únicamente durante 6 meses (por ejemplo, Java 18, 19, 20, 22). Se emplean para probar novedades del lenguaje en entornos de experimentación.
-* **Versiones LTS (*Long Term Support*):** Diseñadas para entornos de producción empresarial con soporte oficial garantizado durante años. Las grandes versiones históricas y actuales de referencia en la industria son:
-  * **Java 8 LTS (2014):** La mayor revolución histórica (introdujo lambdas y la API Stream).
-  * **Java 11 LTS (2018):** Sistema modular de módulos (`JPMS`) y eliminación de APIs obsoletas.
-  * **Java 17 LTS (2021):** Clases selladas (*sealed classes*), registros (*records*) y patrones de diseño modernos.
-  * **Java 21 LTS (2023 - Versión del curso):** Hilos virtuales (*Virtual Threads / Project Loom*), coincidencia de patrones en `switch` (*Pattern Matching*), colecciones secuenciadas y plantillas de cadenas.
-
-:::note[OpenJDK vs Oracle JDK]
-**OpenJDK** es la implementación de código abierto de referencia de la plataforma Java Standard Edition (SE). La inmensa mayoría de distribuciones comerciales (como Eclipse Temurin, Amazon Corretto, Azul Zulu o Microsoft Build of OpenJDK) se compilan directamente a partir del código de OpenJDK bajo licencia GPL v2 con Classpath Exception, lo que garantiza su gratuidad total y libertad para su uso comercial.
+:::tip[Duke: La Mascota Oficial de Java]
+La simpática criatura con forma de triángulo blanco y nariz roja que acompaña a la documentación de Java se llama **Duke**. Fue diseñada originalmente por Joe Palrang como el agente interactivo que guiaba al usuario en el prototipo doméstico *Star7*. Hoy en día es el embajador de marca de la comunidad Java en todo el mundo.
 :::
+
+---
+
+### 1.2 Tipología de Aplicaciones en Java
+Gracias a su versatilidad y rendimiento, Java no se limita a un único entorno, sino que abarca prácticamente todas las ramas de la informática actual:
+
+1. **Aplicaciones de Consola (*CLI*):** Programas basados en texto que interactúan mediante la terminal y flujos estándar (`System.in`, `System.out`), ideales para scripts, herramientas de administración y aprendizaje inicial.
+2. **Aplicaciones de Escritorio con Interfaz Gráfica (*GUI*):** Software para sistemas operativos de usuario final creado mediante librerías gráficas como Swing o la moderna **JavaFX**.
+3. **Aplicaciones Web y Servicios Backend:** La columna vertebral de la banca, el comercio electrónico y las grandes plataformas (Netflix, Amazon, Twitter). Emplea tecnologías como Servlets, Jakarta EE (anteriormente Java EE) y frameworks líderes como **Spring Boot** y Quarkus.
+4. **Aplicaciones Móviles:** El sistema operativo **Android** adoptó Java desde sus inicios como lenguaje oficial para el desarrollo de apps nativas.
+5. **Sistemas Embebidos e Internet de las Cosas (*IoT*):** Dispositivos médicos, cajeros automáticos, tarjetas SIM y sensores industriales que ejecutan entornos reducidos de Java.
+
+---
+
+### 1.3 La Arquitectura Técnica: Código Fuente, Bytecode y JVM
+
+Para comprender qué ocurre cuando pulsamos el botón "Run" en nuestro entorno, debemos distinguir con total precisión las tres etapas del ciclo de ejecución:
+
+```text
+┌────────────────────────┐      javac (Compilador)      ┌────────────────────────┐
+│  Código Fuente (.java) │  ─────────────────────────►  │    Bytecode (.class)   │
+└────────────────────────┘                              └────────────────────────┘
+                                                                    │
+                                                                    ▼
+                                                    ┌──────────────────────────────┐
+                                                    │  JVM (Java Virtual Machine)  │
+                                                    │  ├── ClassLoader             │
+                                                    │  ├── Bytecode Verifier       │
+                                                    │  ├── Intérprete              │
+                                                    │  └── Compilador JIT (C1/C2)  │
+                                                    └──────────────────────────────┘
+                                                                    │
+                                                                    ▼
+                                                    ┌──────────────────────────────┐
+                                                    │ Código Máquina Nativo (CPU)  │
+                                                    └──────────────────────────────┘
+```
+
+1. **Código Fuente (`.java`):** Es el texto en lenguaje Java comprensible para los seres humanos.
+2. **Compilador (`javac`):** No traduce el código fuente a lenguaje máquina directo de la CPU, sino a un código intermedio universal denominado **Bytecode** (almacenado en archivos `.class`). El Bytecode es independiente del procesador y del sistema operativo.
+3. **Máquina Virtual de Java (`JVM`):** Es el software instalado en el sistema operativo del cliente que interpreta y ejecuta el Bytecode. Cada plataforma (Windows, macOS, Linux, Android) tiene su propia versión de la JVM adaptada a su hardware, pero todas interpretan exactamente el mismo Bytecode.
+4. **Compilador JIT (*Just-In-Time*):** Para evitar la lentitud clásica de los intérpretes puros, las JVM modernas detectan las partes del código que se ejecutan repetidamente (*hot spots*) y las compilan dinámicamente sobre la marcha a código máquina nativo del procesador, logrando un rendimiento cercano al de C++.
+5. **Recolector de Basura (*Garbage Collector*):** Un proceso en segundo plano de la JVM que rastrea los objetos en la memoria RAM que ya no se usan y libera su espacio automáticamente, eliminando de raíz las fugas de memoria (*memory leaks*) que plagaban a los lenguajes tradicionales.
+
+---
+
+### 1.4 La Tríada Fundamental: JDK, JRE y JVM
+
+Es muy frecuente que los estudiantes principiantes confundan estas tres siglas esenciales:
+
+| Sigla | Significado | ¿Qué incluye? | ¿Para quién es? |
+|---|---|---|---|
+| **JVM** | *Java Virtual Machine* | Motor de ejecución, intérprete, compilador JIT y Garbage Collector. | La base técnica de todo el sistema. |
+| **JRE** | *Java Runtime Environment* | La **JVM** + las **librerías estándar de clases** de Java (`rt.jar` / módulos). | **Usuarios finales** que solo quieren ejecutar programas ya compilados. |
+| **JDK** | *Java Development Kit* | El **JRE** completo + **herramientas de desarrollo** (`javac`, `javadoc`, depuradores, empaquetador `jar`). | **Desarrolladores de software**. Es lo que nosotros instalaremos obligatoriamente. |
+
+```text
+┌─────────────────────────────────────────────────────────────┐
+│ JDK (Java Development Kit)                                  │
+│ ┌─────────────────────────────────────────────────────────┐ │
+│ │ JRE (Java Runtime Environment)                          │ │
+│ │ ┌───────────────────────┐ ┌───────────────────────────┐ │ │
+│ │ │ JVM                   │ │ Librerías de la API       │ │ │
+│ │ │ (Intérprete + JIT)    │ │ (java.base, util, io...)  │ │ │
+│ │ └───────────────────────┘ └───────────────────────────┘ │ │
+│ └─────────────────────────────────────────────────────────┘ │
+│ Herramientas: javac, javadoc, jdb, jar...                   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 1.5 Versiones de Java y Filosofía LTS
+
+Desde 2018, Java adoptó un ritmo de lanzamientos semestral (cada 6 meses, en marzo y septiembre, se publica una nueva versión del lenguaje). Para garantizar la estabilidad industrial sin obligar a las empresas a migrar de versión cada medio año, Oracle introdujo la distinción entre versiones estándar y **LTS (*Long-Term Support*)**:
+
+* **Versiones No-LTS (rápidas):** Tienen soporte oficial de solo 6 meses y se utilizan como banco de pruebas para novedades.
+* **Versiones LTS (Soporte Extendido):** Se publican cada dos años y cuentan con un mínimo de 5 a 8 años de parches de seguridad y estabilidad empresarial.
+  * **Java 8 LTS:** El hito de la programación funcional (Lambdas y Streams).
+  * **Java 11 LTS:** Sistema de módulos e inferencia local con `var`.
+  * **Java 17 LTS:** Registros (*records*), clases selladas y nuevo switch.
+  * **Java 21 LTS (La versión de nuestro curso):** La versión actual de referencia en la industria, con hilos virtuales (*Virtual Threads*), pattern matching exhaustivo y máxima optimización.
+
+#### OpenJDK vs. Oracle JDK
+* **OpenJDK:** La implementación oficial de código abierto y libre distribución con licencia GNU GPL v2. Es el estándar sobre el que se basan los compiladores modernos.
+* **Oracle JDK:** Distribución comercial de Oracle, con condiciones específicas de licencia para entornos productivos corporativos.
+* **Distribuciones comunitarias certificadas:** Existen compilaciones 100% gratuitas, de alto rendimiento y código abierto muy populares como **Eclipse Temurin (Adoptium)**, **Amazon Corretto** o **Azul Zulu**.
 
 ---
 
 ## 2. El Entorno de Desarrollo Oficial: IntelliJ IDEA
 
-En el ciclo de DAM y en la industria del software internacional, **IntelliJ IDEA** (desarrollado por JetBrains) es ampliamente reconocido como el IDE más avanzado, ergonómico e inteligente para el desarrollo en Java.
+En el ciclo de DAM profesional, no escribimos código en editores de texto planos sin asistencia. Utilizamos un **Entorno Integrado de Desarrollo (*IDE - Integrated Development Environment*)**. 
 
-### 2.1 Descarga e Instalación de IntelliJ IDEA Community
-
-1. Dirígete al portal oficial de JetBrains (`https://www.jetbrains.com/idea/download/`).
-2. Descarga la edición **IntelliJ IDEA Community Edition**, la versión gratuita, de código abierto y completamente funcional para todo el temario de DAM.
-3. Ejecuta el asistente de instalación asegurándote de marcar las casillas:
-   * Crear acceso directo en el escritorio (*Desktop Shortcut*).
-   * Añadir la carpeta `bin` a la variable de entorno `PATH`.
-   * Asociar archivos `.java`.
-
-### 2.2 Creación de un Nuevo Proyecto y Vinculación del JDK
-
-Una de las ventajas más sobresalientes de IntelliJ IDEA es que **puede descargar y configurar automáticamente el JDK por ti** sin necesidad de lidiar manualmente con variables de entorno del sistema operativo:
-
-1. Abre IntelliJ IDEA y haz clic en **New Project** (Nuevo Proyecto).
-2. En la barra lateral izquierda, selecciona **New Project**.
-3. Configura los siguientes parámetros:
-   * **Name:** `UD02_PrimerosPasos`
-   * **Location:** Carpeta de tu espacio de trabajo (por ejemplo, `C:\workspace\DAM\UD02_PrimerosPasos`).
-   * **Language:** `Java`.
-   * **Build system:** `IntelliJ`.
-   * **JDK:** Si no tienes ninguno instalado, despliega el selector, pulsa en **Download JDK**, escoge la versión **21** y el proveedor **Eclipse Temurin (Adoptium)**. IntelliJ lo descargará e integrará automáticamente.
-   * Marca la casilla opcional *Add sample code* si deseas que genere un archivo de prueba.
-4. Haz clic en **Create**.
-
-:::tip[No te compliques configurando variables de entorno a mano]
-En cursos antiguos o manuales tradicionales era necesario configurar manualmente las variables del sistema (`PATH`, `JAVA_HOME`, `CLASSPATH`) en el Panel de Control de Windows o en el fichero `.bashrc` de Linux para poder compilar y ejecutar desde la terminal. **IntelliJ IDEA se encarga de todo esto por ti**: detecta o descarga cualquier versión del JDK que necesites directamente desde su asistente, y compila y ejecuta con un solo clic. Como futuro técnico superior en DAM es conveniente que comprendas para qué sirven estas variables (lo vimos en la sección anterior), pero apóyate en la potencia de tu IDE para concentrarte en lo verdaderamente determinante: aprender a programar.
-:::
+El IDE oficial para todas las explicaciones, prácticas y proyectos de este curso es **IntelliJ IDEA** (de JetBrains), la herramienta más potente, inteligente y ampliamente adoptada en el sector empresarial de Java.
 
 ```text
-Estructura de directorios generada por IntelliJ IDEA:
-UD02_PrimerosPasos/
-├── .idea/                 ← Metadatos y configuración interna de IntelliJ (no tocar)
-├── src/                   ← ¡AQUÍ VA TU CÓDIGO FUENTE! Archivos .java
-│   └── Main.java
-├── out/                   ← Carpeta de salida donde IntelliJ compila los .class
-└── UD02_PrimerosPasos.iml ← Fichero descriptor del módulo de IntelliJ
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  IntelliJ IDEA                                                               │
+│  ┌────────────────────┬────────────────────────────────────────────────────┐ │
+│  │ Project Navigator  │ Editor de Código con Resaltado de Sintaxis         │ │
+│  │                    │                                                    │ │
+│  │ ▼ src              │ public class HolaMundo {                           │ │
+│  │   └─ HolaMundo.java│     public static void main(String[] args) {       │ │
+│  │                    │         System.out.println("¡Hola Mundo!");        │ │
+│  │                    │     }                                              │ │
+│  │                    │ }                                                  │ │
+│  ├────────────────────┴────────────────────────────────────────────────────┤ │
+│  │ Terminal / Run / Debugger Console                                       │ │
+│  │ "C:\Program Files\Java\jdk-21in\java.exe" HolaMundo                  │ │
+│  │ ¡Hola Mundo!                                                            │ │
+│  └─────────────────────────────────────────────────────────────────────────┘ │
+└──────────────────────────────────────────────────────────────────────────────┘
 ```
+
+### 2.1 Conceptos de Sistema Operativo: PATH, JAVA_HOME y CLASSPATH
+
+Aunque IntelliJ IDEA automatiza la detección del JDK, cualquier técnico superior en informática debe conocer los tres mecanismos con los que el sistema operativo localiza las herramientas de Java:
+
+1. **`PATH`:** Es una variable de entorno del sistema que contiene una lista de directorios donde el sistema operativo busca programas ejecutables cuando se invoca su nombre en la consola (como `javac` o `java`). Para que funcionen desde cualquier carpeta, se debe añadir al PATH la ruta a la subcarpeta `bin` del JDK (por ejemplo, `C:\Program Files\Java\jdk-21in` en Windows o `/usr/lib/jvm/jdk-21/bin` en Linux).
+2. **`JAVA_HOME`:** Variable de entorno utilizada por servidores de aplicaciones (Tomcat, WildFly) y herramientas de compilación (Maven, Gradle) para saber exactamente en qué carpeta raíz reside el JDK principal del sistema.
+3. **`CLASSPATH`:** Variable que indica a la JVM en qué directorios o librerías empaquetadas (`.jar`) debe buscar las clases que necesita un programa para funcionar. Por defecto, siempre incluye el directorio actual representado por un punto (`.`).
+
+:::tip[IntelliJ IDEA se encarga de todo esto por ti]
+En el pasado, los desarrolladores tenían que pelear manualmente configurando estas variables en el registro de Windows o en el fichero `/etc/environment` de Linux. **IntelliJ IDEA gestiona todo esto de forma autónoma**: detecta automáticamente los JDKs instalados en tu equipo o te permite descargar uno nuevo con un simple clic desde su propia interfaz.
+:::
+
+---
+
+### 2.2 Creación de un Nuevo Proyecto en IntelliJ IDEA
+
+Para crear tu primer proyecto profesional en IntelliJ IDEA Community Edition:
+
+1. Abre IntelliJ IDEA y en la pantalla de bienvenida pulsa sobre **New Project** (o desde el menú: **File → New → Project...**).
+2. En el panel lateral izquierdo, selecciona **Java**.
+3. En el campo **Name**, escribe el nombre del proyecto (por ejemplo, `Unidad02_PrimerosPasos`).
+4. En **Location**, elige la carpeta de tu disco donde se guardará tu código.
+5. En el desplegable **JDK**, selecciona tu versión de **Java 21**. Si no aparece ninguna instalada, pulsa sobre **Download JDK...** y elige el proveedor *Eclipse Temurin* o *Amazon Corretto*: IntelliJ lo descargará e instalará automáticamente.
+6. Marca la casilla **Add sample code** si deseas que IntelliJ cree automáticamente un archivo de ejemplo con el método `main`.
+7. Pulsa **Create**.
+
+#### Anatomía del Proyecto en el Disco
+IntelliJ organiza los archivos de trabajo en una estructura estricta:
+* **`.idea/`:** Carpeta oculta donde IntelliJ guarda las preferencias del proyecto, módulos y configuraciones de ejecución (no se debe modificar a mano).
+* **`src/` (*Source*):** La carpeta más importante. Aquí residen exclusivamente nuestros archivos de código fuente con extensión `.java`.
+* **`out/` (o `target/`):** Carpeta donde IntelliJ almacena automáticamente los archivos binarios compilados `.class` listos para ser interpretados por la JVM.
+
+---
 
 ### 2.3 Atajos de Teclado y Plantillas Vivas (*Live Templates*)
 
-Para programar con fluidez en IntelliJ IDEA, memoriza y practica estos atajos desde el primer día:
+La velocidad y comodidad con la que un programador escribe código en IntelliJ IDEA se debe a sus plantillas automáticas:
 
-| Atajo / Plantilla | Acción en IntelliJ IDEA | Utilidad Práctica |
+| Plantilla / Atajo | Acción que realiza | Resultado generado |
 |---|---|---|
-| `main` o `psvm` + <kbd>Tab</kbd> | Genera automáticamente el método `public static void main(String[] args)` | Ahorra escribir 40 caracteres de cabecera en cada programa. |
-| `sout` + <kbd>Tab</kbd> | Genera `System.out.println();` | La instrucción de impresión más habitual. |
-| `souf` + <kbd>Tab</kbd> | Genera `System.out.printf("");` | Para imprimir texto con formato de columnas y decimales. |
-| <kbd>Shift</kbd> + <kbd>F10</kbd> | **Run (Ejecutar)** | Compila y ejecuta el programa activo de inmediato. |
-| <kbd>Ctrl</kbd> + <kbd>F9</kbd> | **Build Project** | Compila todo el proyecto comprobando errores sintácticos. |
-| <kbd>Shift</kbd> + <kbd>F9</kbd> | **Debug (Depurar)** | Inicia la ejecución controlada deteniéndose en los puntos de interrupción. |
-| <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>L</kbd> | **Reformat Code** | Formatea e indenta perfectamente todo tu código según el estándar oficial de Java. |
-| <kbd>Ctrl</kbd> + <kbd>/</kbd> | **Toggle Comment** | Comenta o descomenta la línea actual con `//`. |
-| <kbd>Alt</kbd> + <kbd>Enter</kbd> | **Show Context Actions** | Menú mágico de corrección: soluciona errores, añade imports y sugiere mejoras. |
+| Escribir `main` o `psvm` + <kbd>Tab</kbd> | Genera el punto de entrada de la aplicación. | `public static void main(String[] args) { }` |
+| Escribir `sout` + <kbd>Tab</kbd> | Imprime texto por consola con salto de línea. | `System.out.println();` |
+| Escribir `souf` + <kbd>Tab</kbd> | Imprime texto con formato enriquecido. | `System.out.printf("");` |
+| <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>L</kbd> | **Reformat Code:** Limpia e indenta todo el archivo con formato perfecto. | Código limpio y alineado automáticamente. |
+| <kbd>Shift</kbd> + <kbd>F10</kbd> | **Run:** Compila y ejecuta el programa actual. | Abre la consola de salida. |
+| <kbd>Shift</kbd> + <kbd>F9</kbd> | **Debug:** Inicia la ejecución con depurador paso a paso. | Abre el panel de inspección de variables. |
+| <kbd>Alt</kbd> + <kbd>Intro</kbd> | **Show Context Actions:** Soluciona errores y sugiere mejoras. | Corrección guiada de código. |
 
 ---
 
 ## 3. Anatomía de un Programa en Java
 
-Vamos a crear y analizar minuciosamente nuestro primer programa formal en Java. Dentro de la carpeta `src/`, crea un paquete llamado `es.iesperenxisa.primerospasos` y un archivo llamado `HolaMundo.java`:
+Observemos el programa clásico "Hola Mundo" estructurado conforme a las mejores prácticas de la ingeniería del software:
 
 ```java
 package es.iesperenxisa.primerospasos;
 
 /**
- * Mi primer programa en Java para el módulo de Programación DAM.
- * Imprime un mensaje de bienvenida y realiza una operación básica.
- * 
- * @author Tu Nombre
+ * Clase principal para ilustrar la anatomía de un programa en Java.
+ * @author Docente DAM
  * @version 1.0
  */
 public class HolaMundo {
 
     public static void main(String[] args) {
-        // Imprimimos un saludo por la consola de salida estándar
-        System.out.println("¡Bienvenido al universo Java desde IntelliJ IDEA!");
-        
-        // Declaramos una variable entera y mostramos un cálculo
-        int horasSemanales = 8;
-        System.out.println("Horas semanales dedicadas: " + horasSemanales);
+        // Imprime un saludo por la consola estándar del sistema
+        System.out.println("¡Hola, programadores de DAM!");
     }
 }
 ```
 
 ### 3.1 Desglose Riguroso del Código
 
-Cada una de las líneas anteriores encierra una regla estructural obligatoria del lenguaje Java:
+1. **`package es.iesperenxisa.primerospasos;`**  
+   Indica el **paquete** (espacio de nombres) al que pertenece la clase. Los paquetes evitan colisiones de nombres entre clases y organizan el proyecto en carpetas físicas en el disco. La convención internacional de Java exige utilizar el nombre de dominio de la organización en orden inverso (por ejemplo, `es.iesperenxisa`).
+2. **`public class HolaMundo`**  
+   En Java, **todo el código debe residir obligatoriamente dentro de una clase**. No pueden existir funciones o variables "sueltas" en el archivo.  
+   * **Regla estricta del compilador:** Si una clase se declara con el modificador `public`, el archivo en el disco **debe llamarse exactamente igual que la clase** y con extensión `.java` (`HolaMundo.java`). Además, solo puede existir una única clase pública por cada archivo físico.
+3. **`public static void main(String[] args)`**  
+   Es el **punto de entrada universal (*Entry Point*)** de cualquier aplicación ejecutable en Java. Cuando le pedimos a la JVM que lance nuestra aplicación, busca exactamente este método:
+   * **`public`:** Modificador de visibilidad que permite a la JVM invocar el método desde fuera de la clase.
+   * **`static`:** Permite que la JVM invoque el método sin necesidad de crear previamente un objeto de la clase `HolaMundo` en memoria.
+   * **`void`:** Indica que el método realiza una tarea pero no devuelve ningún valor como resultado de su ejecución.
+   * **`main`:** Nombre reservado que busca el lanzador de Java.
+   * **`String[] args`:** Parámetro que representa un array de cadenas de texto para capturar argumentos pasados por línea de comandos al arrancar el programa.
+4. **`System.out.println(...)`**  
+   * `System`: Es una clase predefinida en el paquete nuclear de Java (`java.lang`).
+   * `out`: Es un objeto estático dentro de `System` que representa el flujo de salida estándar (la consola de texto).
+   * `println()`: Es el método que escribe el contenido entre paréntesis en la pantalla y añade automáticamente un salto de línea al final. Su homólogo `System.out.print()` muestra el contenido pero mantiene el cursor en la misma línea.
 
-#### 1. La declaración de paquete: `package es.iesperenxisa.primerospasos;`
-* Los **paquetes** (*packages*) son el mecanismo de Java para organizar las clases en carpetas jerárquicas y evitar colisiones de nombres entre librerías.
-* Por convención internacional, los nombres de paquetes se escriben íntegramente en minúsculas utilizando la notación de dominio web inverso del centro o empresa (`es.iesperenxisa.modulo.tema`).
-
-#### 2. La definición de la clase: `public class HolaMundo`
-* Java es un lenguaje orientado a objetos puro: **absolutamente todo el código debe residir en el interior de una clase**.
-* `public`: modificador de visibilidad que indica que la clase es accesible desde cualquier parte del proyecto.
-* `class`: palabra reservada fundamental que indica la definición de un molde o tipo.
-* `HolaMundo`: identificador o nombre asignado a la clase.
-
-:::caution[Regla de Oro de los Ficheros Java]
-Si una clase está declarada con el modificador `public`, el archivo en disco **DEBE llamarse exactamente igual que la clase**, respetando estrictamente las mayúsculas y minúsculas (sensibilidad a la caja tipográfica o *case-sensitive*) y finalizando con la extensión `.java`:
-* Nombre de la clase: `public class HolaMundo` → Nombre de archivo: `HolaMundo.java`.
-* Si el fichero se llamara `holamundo.java` o `Hola_Mundo.java`, el compilador emitirá un error fatal de compilación.
-:::
-
-#### 3. El punto de entrada universal: `public static void main(String[] args)`
-Es el método más célebre de Java. Cuando ordenas a la JVM ejecutar una clase, busca con exactitud milimétrica esta cabecera para comenzar la ejecución:
-
-* `public`: El método debe poder ser invocado externamente por la Máquina Virtual desde fuera de la clase.
-* `static`: Indica que el método pertenece a la clase en sí y **no requiere la creación previa de un objeto** en memoria mediante `new` para poder ser invocado. Al encenderse la JVM, la aplicación aún no ha creado ningún objeto; sin `static`, el programa jamás podría arrancar.
-* `void`: Especifica el tipo de retorno. Significa que el método realiza una tarea pero **no devuelve ningún dato** al finalizar su ejecución.
-* `main`: Es el nombre reservado que identifica la puerta de entrada. Si cometes una errata (como `Main` con mayúscula o `mian`), el compilador no se quejará, pero la JVM responderá con el clásico error: *"Main method not found in class"*.
-* `String[] args`: Es un vector o array de cadenas de caracteres (`String`). Permite recibir parámetros o modificadores que el usuario introduzca desde la línea de comandos al lanzar el programa (por ejemplo: `java MiServidor --puerto 8080`).
-
-#### 4. La salida por pantalla: `System.out.println(...)`
-* `System`: Clase predefinida perteneciente al núcleo de Java (`java.lang.System`) que proporciona acceso a recursos del sistema.
-* `out`: Objeto estático dentro de `System` que representa el flujo de **salida estándar** (*Standard Output Stream*), conectado por defecto a la consola.
-* `println`: Método que envía una cadena de texto a la consola e introduce automáticamente un **salto de línea** al final. Si utilizáramos `print()`, el cursor se quedaría pegado al final de la frase.
-* `;` (punto y coma): En Java, todas las sentencias ejecutables finalizan obligatoriamente en punto y coma. Omitirlo es el error sintáctico más común de los programadores noveles.
+---
 
 ### 3.2 Tipología de Comentarios y Generación con JavaDoc
 
-El código profesional debe ser autoexplicativo y estar documentado con elegancia. Java soporta tres modalidades de comentarios:
+Java soporta tres modalidades de comentarios:
 
 ```java
-// 1. Comentario de una sola línea: se extiende hasta el final de la línea actual.
+// 1. Comentario de una sola línea: ideal para notas breves y directas.
 
-/*
-   2. Comentario de múltiples líneas o de bloque:
-   Útil para explicaciones largas o para deshabilitar
-   temporalmente bloques enteros de código durante una prueba.
+/* 
+   2. Comentario de bloque o multilínea: 
+   útil para explicaciones extensas o para 
+   desactivar temporalmente fragmentos de código.
 */
 
 /**
- * 3. Comentario de documentación JavaDoc:
- * Comienza con /** y finaliza con * /
- * Permite a la herramienta 'javadoc' generar páginas web de ayuda técnica.
- * 
- * @param radio El radio de la circunferencia en metros (debe ser > 0)
- * @return El área calculada en metros cuadrados
- * @throws IllegalArgumentException si el radio es negativo
+ * 3. Comentario de documentación técnica (JavaDoc).
+ * Describe el propósito de una clase o método y es procesado
+ * por la herramienta javadoc para generar páginas web HTML de documentación.
+ * @param args Argumentos de la línea de comandos
  */
-public double calcularArea(double radio) {
-    return Math.PI * radio * radio;
-}
 ```
+
+#### Etiquetas JavaDoc más Comunes:
+* **`@author Nombre`:** Especifica el autor del componente software.
+* **`@version 1.0`:** Indica la versión actual del código.
+* **`@param nombre Parametro`:** Explica qué representa cada parámetro recibido por un método.
+* **`@return Descripcion`:** Detalla qué valor devuelve el método al finalizar.
+* **`@throws TipoExcepcion`:** Documenta qué errores puede lanzar el método si algo falla.
+
+En IntelliJ IDEA, puedes generar la documentación HTML completa de tu proyecto navegando a:  
+**Tools → Generate JavaDoc...**
+
+---
 
 ### 3.3 Compilación y Ejecución Manual desde la Terminal
 
-Aunque en el día a día trabajarás con los botones de IntelliJ IDEA, como futuro técnico superior en DAM debes dominar con soltura qué comandos se ejecutan entre bastidores desde una consola de comandos (PowerShell, Bash o CMD):
+Aunque el IDE automatiza el proceso, un desarrollador profesional debe comprender cómo interactuar directamente con el compilador desde la consola de comandos de Windows o Linux:
 
 ```bash
 # 1. Compilación: Transforma el archivo fuente en Bytecode
-javac HolaMundo.java
+# El flag -d indica la carpeta destino donde dejar los binarios compilados
+javac -d out/production/Unidad02 src/es/iesperenxisa/primerospasos/HolaMundo.java
 
-# Al compilar con éxito, se genera en la misma carpeta el archivo binario:
-# HolaMundo.class
+# 2. Ejecución: Se lanza la JVM indicando el classpath (-cp) y el nombre canónico de la clase
+java -cp out/production/Unidad02 es.iesperenxisa.primerospasos.HolaMundo
 
-# 2. Ejecución: Se lanza la JVM indicando el nombre de la clase (¡SIN extensión .class!)
-java HolaMundo
-
-# 3. Generación de documentación HTML:
-javadoc -d docs/ HolaMundo.java
+# 3. Novedad de Java moderno (Java 11+): Ejecución directa sin compilar a disco
+java src/HolaMundo.java
 ```
 
 ---
 
-## 4. Elementos Básicos del Lenguaje: Variables, Constantes y Tipos
+## 4. Elementos Básicos del Lenguaje: Identificadores, Variables y Constantes
 
-Un programa informático es, en esencia, un transformador de datos. Para manipular esos datos en la memoria RAM, necesitamos declarar **variables** y **constantes**.
+Para construir cualquier algoritmo en un lenguaje de programación necesitamos mecanismos para nombrar entidades, almacenar datos temporales en la memoria RAM y garantizar que ciertos valores permanezcan inmutables a lo largo del tiempo.
 
-### 4.1 Identificadores y Reglas de Nomenclatura
+### 4.1 Identificadores y Convenciones de Nomenclatura
 
-Un **identificador** es el nombre que el programador asigna a una variable, constante, método, clase o paquete. En Java, los identificadores deben cumplir reglas sintácticas inflexibles y convenciones de estilo universales:
+Un **identificador** es el nombre que el programador asigna a un elemento del código: un paquete, una clase, una variable, una constante o un método.
 
-#### Reglas Sintácticas Obligatorias (impuestas por el compilador):
-1. Solo pueden estar compuestos por caracteres alfanuméricos Unicode (letras y dígitos), el signo de dólar `$` y el guion bajo `_`.
-2. **Nunca pueden comenzar por un dígito** (`1variable` es ilegal; `variable1` es legal).
-3. No pueden coincidir con ninguna de las **palabras reservadas** de Java (`int`, `class`, `public`, `return`, `void`, `if`, etc.).
-4. No pueden contener espacios en blanco ni operadores aritméticos o de puntuación (`mi-variable`, `total%`, `nombre completo` son ilegales).
-5. Java distingue estrictamente entre mayúsculas y minúsculas: `numero`, `Numero` y `NUMERO` son tres variables totalmente distintas para el compilador.
+#### Reglas Léxicas Obligatorias del Compilador
+Si vulneras alguna de estas reglas, el compilador `javac` generará un error de sintaxis y el programa no compilará:
+1. Debe comenzar por una letra Unicode (del alfabeto latino básico), un carácter de subrayado (`_`) o el signo de dólar (`$`). **Nunca puede comenzar por un dígito**.
+2. Los caracteres posteriores pueden ser letras, dígitos (0-9), subrayados (`_`) o signos de dólar (`$`).
+3. Java distingue de manera estricta entre mayúsculas y minúsculas (*case-sensitive*). Por ejemplo, `edad`, `Edad` y `EDAD` son tres identificadores totalmente distintos e independientes.
+4. No puede coincidir con ninguna de las **palabras reservadas** (*keywords*) del lenguaje Java (como `class`, `public`, `static`, `void`, `int`, `if`, `while`, `return`, etc.), ni con los literales reservados `true`, `false` y `null`.
+5. No puede contener espacios en blanco ni operadores matemáticos o signos de puntuación (`+`, `-`, `*`, `/`, `@`, `#`, `.`, `,`).
 
-#### Convenciones de Nomenclatura Profesionales (Java Code Conventions):
-
-| Elemento | Convención Oficial | Ejemplo Válido y Explicativo |
-|---|---|---|
-| **Clases e Interfaces** | **UpperCamelCase** (PascalCase): Cada palabra comienza en mayúscula; sustantivos. | `GestorClientes`, `FacturaElectronica`, `CalculadoraFinanciera` |
-| **Variables y Atributos** | **lowerCamelCase**: Primera palabra en minúscula, siguientes en mayúscula; sustantivos descriptivos. | `edadUsuario`, `saldoCuentaBancaria`, `esMayorDeEdad` |
-| **Métodos y Funciones** | **lowerCamelCase**: Verbo que denota acción seguido de objeto. | `calcularTotal()`, `obtenerDni()`, `imprimirInforme()` |
-| **Constantes (`final`)** | **UPPER_SNAKE_CASE**: Todas las letras en mayúsculas separadas por guion bajo. | `PI`, `MAX_INTENTOS_LOGIN`, `VELOCIDAD_DE_LA_LUZ` |
-| **Paquetes** | Minúsculas continuas separadas por puntos; dominio inverso. | `es.iesperenxisa.primerospasos`, `org.empresa.utilidades` |
-
-:::caution[Evita la 'ñ', tildes y caracteres especiales en el código fuente]
-Técnicamente, el compilador de Java utiliza la codificación Unicode y aceptará variables como `int año = 2024;` o `double puntuación = 9.5;` sin dar error sintáctico. Sin embargo, **la convención profesional internacional prohíbe taxativamente su uso**.
-Si compartes código con compañeros en otros sistemas operativos (Windows, Linux, macOS), repositorios Git o servidores de integración y despliegue continuo (CI/CD) con diferentes configuraciones regionales de terminal (*charsets* como UTF-8 vs Windows-1252), esos caracteres pueden corromperse y provocar fallos de compilación desconcertantes.
-* En **comentarios** y en **cadenas de texto para el usuario** (`println`, interfaces): escribe con ortografía impecable en español (con tildes y 'ñ').
-* En **identificadores de código** (variables, métodos, clases): utiliza **exclusivamente el alfabeto inglés sin tildes ni eñes** (`int anio = 2024;` o en inglés `int year = 2024;`).
+:::caution[Atención con tildes y caracteres no ASCII]
+Aunque el compilador de Java soporta caracteres Unicode completos en identificadores (lo que permite declarar variables como `año` o `número`), **en el desarrollo profesional está terminantemente desaconsejado**. Utilizar caracteres fuera del estándar ASCII (como la `ñ`, tildes, diéresis o caracteres cirílicos/asiáticos) genera graves problemas de compatibilidad al compartir código entre diferentes sistemas operativos (Windows, Linux, macOS), servidores de integración continua y herramientas de control de versiones como Git. Se debe utilizar siempre el alfabeto inglés sin tildes: `anio` o `year`, `numero` o `number`.
 :::
 
-### 4.2 Variables vs Constantes
+#### Convenciones de la Comunidad Java (Code Style de Oracle e IntelliJ)
+A diferencia de las reglas del compilador (que son obligatorias), las convenciones son acuerdos universales seguidos por millones de desarrolladores para que el código sea inmediatamente legible:
 
-* **Variable:** Es una posición nombrada de memoria RAM cuyo contenido puede cambiar a lo largo del tiempo durante la ejecución del programa.
-* **Constante:** Es una posición de memoria cuyo valor se define en el momento de su inicialización y queda protegido contra cualquier modificación posterior mediante la palabra clave `final`. Si intentas reasignar una constante, el compilador bloqueará el proceso.
-
-```java
-// Declaración e inicialización de variables
-int edad = 20;
-edad = 21; // Completamente válido: el valor se actualiza en memoria
-
-// Declaración de una constante
-final double TIPO_IVA = 0.21;
-// TIPO_IVA = 0.25; // ¡ERROR DE COMPILACIÓN! Cannot assign a value to final variable
-```
-
-### 4.3 Inferencia de Tipos con `var` (Java 10+)
-
-A partir de Java 10, es posible omitir el tipo explícito al declarar variables locales utilizando la palabra reservada contextual `var`. El compilador infiere el tipo exacto basándose en el valor de la asignación inicial:
-
-```java
-var contador = 10;                // El compilador infiere que es de tipo int
-var precio = 19.99;               // El compilador infiere que es double
-var mensaje = "Hola DAM";         // El compilador infiere String
-var cliente = new GestorClientes();// El compilador infiere GestorClientes
-```
-
-:::caution[Reglas y Buenas Prácticas con `var`]
-* `var` solo puede utilizarse en **variables locales** dentro de un método y **requiere inicialización inmediata obligatoria** en la misma línea (`var x;` da error porque el compilador no puede adivinar qué es).
-* Java **sigue siendo un lenguaje de tipado estático**: una vez que `var contador = 10` se infiere como `int`, jamás podrás asignarle un texto (`contador = "hola";` fallará en compilación).
-* Emplea `var` únicamente cuando el tipo resulte redundante o evidente (por ejemplo con llamadas a constructores largos: `var lista = new ArrayList<String>()`). Si perjudica la legibilidad del código, declara siempre el tipo explícito.
-:::
+| Elemento | Convención de Nomenclatura | Ejemplo Recomendado | Antiejemplo a Evitar |
+| :--- | :--- | :--- | :--- |
+| **Clases e Interfaces** | **PascalCase / UpperCamelCase** (cada palabra empieza en mayúscula) | `CuentaBancaria`, `GestorPedidos` | `cuentaBancaria`, `gestor_pedidos` |
+| **Variables y Métodos** | **lowerCamelCase** (primera palabra minúscula, siguientes en mayúscula) | `saldoActual`, `calcularInteres()` | `SaldoActual`, `calcular_interes` |
+| **Constantes** | **UPPER_SNAKE_CASE** (todo mayúsculas separadas por guion bajo) | `PI`, `MAX_INTENTOS_LOGIN` | `maxIntentos`, `max_intentos` |
+| **Paquetes** | **Todo minúsculas** en orden inverso de dominio de internet | `es.iesperenxisa.primerospasos` | `es.IESPerenxisa.PrimerosPasos` |
 
 ---
 
-## 5. El Sistema de Tipos: Los 8 Tipos de Datos Primitivos
+### 4.2 Declaración, Inicialización y Ámbito de Variables
 
-Java divide su sistema de tipos en dos grandes categorías:
-1. **Tipos Primitivos:** Valores elementales puros alojados directamente en la pila de memoria (*Stack*).
-2. **Tipos Referenciados u Objetos:** Punteros gestionados que apuntan a estructuras de datos complejas en la memoria dinámica (*Heap*).
+Una **variable** es un contenedor con nombre asociado a una posición de la memoria RAM del ordenador, capaz de albergar un dato de un tipo concreto que puede ser modificado durante la ejecución del programa.
 
-A continuación se detalla la tabla canónica de los 8 tipos primitivos de Java:
-
-| Categoría | Tipo | Tamaño en Memoria | Rango de Valores Representable | Valor por Defecto |
-|---|---|---|---|---|
-| **Enteros** | `byte` | 8 bits (1 byte) | -128 a 127 (-2⁷ a 2⁷ - 1) | `0` |
-| | `short` | 16 bits (2 bytes) | -32.768 a 32.767 (-2¹⁵ a 2¹⁵ - 1) | `0` |
-| | `int` | 32 bits (4 bytes) | -2.147.483.648 a 2.147.483.647 (-2³¹ a 2³¹ - 1) | `0` |
-| | `long` | 64 bits (8 bytes) | -9.223.372.036.854.775.808 a 9.223.372.036.854.775.807 (-2⁶³ a 2⁶³ - 1) | `0L` |
-| **Coma Flotante** | `float` | 32 bits (4 bytes) | ~1.4 × 10⁻⁴⁵ a ~3.4 × 10³⁸ (precisión simple, 7 dígitos) | `0.0f` |
-| | `double` | 64 bits (8 bytes) | ~4.9 × 10⁻³²⁴ a ~1.8 × 10³⁰⁸ (precisión doble, 15-17 dígitos) | `0.0d` |
-| **Carácter** | `char` | 16 bits (2 bytes) | Caracteres Unicode UTF-16 (` ` a `￿` ó 0 a 65.535) | ` ` |
-| **Booleano** | `boolean` | 1 bit (lógico) | Únicamente `true` o `false` | `false` |
-
-:::caution[Java no comprueba desbordamientos numéricos en tipos primitivos]
-A diferencia de lo que cabría esperar intuitivamente, si a una variable `short` que contiene su valor máximo permitido (`32.767`) le sumas `1`, Java **no lanza ningún error ni detiene el programa**: el valor da la vuelta de manera cíclica en aritmética binaria de complemento a dos, pasando a valer instantáneamente `-32.768`.
-Elegir un tipo de dato numérico demasiado ajustado para tus variables es una fuente clásica de *bugs* silenciosos y catastróficos en producción. En caso de duda:
-* Para números enteros: utiliza siempre `int` (o `long` para cifras astronómicas o identificadores globales).
-* Para números con decimales: utiliza siempre `double`.
-:::
-
-### 5.1 Literales y Notación Numérica
-
-Un **literal** es un valor constante escrito directamente en el código fuente:
-
-* **Literales Enteros:** Por defecto, cualquier número entero entero suelto en el código (como `42`) es tratado por el compilador como un `int`. Si necesitamos asignarlo a un `long`, debemos agregar obligatoriamente el sufijo `L` o `l` (se recomienda siempre la `L` mayúscula para no confundirla con el número `1`):
-  ```java
-  long poblacionMundial = 8_000_000_000L; // Sufijo L obligatorio
-  ```
-* **Separadores Visuales con Guion Bajo:** Para mejorar la legibilidad de cifras astronómicas, Java permite intercalar guiones bajos entre dígitos numéricos:
-  ```java
-  int unMillon = 1_000_000;
-  long tarjetaCredito = 4542_1234_5678_9012L;
-  ```
-* **Bases Numéricas:**
-  * Decimal: `int dec = 26;`
-  * Binario (prefijo `0b` o `0B`): `int bin = 0b0001_1010; // Vale 26 en decimal`
-  * Octal (prefijo `0`): `int oct = 032; // Vale 26 en decimal`
-  * Hexadecimal (prefijo `0x` o `0X`): `int hex = 0x1A; // Vale 26 en decimal`
-* **Literales Decimales (Coma Flotante):** Cualquier número con punto decimal (como `3.14`) es considerado automáticamente de tipo `double`. Para forzar que sea `float`, debe llevar el sufijo `F` o `f`:
-  ```java
-  double piDoble = 3.1415926535; // Válido: double por defecto
-  float piSimple = 3.141592f;    // Válido: forzado a float con 'f'
-  // float error = 3.14;        // ¡ERROR! Type mismatch: cannot convert from double to float
-  ```
-* **Literales de Carácter y Secuencias de Escape:** Los valores de tipo `char` se encierran siempre entre comillas simples `' '` (a diferencia de los textos `String` que usan comillas dobles `" "`):
-  ```java
-  char letra = 'A';
-  char caracterUnicode = 'A'; // 'A' en código Unicode hexadecimal
-  char saltoLinea = '
-';          // Salto de línea (Line Feed)
-  char tabulador = '	';           // Tabulación horizontal
-  char barraInvertida = '\';      // Barra invertida literal
-  char comillaSimple = ''';       // Comilla simple literal
-  ```
-
----
-
-## 6. Conversión de Tipos (*Type Casting*)
-
-En muchas situaciones necesitamos transferir el valor almacenado en una variable de un tipo a otra variable de diferente tipo. En Java existen dos categorías de conversión:
-
-```text
-               ENSANCHAMIENTO (Automático / Seguro / Sin pérdida)
-  byte ────► short ────► int ────► long ────► float ────► double
-               char ────► int
-  ◄──────────────────────────────────────────────────────────────
-               ESTRECHAMIENTO (Explícito / 'Casting' forzado / Posible pérdida)
-```
-
-### 6.1 Conversión Implícita o Ensanchamiento (*Widening*)
-
-Ocurre de manera completamente automática cuando se asigna un valor de un tipo con menor rango de memoria a una variable de un tipo de mayor rango. Como el contenedor de destino es más grande que el origen, **no existe posibilidad de desbordamiento ni pérdida de precisión**:
+En Java, toda variable debe ser declarada especificando obligatoriamente su **tipo de dato** y su **identificador**:
 
 ```java
-int numeroPequeno = 100;
-long numeroGrande = numeroPequeno;  // int se promociona automáticamente a long
-double decimal = numeroGrande;      // long se promociona automáticamente a double (100.0)
+// 1. Declaración simple (se reserva el espacio en memoria, sin asignar valor explícito)
+int edadUsuario;
+double temperaturaMedia;
+
+// 2. Inicialización posterior (asignación del primer valor)
+edadUsuario = 25;
+temperaturaMedia = 21.4;
+
+// 3. Declaración e inicialización combinada en una sola línea (recomendado)
+int puntos = 100;
+boolean usuarioActivo = true;
+
+// 4. Declaración múltiple del mismo tipo (permitido por sintaxis, pero desaconsejado)
+int x = 0, y = 10, z = 20;
 ```
 
-### 6.2 Conversión Explícita o Estrechamiento (*Narrowing*)
-
-Ocurre cuando intentamos forzar la introducción de un valor de mayor tamaño o precisión en un contenedor más pequeño. El compilador de Java lo prohibirá tajantemente a menos que el programador asuma la responsabilidad expresa mediante un **operador de moldeado o *cast***: `(tipoDestino) valor`.
-
-:::caution[Peligros del Casting Explícito: Truncamiento y Desbordamiento (*Overflow*)]
-El estrechamiento puede acarrear consecuencias drásticas:
-1. **Pérdida de decimales (Truncamiento):** Al convertir de `double` a `int`, no se redondea: se cortan los decimales a machete.
-   ```java
-   double precio = 9.99;
-   int precioEntero = (int) precio; // Vale 9 (se pierden los .99 decimales)
-   ```
-2. **Desbordamiento (*Overflow* numérico):** Si el valor excede el rango máximo del tipo destino, los bits se desbordan produciendo números absurdos o negativos:
-   ```java
-   int valorGrande = 130;
-   byte valorByte = (byte) valorGrande; 
-   // Un byte solo almacena de -128 a 127.
-   // Al desbordarse 130, el bit de signo se activa y valorByte pasa a valer: -126
-   System.out.println("Resultado de forzar 130 en byte: " + valorByte); // Imprime -126
-   ```
-:::
-
----
-
-## 7. Operadores y Precedencia en Java
-
-Los operadores son símbolos especiales que indican a la CPU qué cálculo o evaluación lógica ejecutar sobre uno, dos o tres operandos.
-
-### 7.1 Operadores Aritméticos
-
-| Operador | Significado | Ejemplo con `int a = 10, b = 3;` | Resultado | Observaciones |
-|---|---|---|---|---|
-| `+` | Suma o Concatenación | `a + b` | `13` | Si uno de los operandos es `String`, concatena texto. |
-| `-` | Resta | `a - b` | `7` | También actúa como operador unario negativo (`-a`). |
-| `*` | Multiplicación | `a * b` | `30` | |
-| `/` | División | `a / b` | `3` | **¡Atención!** Si ambos operandos son enteros, la división es entera (trunca el resto). Para decimales, al menos uno debe ser `double` (`10.0 / 3` → `3.3333333333333335`). |
-| `%` | Módulo (Resto de división) | `a % b` | `1` | Devuelve el residuo entero de `10 / 3`. Imprescindible para saber si un número es par (`n % 2 == 0`). |
-
-### 7.2 Asignación Compuesta
-
-Permiten abreviar operaciones en las que una variable se modifica a partir de su propio valor:
-* `x += 5;` equivale exactamente a `x = x + 5;`
-* `x -= 2;` equivale a `x = x - 2;`
-* `x *= 3;` equivale a `x = x * 3;`
-* `x /= 2;` equivale a `x = x / 2;`
-* `x %= 10;` equivale a `x = x % 10;`
-
-### 7.3 Incremento y Decremento: Prefijo vs Sufijo
-
-Estos operadores unarios incrementan o reducen en 1 el valor de una variable. Sin embargo, su posición produce efectos colaterales muy diferentes si forman parte de una expresión:
-
-* **Post-incremento (`x++`):** Primero **se utiliza el valor actual** de `x` en la evaluación de la expresión y, a continuación, se incrementa `x` en memoria.
-* **Pre-incremento (`++x`):** Primero **se incrementa de inmediato** `x` en memoria y luego se utiliza el nuevo valor en la expresión.
+#### Ámbito (*Scope*) y el Peligro de Variables Locales no Inicializadas
+El ámbito de una variable es la región del código fuente comprendida entre las llaves `{ ... }` donde fue declarada. Fuera de ese bloque, la variable deja de existir para el compilador y para la memoria:
 
 ```java
-int a = 5;
-int b = a++; // b recibe 5, y a continuación 'a' pasa a valer 6
-
-int c = 5;
-int d = ++c; // 'c' pasa de inmediato a valer 6, y d recibe 6
-```
-
-### 7.4 Operadores Relacionales o de Comparación
-
-Comparan dos operandos y devuelven un resultado estrictamente booleano (`true` o `false`):
-
-| Operador | Significado | Expresión (`x = 5`, `y = 8`) | Resultado |
-|---|---|---|---|
-| `==` | Igual a | `x == y` | `false` |
-| `!=` | Distinto de | `x != y` | `true` |
-| `<` | Menor que | `x < y` | `true` |
-| `<=` | Menor o igual que | `x <= 5` | `true` |
-| `>` | Mayor que | `x > y` | `false` |
-| `>=` | Mayor o igual que | `y >= 8` | `true` |
-
-### 7.5 Operadores Lógicos y Cortocircuito (*Short-Circuit Evaluation*)
-
-Permiten combinar múltiples condiciones booleanas:
-
-* `&&` (**AND lógico con cortocircuito**): Devuelve `true` si y solo si **ambos** operandos son verdaderos. Si el primer operando es `false`, la JVM **no se molesta en evaluar el segundo**, porque el resultado final será inexorablemente falso (cortocircuito).
-* `||` (**OR lógico con cortocircuito**): Devuelve `true` si **al menos uno** de los operandos es verdadero. Si el primer operando es `true`, el segundo **no se evalúa**, porque el resultado ya está garantizado como verdadero.
-* `!` (**NOT lógico o negación**): Invierte el valor de verdad (`!true` es `false`; `!false` es `true`).
-
-```java
-int divisor = 0;
-int dividendo = 100;
-
-// Gracias al cortocircuito, la siguiente línea NO lanza división por cero:
-if (divisor != 0 && (dividendo / divisor > 10)) {
-    System.out.println("Operación válida");
-} else {
-    System.out.println("División abortada de forma segura por cortocircuito");
+public void calcular() {
+    int total = 10; // Variable local accesible en todo el método
+    
+    if (total > 5) {
+        int descuento = 2; // Variable local al bloque if
+        total -= descuento;
+    } // Aquí 'descuento' se destruye y ya no es accesible
+    
+    // System.out.println(descuento); // ¡ERROR de compilación! 'descuento' no existe aquí
 }
 ```
 
-### 7.6 El Operador Condicional Ternario (`? :`)
+:::warning[Regla de Oro en Java: Las variables locales NO tienen valor por defecto]
+A diferencia de los atributos o campos de una clase (que la JVM inicializa automáticamente a `0`, `0.0`, `false` o `null`), **las variables locales declaradas dentro de un método NO reciben ningún valor por defecto**. Si intentas leer o utilizar una variable local sin haberle asignado un valor previamente, el compilador detendrá el proceso arrojando el error:  
+`java: variable edadUsuario might not have been initialized`
+:::
 
-Es el único operador ternario de Java (requiere tres operandos). Constituye una contracción compacta de una sentencia `if-else` que devuelve un valor:
+---
+
+### 4.3 Constantes con la Palabra Clave `final`
+
+Una **constante** es una variable cuyo valor no puede ser alterado una vez que ha sido asignado por primera vez. En Java se definen anteponiendo el modificador `final`:
 
 ```java
-// Sintaxis: variable = condicion ? valorSiVerdadero : valorSiFalso;
+public class ConstantesDemo {
+    public static void main(String[] args) {
+        final double TASA_IVA = 0.21;
+        final int DIAS_SEMANA = 7;
+        final String NOMBRE_APLICACION = "GestorDAM";
+
+        // TASA_IVA = 0.10; // ¡ERROR de compilación! Cannot assign a value to final variable
+    }
+}
+```
+
+**Ventajas de utilizar constantes:**
+1. **Evitan los "números mágicos"**: Un código con valores como `3.14159` o `86400` repartidos por el código es difícil de entender y mantener. Al bautizarlos como `final double PI` o `final int SEGUNDOS_POR_DIA`, el código se autoexplica.
+2. **Seguridad e Integridad**: Garantizan que parámetros críticos del sistema (tasas impositivas, límites de memoria, puertos de red) no puedan ser sobreescritos por accidente por otro método.
+3. **Optimizaciones del compilador JIT**: Al saber que el valor jamás cambiará, la JVM puede sustituir la variable directamente por el valor literal en tiempo de ejecución (*inlining*), mejorando el rendimiento.
+
+---
+
+### 4.4 Inferencia de Tipos en Variables Locales con `var` (Java 10+)
+
+A partir de Java 10 (2018), el lenguaje incorporó la palabra reservada contextual `var`, permitiendo al compilador inferir automáticamente el tipo de la variable a partir del valor de la expresión a su derecha:
+
+```java
+// Declaración tradicional con tipo explícito
+String mensaje = "Hola Mundo";
+int contador = 42;
+double precio = 99.95;
+
+// Declaración moderna con inferencia de tipos (var)
+var mensajeMod = "Hola Mundo"; // El compilador infiere String
+var contadorMod = 42;           // El compilador infiere int
+var precioMod = 99.95;          // El compilador infiere double
+```
+
+#### Reglas Estrictas de `var`:
+1. **Java sigue siendo un lenguaje fuertemente tipado**: `var` **NO** convierte a Java en JavaScript o Python. El tipo de la variable se fija irrevocablemente durante la compilación. Una vez que `var contadorMod = 42` es compilado como `int`, intentar asignarle un texto (`contadorMod = "Texto"`) causará un error de compilación.
+2. **Solo para variables locales con inicializador**: No se puede usar `var` en atributos de clase, ni en parámetros de métodos, ni en tipos de retorno, ni sin asignar un valor en la misma línea (`var x;` es ilegal).
+3. **Buenas prácticas**: Usa `var` cuando el tipo sea evidente y reduzca la redundancia visual (por ejemplo al instanciar objetos complejos `var scanner = new Scanner(System.in);`). Evita su uso cuando el tipo de retorno de una función sea ambiguo y dificulte la lectura al desarrollador humano.
+
+---
+
+## 5. El Sistema de Tipos de Java: Los 8 Tipos Primitivos
+
+Java es un lenguaje de **tipado estático y fuerte**:
+- **Estático**: El tipo de cada variable se comprueba y valida en tiempo de compilación.
+- **Fuerte**: No se permiten operaciones entre tipos incompatibles sin una conversión explícita.
+
+En el nivel más bajo de la arquitectura de memoria de Java residen los **8 tipos primitivos**, diseñados para ofrecer el máximo rendimiento al mapearse directamente sobre las instrucciones del procesador.
+
+```
+Tipos de Datos en Java
+├── Primitivos (8 tipos básicos almacenados directamente por valor en Stack)
+│   ├── Numéricos Enteros (byte, short, int, long)
+│   ├── Numéricos de Coma Flotante (float, double)
+│   ├── Carácter (char)
+│   └── Booleano (boolean)
+└── Referenciados / Objetos (almacenados en Heap, referenciados por puntero)
+    ├── Clases (String, Scanner, Integer, etc.)
+    ├── Interfaces
+    ├── Arrays (vectores y matrices)
+    └── Records y Enums
+```
+
+### 5.1 Tabla Comparativa Completa de Tipos Primitivos
+
+| Tipo | Categoría | Tamaño | Rango de Valores | Literal / Sufijo | Valor Defecto (en clases) |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| `byte` | Entero | 8 bits (1 byte) | -128 a 127 | `(byte) 10` | `0` |
+| `short` | Entero | 16 bits (2 bytes) | -32.768 a 32.767 | `(short) 3000` | `0` |
+| `int` | Entero | 32 bits (4 bytes) | -2.147.483.648 a 2.147.483.647 (-2³¹ a 2³¹-1) | `100` | `0` |
+| `long` | Entero | 64 bits (8 bytes) | -9.223.372.036.854.775.808 a 9.223.372.036.854.775.807 | `100L` o `100l` | `0L` |
+| `float` | Flotante | 32 bits (4 bytes) | ±1.4×10⁻⁴⁵ a ±3.4028235×10³⁸ (~7 dígitos de precisión) | `3.14f` o `3.14F` | `0.0f` |
+| `double` | Flotante | 64 bits (8 bytes) | ±4.9×10⁻³²⁴ a ±1.7976931348623157×10³⁰⁸ (~16 dígitos) | `3.14` o `3.14d` | `0.0d` |
+| `char` | Carácter | 16 bits (2 bytes) | Código Unicode UTF-16: `\u0000` (0) a `\uffff` (65.535) | `'A'`, `'\n'`, `'\u0041'` | `'\u0000'` |
+| `boolean`| Lógico | JVM dependiente (~8 bits) | `true` o `false` | `true`, `false` | `false` |
+
+#### Aspectos Críticos a Recordar:
+1. **Los enteros literales son siempre `int` por defecto**: Si escribes `3000000000` (3 mil millones), el compilador dará error porque supera el rango de `int`. Para convertirlo en un literal de tipo `long`, debes añadir obligatoriamente la letra `L` al final: `3000000000L` (utiliza siempre `L` mayúscula, ya que `l` minúscula se confunde visualmente con el número `1`).
+2. **Los decimales literales son siempre `double` por defecto**: Si escribes `float f = 3.14;`, el compilador emitirá un error indicando pérdida de precisión (un `double` no cabe automáticamente en un `float`). Debes indicar `3.14f`.
+3. **El tipo `boolean` es puro**: En Java, a diferencia de C/C++, **un booleano NUNCA equivale a 0 o 1**. `if (1) { ... }` o `boolean flag = 0;` son errores de compilación directos.
+4. **El tipo `char` representa números de 16 bits sin signo**: Los caracteres se delimitan con comillas simples (`'A'`), mientras que los textos se delimitan con comillas dobles (`"A"`). Un `char` puede operarse aritméticamente: `'A' + 1` da el número entero `66` (código ASCII de `'B'`).
+
+---
+
+### 5.2 Notación de Literales Numéricos y Formatos Alternativos
+
+Java admite representar literales numéricos enteros en distintas bases numéricas y con separadores de legibilidad:
+
+```java
+// 1. Sistema Decimal (base 10 - habitual)
+int decimal = 100;
+
+// 2. Sistema Hexadecimal (base 16 - prefijo 0x o 0X)
+int hex = 0x2A; // Equivale a 42 en decimal (2 * 16 + 10)
+int colorBlanco = 0xFFFFFF;
+
+// 3. Sistema Binario (base 2 - prefijo 0b o 0B, introducido en Java 7)
+int mascaraBinaria = 0b101010; // Equivale a 42 en decimal
+
+// 4. Sistema Octal (base 8 - prefijo 0)
+// ¡CUIDADO! Un número que empieza por 0 se interpreta como octal
+int octal = 052; // Equivale a 42 en decimal (5 * 8 + 2)
+
+// 5. Separador visual con guion bajo (Java 7+)
+// No altera el valor numérico, solo mejora drásticamente la legibilidad humana
+long tarjetaCredito = 4552_1100_8923_4321L;
+double unMillon = 1_000_000.00;
+int bytesMascara = 0b1111_0000_1010_0101;
+```
+
+---
+
+### 5.3 Desbordamiento Numérico Cíclico (*Integer Overflow*)
+
+Los tipos primitivos enteros en Java utilizan la codificación de **complemento a dos** (*two's complement*) para representar valores positivos y negativos. ¿Qué sucede si sumamos 1 al valor máximo que puede almacenar un tipo entero?
+
+```java
+byte b = 127; // Máximo valor positivo representable en 8 bits (-128 a 127)
+b++;          // Sumamos 1
+System.out.println(b); // Imprime: -128
+```
+
+:::danger[El Desbordamiento NO lanza ninguna excepción]
+En Java, las operaciones aritméticas primitivas que superan los límites de rango **no detienen el programa ni lanzan errores**. Simplemente se produce un desbordamiento cíclico silencioso: el bit de signo cambia y el valor pasa al extremo negativo opuesto.
+
+Si estás trabajando con cálculos matemáticos críticos, acumuladores financieros o conteos masivos, debes utilizar la clase `Math` con sus métodos de comprobación exacta introducidos en Java 8, tales como `Math.addExact(a, b)` o `Math.multiplyExact(a, b)`, los cuales lanzan inmediatamente una excepción `ArithmeticException` si detectan un desbordamiento.
+:::
+
+---
+
+## 6. Conversión de Tipos (*Type Casting*) y Clases Envoltorio (*Wrappers*)
+
+A menudo necesitamos transferir datos entre variables de diferente naturaleza. Dependiendo de si existe o no riesgo de pérdida de información, Java clasifica las conversiones en dos grandes categorías.
+
+### 6.1 Conversión Implícita o Promoción (*Widening Casting*)
+
+Ocurre de manera totalmente **automática y transparente** cuando se asigna un valor de un tipo con menor capacidad o rango a una variable de un tipo con mayor capacidad. Como no existe peligro de pérdida de magnitud, el compilador lo permite sin advertencias:
+
+```
+byte → short → int → long → float → double
+         char ↗
+```
+
+```java
+int numeroEntero = 100;
+long numeroLargo = numeroEntero;     // Automático: int (32 bits) a long (64 bits)
+double numeroReal = numeroLargo;     // Automático: long a double (64 bits coma flotante)
+System.out.println(numeroReal);      // Imprime: 100.0
+```
+
+---
+
+### 6.2 Conversión Explícita o Truncamiento (*Narrowing Casting*)
+
+Ocurre cuando intentamos guardar un dato de mayor rango o precisión en un contenedor más pequeño. Como existe un **riesgo real de pérdida de información o truncamiento de decimales**, el compilador exige que el programador declare su intención explícitamente mediante el operador de moldeado `(tipo)`:
+
+```java
+double precioConIva = 99.89;
+// int precioEntero = precioConIva; // ¡ERROR de compilación! Possible loss of precision
+
+// Casting explícito: se descartan por completo los decimales (truncamiento hacia cero)
+int precioEntero = (int) precioConIva;
+System.out.println(precioEntero); // Imprime: 99 (¡se han perdido los 0.89!)
+
+// Peligro de desbordamiento en narrowing:
+int valorGrande = 300;
+byte valorByte = (byte) valorGrande; // 300 no cabe en 8 bits (-128 a 127)
+System.out.println(valorByte);       // Imprime: 44 (resultado del desbordamiento binario)
+```
+
+---
+
+### 6.3 Conversión entre Cadenas (`String`) y Tipos Numéricos
+
+La interacción por consola, archivos o interfaces gráficas siempre se realiza mediante texto (`String`). Para realizar cálculos aritméticos con esos datos, debemos convertirlos a sus tipos primitivos equivalentes mediante los métodos de parseo de las clases envoltorio:
+
+```java
+// 1. De String a Tipos Primitivos (Parseo)
+String textoEdad = "25";
+int edad = Integer.parseInt(textoEdad);
+
+String textoSueldo = "1850.75";
+double sueldo = Double.parseDouble(textoSueldo);
+
+String textoActivo = "true";
+boolean activo = Boolean.parseBoolean(textoActivo);
+
+// 2. De Tipos Primitivos a String
+int dias = 365;
+String s1 = String.valueOf(dias);    // Forma óptima y recomendada
+String s2 = Integer.toString(dias);  // Equivalente directo
+String s3 = "" + dias;               // Válido por concatenación, pero menos eficiente
+```
+
+:::warning[La temida excepción `NumberFormatException`]
+Si intentas parsear una cadena que contiene caracteres no numéricos o espacios en blanco residuales (por ejemplo, `Integer.parseInt(" 25a ")`), la JVM detendrá el programa inmediatamente arrojando un error de tipo `java.lang.NumberFormatException`. Más adelante aprenderemos a capturarlo mediante bloques `try-catch`.
+:::
+
+---
+
+### 6.4 Clases Envoltorio (*Wrapper Classes*) y Autoboxing/Unboxing
+
+Dado que Java es un lenguaje orientado a objetos pero los tipos primitivos no son objetos (no tienen métodos ni atributos), Java proporciona una **Clase Envoltorio** (*Wrapper*) correspondiente a cada uno de los 8 tipos primitivos dentro del paquete estándar `java.lang`:
+
+| Tipo Primitivo | Clase Envoltorio (*Wrapper*) | Métodos y Constantes de Gran Utilidad |
+| :--- | :--- | :--- |
+| `byte` | `Byte` | `Byte.MAX_VALUE`, `Byte.MIN_VALUE`, `Byte.parseByte()` |
+| `short` | `Short` | `Short.MAX_VALUE`, `Short.MIN_VALUE` |
+| `int` | `Integer` | `Integer.MAX_VALUE`, `Integer.toBinaryString()`, `Integer.compare()` |
+| `long` | `Long` | `Long.MAX_VALUE`, `Long.parseLong()` |
+| `float` | `Float` | `Float.isNaN()`, `Float.isInfinite()` |
+| `double` | `Double` | `Double.POSITIVE_INFINITY`, `Double.parseDouble()` |
+| `char` | `Character` | `Character.isDigit()`, `Character.isLetter()`, `Character.toUpperCase()` |
+| `boolean` | `Boolean` | `Boolean.TRUE`, `Boolean.FALSE`, `Boolean.logicalAnd()` |
+
+#### Autoboxing y Unboxing Automático
+Desde Java 5, el compilador realiza de forma totalmente automática la conversión entre el tipo primitivo y su correspondiente objeto envoltorio:
+- **Autoboxing**: Conversión automática de un primitivo a su clase Wrapper (`int` → `Integer`).
+- **Unboxing**: Conversión automática de un objeto Wrapper a su primitivo básico (`Integer` → `int`).
+
+```java
+// Autoboxing: el compilador ejecuta internamente Integer.valueOf(50)
+Integer objetoEntero = 50; 
+
+// Unboxing: el compilador extrae el valor primitivo con objetoEntero.intValue()
+int primitivo = objetoEntero;
+
+// Operaciones aritméticas transparentes entre wrappers y primitivos
+objetoEntero = objetoEntero + 10;
+```
+
+:::danger[La Trampa Mortal del Unboxing con valores `null`]
+Un primitivo (`int`) siempre tiene un valor numérico. Sin embargo, un objeto Wrapper (`Integer`) es una referencia y **puede valer `null`**. Si la JVM intenta realizar un unboxing sobre una referencia nula, provocará una catástrofe en tiempo de ejecución:
+
+```java
+Integer puntos = null; // No tiene ningún objeto asociado
+int resultado = puntos + 5; // ¡Lanza NullPointerException en tiempo de ejecución!
+```
+:::
+
+---
+
+## 7. Operadores y Precedencia
+
+Los operadores son símbolos especiales que indican a la CPU que realice cálculos matemáticos, comparaciones lógicas o manipulaciones de bits sobre uno o más operandos.
+
+### 7.1 Operadores Aritméticos y Asignación Compuesta
+
+Java incluye los 5 operadores aritméticos fundamentales:
+
+```java
+int a = 15;
+int b = 4;
+
+int suma = a + b;           // 19
+int resta = a - b;          // 11
+int multiplicacion = a * b; // 60
+int divisionEntera = a / b; // 3  (¡Atención: trunca la parte decimal!)
+int modulo = a % b;         // 3  (Resto exacto de la división: 15 = 4 * 3 + 3)
+```
+
+#### División Entera vs División Real
+Si ambos operandos son números enteros, el operador `/` efectúa una **división entera**, ignorando por completo cualquier residuo fraccionario. Para obtener un resultado con decimales, **al menos uno de los operandos debe ser de coma flotante** (`double` o `float`):
+
+```java
+int x = 7;
+int y = 2;
+double r1 = x / y;          // Evalúa 7 / 2 = 3 → asigna 3.0 (¡Error común!)
+double r2 = (double) x / y;  // Hace casting de x a 7.0 → 7.0 / 2 = 3.5 (¡Correcto!)
+```
+
+#### Aplicaciones Prácticas del Operador Módulo (`%`)
+El operador `%` no es una simple curiosidad matemática; es una de las herramientas más utilizadas en la algoritmia diaria:
+1. **Comprobar si un número es par o impar**: `if (n % 2 == 0) // Es par`
+2. **Comprobar múltiplos exactos**: `if (anio % 4 == 0) // Posible bisiesto`
+3. **Controlar ciclos y relojes circulares**: `hora = (hora + 1) % 24;`
+4. **Descomposición de dígitos decimales**:  
+   - Última cifra de un número: `numero % 10`  
+   - Eliminar la última cifra: `numero / 10`
+
+#### Operadores de Asignación Compuesta
+Permiten abreviar operaciones donde una variable se modifica a sí misma:
+
+| Operador Compuesto | Expresión Equivalente | Ejemplo |
+| :---: | :---: | :--- |
+| `+=` | `a = a + b` | `saldo += ingreso;` |
+| `-=` | `a = a - b` | `stock -= unidadesVendidas;` |
+| `*=` | `a = a * b` | `precio *= 1.21;` |
+| `/=` | `a = a / b` | `puntos /= 2;` |
+| `%=` | `a = a % b` | `minutos %= 60;` |
+
+---
+
+### 7.2 Operadores de Incremento y Decremento
+
+Java proporciona los operadores unarios `++` (sumar 1) y `--` (restar 1). Pueden situarse antes de la variable (**prefijo**) o después (**postfijo**), y su comportamiento en expresiones combinadas es profundamente diferente:
+
+```java
+int x = 5;
+int y = 5;
+
+// Postfijo (x++): Se utiliza primero el valor actual en la expresión, y luego se incrementa
+int resultadoPost = x++; 
+System.out.println(resultadoPost); // Imprime: 5
+System.out.println(x);             // Imprime: 6
+
+// Prefijo (++y): Se incrementa primero el valor, y luego se utiliza en la expresión
+int resultadoPre = ++y;  
+System.out.println(resultadoPre);  // Imprime: 6
+System.out.println(y);             // Imprime: 6
+```
+
+:::tip[Consejo de Legibilidad]
+Salvo en la cabecera de bucles `for` (donde `i++` es estándar), evita incrustar operadores `++` y `--` dentro de expresiones aritméticas complejas o llamadas a métodos. Separar la operación en una línea independiente (`x++;`) hace que el código sea inmune a confusiones lógicas.
+:::
+
+---
+
+### 7.3 Operadores Relacionales y de Comparación
+
+Se utilizan para comparar dos valores. El resultado de cualquier operación relacional es siempre un valor primitivo `boolean` (`true` o `false`):
+
+| Operador | Significado | Ejemplo (`a = 10`, `b = 20`) | Resultado |
+| :---: | :--- | :--- | :---: |
+| `==` | Igual a | `a == b` | `false` |
+| `!=` | Distinto de | `a != b` | `true` |
+| `>` | Mayor que | `a > b` | `false` |
+| `<` | Menor que | `a < b` | `true` |
+| `>=` | Mayor o igual que | `a >= 10` | `true` |
+| `<=` | Menor o igual que | `b <= 20` | `true` |
+
+---
+
+### 7.4 Operadores Lógicos y Cortocircuito (*Short-Circuit Evaluation*)
+
+Permiten combinar múltiples expresiones booleanas para formar condiciones complejas:
+
+| Operador | Nombre Lógico | Comportamiento |
+| :---: | :--- | :--- |
+| `&&` | **AND lógico condicional** | Devuelve `true` si y solo si **ambos operandos** son `true`. Con cortocircuito. |
+| `\|\|` | **OR lógico condicional** | Devuelve `true` si **al menos uno** de los operandos es `true`. Con cortocircuito. |
+| `!` | **NOT (Negación)** | Invierte el valor booleano: `!true` da `false`, `!false` da `true`. |
+| `^` | **XOR (O exclusivo)** | Devuelve `true` si uno de los operandos es `true` y el otro `false`. |
+| `&` | **AND estricto / lógico** | Evalúa **siempre** ambos operandos (sin cortocircuito). |
+| `\|` | **OR estricto / lógico** | Evalúa **siempre** ambos operandos (sin cortocircuito). |
+
+#### ¿Qué es la Evaluación en Cortocircuito (*Short-Circuit*)?
+Los operadores `&&` y `||` son enormemente eficientes y seguros gracias a la evaluación en cortocircuito:
+- En una expresión `A && B`, si `A` resulta ser `false`, el resultado global será inevitablemente `false`. Java **no se molesta en evaluar la expresión `B`**.
+- En una expresión `A || B`, si `A` resulta ser `true`, el resultado global será indefectiblemente `true`. Java **omite la evaluación de `B`**.
+
+**Patrón Defensivo Fundamental en Java:**
+El cortocircuito permite proteger nuestro programa contra fallos críticos en tiempo de ejecución:
+
+```java
+String texto = null;
+
+// Protección perfecta contra NullPointerException:
+// Si texto == null es true, texto.length() JAMÁS llega a ejecutarse
+if (texto != null && texto.length() > 0) {
+    System.out.println("El texto no está vacío");
+}
+
+// División segura contra división por cero:
+int divisor = 0;
+if (divisor != 0 && (100 / divisor > 2)) {
+    System.out.println("Operación válida");
+}
+```
+
+Si hubieras utilizado el operador `&` en lugar de `&&`, Java habría evaluado `texto.length()` o `100 / divisor`, estrellando la aplicación con un error fatal.
+
+---
+
+### 7.5 Operador Condicional Ternario (`?:`)
+
+Es el único operador ternario de Java (requiere tres operandos). Constituye una versión compacta de una sentencia `if-else` que devuelve directamente un valor evaluado:
+
+```
+variable = (condicion) ? valor_si_verdadero : valor_si_falso;
+```
+
+```java
 int edad = 19;
 String estado = (edad >= 18) ? "Mayor de edad" : "Menor de edad";
-System.out.println("El cliente es: " + estado);
+
+// Cálculo de valor absoluto:
+int valor = -45;
+int absoluto = (valor < 0) ? -valor : valor;
 ```
 
-### 7.7 Tabla de Precedencia de Operadores
+---
 
-Cuando una expresión combina operadores heterogéneos, Java los resuelve según su jerarquía de prioridad:
+### 7.6 Tabla Completa de Precedencia y Asociatividad de Operadores
 
-```text
-Jerarquía de Precedencia (de Mayor a Menor prioridad):
-1. Paréntesis:  ( )   [ ]   .
-2. Postfijos:   expr++   expr--
-3. Unarios:     ++expr   --expr   +expr   -expr   !   ~   (cast)
-4. Multiplicativos:  *   /   %
-5. Aditivos:         +   -
-6. Desplazamiento:   <<   >>   >>>
-7. Relacionales:     <   >   <=   >=   instanceof
-8. Igualdad:         ==   !=
-9. Lógicos a nivel de bits: &  ^  |
-10. Lógicos condicionales:  &&
-11. Lógicos condicionales:  ||
-12. Ternario:        ? :
-13. Asignación:      =   +=   -=   *=   /=   %=
-```
+Cuando una misma expresión contiene múltiples operadores, Java sigue un orden estricto de precedencia matemática y lógica para determinar qué operación se resuelve primero:
 
-:::tip[Regla de Oro: Ante la Duda, Usa Paréntesis]
-Nunca confíes en recordar la tabla completa de memoria ni obligues a tus compañeros de equipo a descifrar expresiones crípticas como `a + b * c >> d && e`. **Utiliza paréntesis explícitos**: clarifican la intención de tu código, evitan errores sutiles y no penalizan en absoluto la velocidad de ejecución.
+| Precedencia | Tipo de Operador | Operadores | Asociatividad |
+| :---: | :--- | :--- | :---: |
+| **1 (Máxima)** | Acceso, llamadas, corchetes | `.` `[]` `()` | De izquierda a derecha |
+| **2** | Unarios y sufijos | `expr++` `expr--` | De derecha a izquierda |
+| **3** | Unarios y prefijos | `++expr` `--expr` `+` `-` `!` `~` `(tipo)` | De derecha a izquierda |
+| **4** | Multiplicativos | `*` `/` `%` | De izquierda a derecha |
+| **5** | Aditivos | `+` `-` | De izquierda a derecha |
+| **6** | Desplazamiento de bits | `<<` `>>` `>>>` | De izquierda a derecha |
+| **7** | Relacionales | `<` `>` `<=` `>=` `instanceof` | De izquierda a derecha |
+| **8** | Igualdad | `==` `!=` | De izquierda a derecha |
+| **9** | AND a nivel de bits | `&` | De izquierda a derecha |
+| **10** | XOR a nivel de bits | `^` | De izquierda a derecha |
+| **11** | OR a nivel de bits | `\|` | De izquierda a derecha |
+| **12** | AND lógico (cortocircuito) | `&&` | De izquierda a derecha |
+| **13** | OR lógico (cortocircuito) | `\|\|` | De izquierda a derecha |
+| **14** | Ternario | `? :` | De derecha a izquierda |
+| **15 (Mínima)**| Asignación | `=` `+=` `-=` `*=` `/=` `%=` etc. | De derecha a izquierda |
+
+:::tip[Usa Paréntesis Sin Miedo]
+No intentes memorizar toda la tabla de precedencia ni obligues a otros desarrolladores a descifrar expresiones complejas como `x + y * z > w && a || b`. **Usa paréntesis deliberadamente**: clarifican la intención del algoritmo y garantizan que el orden de evaluación sea inequívoco.
 :::
 
 ---
 
-## 8. Clases y Objetos Estándar de Uso Frecuente
+## 8. Clases Estándar Fundamentales de la Biblioteca de Java
 
-Java incluye de fábrica miles de clases en su biblioteca estándar. En este punto inicial del curso, destacamos cuatro herramientas indispensables:
+El Java Development Kit (JDK) incluye miles de clases listas para usar dentro del paquete `java.lang` (que se importa de forma automática e implícita en todos los ficheros `.java`) y otros paquetes estándar como `java.time` o `java.math`.
 
-### 8.1 La Clase `String`: Manipulación de Cadenas de Texto
+### 8.1 La Clase `Math`
 
-En Java, un texto no es un array de caracteres primitivo ni un tipo básico: **es un objeto de la clase `java.lang.String`**.
-
-#### Inmutabilidad de los Strings
-Una vez creado un objeto `String` en memoria, **su contenido no puede ser alterado jamás**. Cualquier método que aparente modificar una cadena (`toUpperCase()`, `replace()`, etc.) en realidad construye y devuelve un **nuevo objeto `String`** con el cambio aplicado, dejando la cadena original intacta.
+Ubicada en `java.lang.Math`, ofrece una colección completa de métodos matemáticos y constantes estáticas:
 
 ```java
-String saludo = "hola";
-saludo.toUpperCase(); // ¡No cambia la variable saludo!
-System.out.println(saludo); // Sigue imprimiendo "hola"
-
-saludo = saludo.toUpperCase(); // Reasignamos la referencia al nuevo objeto
-System.out.println(saludo); // Ahora imprime "HOLA"
-```
-
-#### Métodos Clave de la Clase `String`
-
-```java
-String texto = "  Desarrollo de Aplicaciones Multiplataforma (DAM)  ";
-
-// 1. Longitud de la cadena (número de caracteres)
-int longitud = texto.length(); // 52 caracteres
-
-// 2. Limpieza de espacios en blanco en los extremos
-String limpio = texto.strip(); // o texto.trim()
-
-// 3. Obtener el carácter en un índice concreto (0-indexado)
-char primeraLetra = limpio.charAt(0); // 'D'
-
-// 4. Extracción de una subcadena [inicio, finExcluido)
-String siglas = limpio.substring(44, 47); // "DAM"
-
-// 5. Búsquedas y comprobaciones
-boolean contiene = limpio.contains("Aplicaciones"); // true
-boolean empieza = limpio.startsWith("Desarrollo");   // true
-int posicion = limpio.indexOf("Multiplataforma");    // 26
-
-// 6. Sustitución de caracteres o secuencias
-String sustituido = limpio.replace("DAM", "1º DAM");
-
-// 7. Conversión de caja
-String mayusculas = limpio.toUpperCase();
-String minusculas = limpio.toLowerCase();
-```
-
-:::caution[¡REGLA SAGRADA! Comparación de Strings con `.equals()`, NUNCA con `==`]
-Este es, con diferencia, el error más letal que cometen los programadores noveles en Java:
-
-* El operador `==` compara si dos variables apuntan **a la misma dirección física de memoria RAM**.
-* El método `.equals()` compara si el **contenido textual** de dos cadenas es exactamente el mismo carácter a carácter.
-
-```java
-String s1 = "hola";
-Scanner sc = new Scanner(System.in);
-System.out.print("Escribe 'hola': ");
-String s2 = sc.nextLine();
-
-if (s1 == s2) {
-    // ¡CASI NUNCA SE CUMPLE! Aunque hayas escrito 'hola', son objetos distintos en memoria.
-}
-
-if (s1.equals(s2)) {
-    // ¡FORMA CORRECTA! Devuelve true si ambos contienen las letras h-o-l-a.
-    System.out.println("Las cadenas son idénticas en contenido.");
-}
-
-// Para ignorar mayúsculas y minúsculas:
-if (s1.equalsIgnoreCase(s2)) { ... }
-```
-:::
-
-### 8.2 La Clase `Math`: Cálculos Matemáticos
-
-La clase `java.lang.Math` ofrece constantes y métodos matemáticos estáticos que se invocan directamente sobre el nombre de la clase sin necesidad de crear objetos con `new`:
-
-```java
-// Constantes matemáticas fundamentales
+// 1. Constantes matemáticas universales
 double pi = Math.PI; // 3.141592653589793
 double e = Math.E;   // 2.718281828459045
 
-// Funciones habituales
-double raiz = Math.sqrt(25.0);           // Raíz cuadrada: 5.0
-double potencia = Math.pow(2.0, 8.0);     // 2 elevado a 8: 256.0
-double absoluto = Math.abs(-42.5);        // Valor absoluto: 42.5
-int maximo = Math.max(15, 29);            // Máximo entre dos números: 29
-int minimo = Math.min(15, 29);            // Mínimo: 15
-double hipotenusa = Math.hypot(3.0, 4.0); // Hipotenusa de catetos 3 y 4: 5.0
+// 2. Funciones de cálculo y raíces
+double potencia = Math.pow(2, 8);     // 2 elevado a 8 = 256.0
+double raizCuadrada = Math.sqrt(49);  // 7.0
+double raizCubica = Math.cbrt(27);    // 3.0
+int absoluto = Math.abs(-15);         // 15
 
-// Redondeos
-long redondeo = Math.round(7.6);          // Redondea al entero más próximo: 8
-double techo = Math.ceil(7.1);            // Redondeo hacia arriba: 8.0
-double suelo = Math.floor(7.9);           // Redondeo hacia abajo (trunca): 7.0
+// 3. Métodos de redondeo
+double valor = 4.7;
+long redondeo = Math.round(valor);    // 5 (redondeo estándar al entero más próximo)
+double suelo = Math.floor(valor);     // 4.0 (mayor entero menor o igual al valor)
+double techo = Math.ceil(valor);      // 5.0 (menor entero mayor o igual al valor)
 
-// Generación de números pseudoaleatorios
-// Math.random() genera un double aleatorio en el rango semiabierto [0.0, 1.0)
-// Fórmula general para obtener un entero aleatorio en el rango [min, max]:
-int min = 1, max = 6;
-int dado = (int)(Math.random() * (max - min + 1)) + min;
-System.out.println("Tirada de dado (1-6): " + dado);
+// 4. Comparaciones extremas
+int maximo = Math.max(10, 25);        // 25
+int minimo = Math.min(10, 25);        // 10
 ```
 
-### 8.3 Fechas y Horas Modernas: El Paquete `java.time`
+#### Generación de Números Aleatorios con `Math.random()`
+El método `Math.random()` devuelve un número pseudoaleatorio de tipo `double` comprendido en el intervalo semiabierto `[0.0, 1.0)` (incluye el `0.0`, pero nunca alcanza el `1.0`).
 
-Desde Java 8, se desaconseja por completo el uso de las vetustas clases `Date` y `Calendar` en favor de la moderna y robusta API `java.time`:
+Para generar un número entero aleatorio dentro de un rango inclusivo arbitrario `[min, max]`, aplicamos la siguiente fórmula estándar:
+
+```java
+// Fórmula Universal: (int)(Math.random() * (max - min + 1)) + min
+int min = 1;
+int max = 6;
+int dado = (int)(Math.random() * (max - min + 1)) + min;
+System.out.println("Tirada de dado: " + dado);
+```
+
+---
+
+### 8.2 Cadenas de Texto con la Clase `String`
+
+En Java, un texto **no es un tipo primitivo**, sino un objeto de la clase `java.lang.String`.
+
+#### La Gran Característica: Inmutabilidad de los Strings
+Una vez que un objeto `String` es creado en la memoria Heap, **su contenido jamás puede ser modificado**. Cualquier método que supuestamente "modifique" un `String` (como `.toUpperCase()`, `.trim()` o `.replace()`) en realidad genera un **nuevo objeto `String`** en memoria con los cambios, dejando el original intacto:
+
+```java
+String saludo = "hola";
+saludo.toUpperCase(); // ¡No modifica 'saludo'! Crea un nuevo String "HOLA" en el aire
+System.out.println(saludo); // Imprime: hola
+
+// Para conservar los cambios, debemos reasignar la referencia:
+saludo = saludo.toUpperCase();
+System.out.println(saludo); // Imprime: HOLA
+```
+
+#### El String Pool y el Gran Error de Comparar Cadenas con `==`
+La JVM optimiza el uso de memoria gestionando una zona especial en el Heap llamada **String Constant Pool**. Cuando creas un literal de texto como `String a = "Java"`, la JVM lo almacena en el pool. Si luego creas `String b = "Java"`, ambas variables apuntan a la misma dirección física de memoria.
+
+Sin embargo, si la cadena se crea en tiempo de ejecución (por ejemplo, leyéndola con `Scanner` o con `new String("Java")`), se aloja en un espacio de memoria distinto:
+
+```java
+String s1 = "DAM";
+String s2 = "DAM";
+String s3 = new String("DAM");
+
+System.out.println(s1 == s2); // true (¡Coincidencia fortuita! Apuntan al mismo String Pool)
+System.out.println(s1 == s3); // FALSE (¡Error catastrófico! Son dos objetos distintos en Heap)
+
+// REGLA UNIVERSAL E INQUEBRANTABLE EN JAVA:
+// Para comparar el contenido de objetos y textos, usa SIEMPRE .equals()
+System.out.println(s1.equals(s3)); // TRUE (compara los caracteres reales)
+System.out.println(s1.equalsIgnoreCase("dam")); // TRUE (ignora mayúsculas/minúsculas)
+```
+
+:::danger[Prohibido usar `==` con objetos en Java]
+El operador `==` compara **direcciones de memoria física** (si ambos punteros señalan al mismísimo objeto). Para comparar si dos cadenas tienen el mismo texto alfanumérico, debes usar **siempre** `cadena1.equals(cadena2)`.
+:::
+
+#### Métodos Clave Indispensables de la Clase `String`:
+
+```java
+String frase = "  Aprender Java en DAM es Fantástico!  ";
+
+// 1. Longitud del texto
+int totalCaracteres = frase.length(); // 39
+
+// 2. Extracción de caracteres por índice (0-based)
+char primerCaracter = frase.charAt(2); // 'A'
+
+// 3. Subcadenas (índice inicio inclusivo, índice fin exclusivo)
+String sub = frase.substring(2, 10); // "Aprender"
+
+// 4. Limpieza de espacios en blanco
+String limpia = frase.strip(); // "Aprender Java en DAM es Fantástico!" (Java 11+)
+
+// 5. Búsqueda de patrones
+boolean contieneJava = limpia.contains("Java"); // true
+boolean empiezaPor = limpia.startsWith("Aprender"); // true
+int posicionDam = limpia.indexOf("DAM"); // 17 (-1 si no existe)
+
+// 6. Reemplazo de caracteres o palabras
+String sustituida = limpia.replace("DAM", "1º DAM");
+
+// 7. Comprobación de vacíos (Java 11+)
+boolean vacia = "".isEmpty(); // true
+boolean enBlanco = "   ".isBlank(); // true (solo contiene espacios en blanco)
+```
+
+#### Bloques de Texto (*Text Blocks* - Java 15+)
+Para textos multilínea extensos (como consultas SQL, fragmentos HTML o JSON), Java 15 introdujo los bloques de texto delimitados por tres comillas dobles `"""`:
+
+```java
+String consultaSql = """
+    SELECT id, nombre, apellidos, saldo
+    FROM usuarios
+    WHERE activo = true
+    ORDER BY apellidos ASC;
+    """;
+```
+
+---
+
+### 8.3 Gestión Moderna de Fechas y Tiempo (`java.time`)
+
+Históricamente, Java utilizaba las clases `java.util.Date` y `java.util.Calendar`. Dichas clases fueron declaradas obsoletas debido a graves fallos de diseño: los meses empezaban en 0 (enero era el mes 0), los años empezaban en 1900, eran objetos mutables que provocaban errores de concurrencia y sus métodos tenían nombres confusos.
+
+Desde Java 8, disponemos de la moderna **API `java.time`** (basada en el estándar internacional ISO-8601), que es **completamente inmutable y segura frente a hilos**:
 
 ```java
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 
-// 1. Obtener la fecha y hora actuales del sistema
-LocalDate hoy = LocalDate.now();
-LocalTime horaActual = LocalTime.now();
-LocalDateTime momentoExacto = LocalDateTime.now();
+public class FechasDemo {
+    public static void main(String[] args) {
+        // 1. Obtener la fecha y hora actual del sistema
+        LocalDate hoy = LocalDate.now();
+        LocalTime horaActual = LocalTime.now();
+        LocalDateTime momentoActual = LocalDateTime.now();
 
-System.out.println("Hoy es: " + hoy); // Imprime: YYYY-MM-DD
+        // 2. Crear fechas concretas (los meses se indican del 1 al 12 o con el enum Month)
+        LocalDate inicioCurso = LocalDate.of(2026, 9, 15);
 
-// 2. Crear una fecha específica
-LocalDate nacimiento = LocalDate.of(2004, 10, 25);
+        // 3. Aritmética de fechas (al ser inmutable, devuelve una nueva fecha)
+        LocalDate dentroDeDosSemanas = hoy.plusWeeks(2);
+        LocalDate haceTresMeses = hoy.minusMonths(3);
 
-// 3. Formateo personalizado al estilo español
-DateTimeFormatter formatoEspanol = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-System.out.println("Momento formateado: " + momentoExacto.format(formatoEspanol));
+        // 4. Cálculo de periodos transcurridos
+        Period diferencia = Period.between(inicioCurso, hoy);
+        System.out.printf("Tiempo transcurrido: %d meses y %d días%n", 
+            diferencia.getMonths(), diferencia.getDays());
+
+        // 5. Ajustadores temporales avanzados (ej. último día del mes actual)
+        LocalDate finDeMes = hoy.with(TemporalAdjusters.lastDayOfMonth());
+
+        // 6. Formateo y parseo profesional
+        DateTimeFormatter formatoEspanol = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        String fechaTexto = momentoActual.format(formatoEspanol);
+        System.out.println("Fecha formateada: " + fechaTexto);
+
+        // Parsear un texto a fecha
+        LocalDate fechaParseada = LocalDate.parse("25/12/2026", DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+}
 ```
 
-### 8.4 Aritmética de Alta Precisión: `BigInteger` y `BigDecimal`
+---
 
-En aplicaciones bancarias o astronómicas, los tipos primitivos `long` y `double` son insuficientes:
-* `BigInteger` (`java.math.BigInteger`): Permite manejar números enteros de longitud teóricamente infinita (limitada únicamente por la RAM).
-* `BigDecimal` (`java.math.BigDecimal`): Resuelve el clásico problema de imprecisión en coma flotante de `double` (donde `0.1 + 0.2 = 0.30000000000000004`), proporcionando control exacto de redondeo monetario.
+### 8.4 Precisión Financiera y Números Gigantes: `BigDecimal` y `BigInteger`
+
+¿Cuánto es `0.1 + 0.2` en matemáticas? Es exactamente `0.3`.  
+Sin embargo, comprueba qué imprime Java al ejecutar este código:
+
+```java
+double suma = 0.1 + 0.2;
+System.out.println(suma); // Imprime: 0.30000000000000004
+```
+
+#### El Problema del Estándar IEEE 754 de Coma Flotante
+Los ordenadores utilizan base binaria (ceros y unos). En binario, fracciones sencillas en base decimal como `0.1` (1/10) o `0.2` (1/5) se convierten en números periódicos infinitos (análogo a un tercio `1/3 = 0.33333...` en base decimal). Al tener un número finito de bits (64 bits en `double`), el procesador debe truncar la cifra, generando un diminuto error de redondeo.
+
+En un videojuego o en un cálculo gráfico, ese error es irrelevante. Pero en **aplicaciones bancarias, nóminas, facturas comerciales o criptografía, este error acumulado es inaceptable**.
+
+#### La Solución Oficial: `BigDecimal`
+Para cálculos monetarios exactos, Java proporciona la clase `java.math.BigDecimal`:
 
 ```java
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.math.RoundingMode;
 
-// Factorial de 100 con BigInteger
-BigInteger factorial = BigInteger.ONE;
-for (int i = 1; i <= 100; i++) {
-    factorial = factorial.multiply(BigInteger.valueOf(i));
+public class FinanzasDemo {
+    public static void main(String[] args) {
+        // REGLA FUNDAMENTAL: Instanciar siempre BigDecimal usando Strings, no doubles
+        BigDecimal precio = new BigDecimal("0.1");
+        BigDecimal iva = new BigDecimal("0.2");
+
+        BigDecimal total = precio.add(iva);
+        System.out.println("Total exacto: " + total); // Imprime: 0.3
+
+        // Operaciones aritméticas: add, subtract, multiply, divide
+        BigDecimal subtotal = new BigDecimal("100.00");
+        BigDecimal tasa = new BigDecimal("0.21");
+        BigDecimal impuesto = subtotal.multiply(tasa);
+
+        // División con control estricto de redondeo a 2 decimales
+        BigDecimal cuota = subtotal.divide(new BigDecimal("3"), 2, RoundingMode.HALF_UP);
+        System.out.println("Cuota mensual: " + cuota); // Imprime: 33.33
+    }
 }
-
-// Cálculo monetario exacto con BigDecimal
-BigDecimal precioUnitario = new BigDecimal("19.99");
-BigDecimal cantidad = new BigDecimal("3");
-BigDecimal total = precioUnitario.multiply(cantidad);
-System.out.println("Total exacto en euros: " + total); // 59.97
 ```
 
-### 8.5 Introducción a los Tipos Enumerados (`enum`)
-
-A menudo un programa necesita representar un conjunto cerrado de opciones fijas (los días de la semana, los estados de una factura, los puntos cardinales). Usar números mágicos o cadenas de texto libres es propenso a erratas. Java ofrece los tipos enumerados para garantizar **seguridad de tipos en tiempo de compilación**:
+#### Números Enteros de Precisión Arbitraria: `BigInteger`
+Si necesitas calcular números astronómicos (por ejemplo, el factorial de 100 o claves criptográficas RSA de 2048 bits) que superan el límite de 64 bits de `long` (~9 trillones), utiliza `java.math.BigInteger`:
 
 ```java
-// Definición de una enumeración
-public enum DiaSemana {
-    LUNES, MARTES, MIERCOLES, JUEVES, VIERNES, SABADO, DOMINGO
-}
+import java.math.BigInteger;
 
-// Uso en el programa
-DiaSemana diaHoy = DiaSemana.VIERNES;
-
-if (diaHoy == DiaSemana.SABADO || diaHoy == DiaSemana.DOMINGO) {
-    System.out.println("¡Es fin de semana!");
-} else {
-    System.out.println("Jornada lectiva en el instituto.");
-}
+BigInteger n1 = new BigInteger("92233720368547758071234567890");
+BigInteger n2 = new BigInteger("50000000000000000000000000000");
+BigInteger producto = n1.multiply(n2);
 ```
 
-:::tip[⭐ Be the Code: Seguridad de tipos frente a "cadenas mágicas"]
-Imagina que en lugar de un `enum`, utilizas una variable de tipo `String` para controlar el día: `String dia = "LUNS";`. Si cometes una errata tipográfica al teclear, **el compilador de Java no se quejará en absoluto**: tu programa compilará con éxito y el fallo pasará completamente desapercibido hasta que un cliente lo descubra en producción.
-Por el contrario, al utilizar `DiaSemana dia = DiaSemana.LUNS;`, **el compilador bloqueará la construcción en el acto**, subrayándolo en rojo e indicando que `LUNS` no existe en la enumeración. Un buen desarrollador siempre prefiere que un error salte en tiempo de compilación antes que en tiempo de ejecución.
-:::
+#### Formateo de Monedas y Números con `DecimalFormat`
+Para mostrar importes numéricos con separadores de miles y decimales acordes al formato español:
+
+```java
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+
+double salario = 2450.60;
+DecimalFormat df = new DecimalFormat("#,##0.00 €", new DecimalFormatSymbols(Locale.of("es", "ES")));
+System.out.println(df.format(salario)); // Imprime: 2.450,60 €
+```
+
+---
+
+### 8.5 Tipos Enumerados (`enum`)
+
+Cuando una variable solo puede tomar un conjunto cerrado, finito y conocido de valores posibles (por ejemplo, los días de la semana, los meses del año, los estados de un pedido o los niveles de dificultad de un juego), utilizar cadenas (`String`) o números enteros (`int`) es propenso a errores tipográficos.
+
+Para resolverlo, Java cuenta con el tipo especial **`enum`**:
+
+```java
+public class EnumDemo {
+    // Definición del tipo enumerado
+    public enum NivelAcceso {
+        INVITADO,
+        USUARIO,
+        ADMINISTRADOR
+    }
+
+    public static void main(String[] args) {
+        // Uso con seguridad estricta de tipos
+        NivelAcceso rolActual = NivelAcceso.USUARIO;
+
+        if (rolActual == NivelAcceso.ADMINISTRADOR) {
+            System.out.println("Acceso concedido a la consola de control");
+        } else {
+            System.out.println("Acceso limitado: Privilegios insuficientes");
+        }
+    }
+}
+```
 
 ---
 
 ## 9. Entrada y Salida Estándar por Consola
 
-La interacción entre el usuario humano y el programa a través de la consola de texto requiere dos canales: la salida estándar (`System.out`) y la entrada estándar (`System.in`).
+Todo programa interactivo requiere un canal para recibir datos del usuario y un canal para proyectar sus resultados.
 
-### 9.1 Salida con Formato: `System.out.printf()`
+### 9.1 Salida por Consola: `print()`, `println()` y `printf()`
 
-Aunque `println()` es muy práctico para imprimir mensajes simples, cuando queremos mostrar tablas, alinear columnas o limitar el número de decimales, la función `System.out.printf()` (heredada de C) es insustituible:
+En Java, la consola se representa mediante el objeto estático `System.out`:
+- `System.out.print(...)`: Muestra el contenido sin salto de línea al final.
+- `System.out.println(...)`: Muestra el contenido y añade automáticamente un salto de línea (`\n`).
+- `System.out.printf(...)`: Permite dar formato avanzado a la salida combinando texto con especificadores de formato (similar a la función `printf` clásica de C).
+
+#### Tabla Completa de Especificadores de Formato para `printf()`
+
+| Especificador | Tipo de Dato | Ejemplo de Entrada | Resultado Formateado |
+| :---: | :--- | :--- | :--- |
+| `%d` | Entero decimal (`int`, `long`, `byte`, `short`) | `printf("%d", 42)` | `42` |
+| `%f` | Coma flotante (`float`, `double`) | `printf("%.2f", 3.14159)` | `3,14` (o `3.14` según Locale) |
+| `%s` | Cadena de texto (`String`) | `printf("%s", "Java")` | `Java` |
+| `%c` | Carácter primitivo (`char`) | `printf("%c", 'A')` | `A` |
+| `%b` | Booleano (`boolean`) | `printf("%b", true)` | `true` |
+| `%n` | Salto de línea independiente del SO | `printf("Hola%nMundo")` | Genera salto de línea universal |
+| `%%` | Carácter de porcentaje literal | `printf("%d%%", 100)` | `100%` |
+
+#### Modificadores de Ancho, Alineación y Relleno
+Podemos intercalar modificadores entre el `%` y la letra del especificador:
+- `%10d`: Justifica a la derecha en un ancho mínimo de 10 columnas.
+- `%-10s`: Justifica a la izquierda rellenando con espacios hasta 10 caracteres.
+- `%05d`: Rellena con ceros a la izquierda hasta completar 5 dígitos (ej. `00007`).
+- `%.2f`: Fija exactamente dos posiciones decimales tras la coma.
 
 ```java
 String producto = "Teclado Mecánico";
-double precio = 89.954;
-int cantidad = 2;
-double total = precio * cantidad;
+int unidades = 4;
+double precioUnitario = 79.99;
+double total = unidades * precioUnitario;
 
-// Formateamos la salida con especificadores de formato
-System.out.printf("Producto: %-20s | Uds: %03d | Total: %8.2f €%n", 
-                  producto, cantidad, total);
+System.out.println("--------------------------------------------------");
+System.out.printf("%-20s %5s %10s %10s%n", "PRODUCTO", "CANT", "PRECIO", "TOTAL");
+System.out.println("--------------------------------------------------");
+System.out.printf("%-20s %5d %10.2f %10.2f €%n", producto, unidades, precioUnitario, total);
+System.out.println("--------------------------------------------------");
 ```
 
-#### Especificadores de Formato Principales:
-* `%d`: Número entero decimal (`byte`, `short`, `int`, `long`).
-* `%f`: Número de coma flotante (`float`, `double`). Podemos indicar precisión: `%.2f` redondea a 2 decimales.
-* `%s`: Cadena de caracteres (`String`). Con `%-20s` alinea a la izquierda ocupando 20 espacios.
-* `%c`: Carácter individual (`char`).
-* `%b`: Valor booleano (`boolean`).
-* `%n`: Salto de línea independiente de la plataforma (más seguro que `
-`).
+---
 
-### 9.2 Lectura de Datos con la Clase `Scanner`
+### 9.2 Entrada de Datos con la Clase `Scanner`
 
-Para leer lo que el usuario escribe en el teclado, utilizamos la clase `java.util.Scanner`, envolviendo el flujo `System.in`:
+Para leer datos introducidos por el usuario a través del teclado, la forma estándar en Java es utilizar la clase `java.util.Scanner`, vinculándola al flujo de entrada estándar del sistema `System.in`:
 
 ```java
 import java.util.Scanner;
 import java.util.Locale;
 
-public class EntradaDatos {
+public class EntradaDatosDemo {
     public static void main(String[] args) {
-        // Configuramos Scanner con Locale.US para que los decimales se introduzcan con punto (.)
-        Scanner teclado = new Scanner(System.in).useLocale(Locale.US);
+        // Creamos una instancia de Scanner asociada al teclado
+        Scanner teclado = new Scanner(System.in);
+        
+        // Configuramos el punto como separador decimal estándar internacional
+        teclado.useLocale(Locale.US);
 
-        System.out.print("Introduce tu nombre completo: ");
-        String nombre = teclado.nextLine(); // Lee toda la línea hasta pulsar Enter
+        System.out.print("Introduce tu nombre: ");
+        String nombre = teclado.nextLine(); // Lee una línea completa de texto
 
         System.out.print("Introduce tu edad: ");
-        int edad = teclado.nextInt();       // Lee un número entero
+        int edad = teclado.nextInt(); // Lee un número entero
 
-        System.out.print("Introduce tu altura en metros (ej: 1.75): ");
-        double altura = teclado.nextDouble();// Lee un número decimal
+        System.out.print("Introduce tu estatura en metros (ej. 1.78): ");
+        double estatura = teclado.nextDouble(); // Lee un número decimal
 
-        System.out.printf("Hola %s. Tienes %d años y mides %.2f m.%n", nombre, edad, altura);
-        
-        teclado.close(); // Buena práctica: cerrar el recurso al finalizar
+        System.out.printf("Hola %s, tienes %d años y mides %.2f metros.%n", nombre, edad, estatura);
+
+        // Buena práctica: cerrar el Scanner al finalizar el programa
+        teclado.close();
     }
 }
 ```
 
-:::caution[⚠️ El Clásico Problema del Salto de Línea en el Buffer de Scanner]
-Casi todos los alumnos caen en esta trampa alguna vez:
-Cuando ejecutas `nextInt()` o `nextDouble()`, el método lee los dígitos numéricos pero **deja el carácter de salto de línea (`
-`) flotando dentro del buffer del teclado**. 
-
-Si a continuación invocas inmediatamente un `nextLine()`, este consumirá de golpe ese `
-` residual, interpretando que el usuario ha introducido una línea vacía y saltándose la pregunta sin dejarte escribir:
-
-```java
-System.out.print("Introduce tu edad: ");
-int edad = teclado.nextInt(); // El usuario escribe "20" y pulsa Enter. El buffer contiene: '
-'
-
-// ¡SOLUCIÓN OBLIGATORIA! Limpiar el buffer consumiendo el salto de línea pendiente:
-teclado.nextLine(); 
-
-System.out.print("Introduce tu ciudad: ");
-String ciudad = teclado.nextLine(); // Ahora sí espera a que el usuario escriba su ciudad
-```
-:::
-
-:::tip[¿Cómo leer un único carácter con `Scanner`?]
-Habrás notado que `Scanner` cuenta con métodos para casi todos los tipos primitivos (`nextInt()`, `nextDouble()`, `nextBoolean()`), pero **no dispone de ningún método `nextChar()`**.
-Para leer un único carácter de teclado, la técnica idiomática en Java consiste en leer la siguiente palabra como texto con `next()` y extraer su primer carácter con `.charAt(0)`:
-```java
-System.out.print("¿Deseas continuar? (S/N): ");
-char respuesta = teclado.next().toUpperCase().charAt(0);
-```
-:::
+#### Métodos Principales de Lectura de `Scanner`:
+- `nextLine()`: Lee todo el texto hasta que el usuario pulsa Enter (incluye espacios).
+- `next()`: Lee únicamente la siguiente palabra (se detiene en el primer espacio en blanco).
+- `nextInt()`: Lee el siguiente token interpretándolo como `int`.
+- `nextDouble()`: Lee el siguiente token interpretándolo como `double`.
+- `nextBoolean()`: Lee `true` o `false`.
 
 ---
 
-## 10. Sentencias de Decisión y Control de Flujo (RA4)
+### 9.3 ⭐ La Trampa del Salto de Línea Residual en `Scanner`
 
-Hasta ahora nuestros programas han sido puramente secuenciales: cada instrucción se ejecuta indefectiblemente una tras otra. Las **sentencias de selección o decisión** permiten bifurcar el camino que sigue el procesador en función de que una o más condiciones booleanas se evalúen como verdaderas o falsas.
+Este es, sin lugar a dudas, **el error número uno que confunde a todos los estudiantes de programación en Java**.
 
-### 10.1 Decisión Simple y Doble: `if` e `if-else`
+Imagina que ejecutas este código:
 
 ```java
-double saldo = 150.0;
-double cargo = 200.0;
+Scanner sc = new Scanner(System.in);
 
-if (saldo >= cargo) {
-    saldo -= cargo;
-    System.out.println("Cargo realizado con éxito. Saldo restante: " + saldo + " €");
+System.out.print("Introduce tu edad: ");
+int edad = sc.nextInt();
+
+System.out.print("Introduce tu nombre completo: ");
+String nombre = sc.nextLine(); // ¡SE LO SALTA! No deja escribir nada
+
+System.out.println("Nombre: " + nombre + ", Edad: " + edad);
+```
+
+#### ¿Por qué ocurre esto?
+Cuando el usuario teclea `25` y pulsa la tecla `Enter`, en el búfer de entrada de la consola se depositan tres caracteres: `'2'`, `'5'` y el carácter de salto de línea `'\n'`.
+1. El método `sc.nextInt()` lee únicamente los caracteres numéricos `'2'` y `'5'`, pero **deja el `\n` abandonado en el búfer**.
+2. A continuación, `sc.nextLine()` entra en acción buscando una línea hasta encontrar un `\n`.
+3. Inmediatamente se encuentra con el `\n` que dejó abandonado `nextInt()`. Como ya ha encontrado un fin de línea, consume el `\n`, devuelve una cadena vacía `""` y el programa continúa sin esperar a que el usuario escriba su nombre.
+
+```
+Búfer tras teclear '25' + Enter:
+[ '2' | '5' | '\n' ]
+   ▲
+   nextInt() lee '25' y se detiene aquí. El '\n' permanece en el búfer.
+
+Cuando llega nextLine():
+Encuentra inmediatamente el '\n' remanente y termina devolviendo cadena vacía.
+```
+
+#### La Solución: Purgar el Búfer
+Siempre que vayas a leer un texto con `nextLine()` después de haber leído un número con `nextInt()`, `nextDouble()` o cualquier otro método que no sea `nextLine()`, debes realizar una **lectura de purga** intermedia para limpiar el salto de línea residual:
+
+```java
+System.out.print("Introduce tu edad: ");
+int edad = sc.nextInt();
+
+sc.nextLine(); // ¡PURGA DEL BÚFER! Consume el '\n' residual abandonado
+
+System.out.print("Introduce tu nombre completo: ");
+String nombre = sc.nextLine(); // Ahora sí se detiene y espera la entrada del usuario
+```
+
+---
+
+## 10. Sentencias de Decisión y Control de Flujo
+
+Por defecto, la Máquina Virtual de Java ejecuta las instrucciones de forma estrictamente secuencial: una línea tras otra, desde la primera sentencia del método `main` hasta la última. Sin embargo, los algoritmos reales requieren tomar bifurcaciones (*branching*) y elegir caminos alternativos en función del estado de las variables y las decisiones del usuario.
+
+### 10.1 Las Sentencias Condicionales: `if`, `if-else` y Escaleras `if-else if`
+
+La estructura `if` evalúa una expresión lógica de tipo `boolean`. Si la condición resulta ser `true`, ejecuta el bloque de instrucciones delimitado por llaves; si es `false`, omite su ejecución:
+
+```java
+int edad = 18;
+
+// 1. Estructura if simple
+if (edad >= 18) {
+    System.out.println("Acceso autorizado: Usuario mayor de edad.");
+}
+
+// 2. Estructura if-else (Bifurcación completa)
+double saldo = 45.50;
+double precioArticulo = 60.00;
+
+if (saldo >= precioArticulo) {
+    saldo -= precioArticulo;
+    System.out.println("Compra realizada con éxito. Saldo restante: " + saldo);
 } else {
-    System.out.println("Operación denegada: Saldo insuficiente.");
+    double falta = precioArticulo - saldo;
+    System.out.printf("Saldo insuficiente. Faltan %.2f € para completar la compra.%n", falta);
 }
 ```
 
-### 10.2 Escaleras de Decisión Múltiple: `if - else if - else`
-
-Cuando existen más de dos escenarios excluyentes, encadenamos condiciones:
+#### Escalera de Condiciones Múltiples: `if - else if - else`
+Cuando debemos clasificar una situación entre múltiples rangos excluyentes:
 
 ```java
 double nota = 7.8;
 
 if (nota < 0.0 || nota > 10.0) {
-    System.out.println("Error: Calificación inválida.");
+    System.out.println("Error: Calificación fuera de rango válido (0-10).");
 } else if (nota < 5.0) {
     System.out.println("Suspenso");
-} else if (nota < 7.0) {
+} else if (nota < 6.5) {
     System.out.println("Aprobado");
-} else if (nota < 9.0) {
+} else if (nota < 8.5) {
     System.out.println("Notable");
 } else if (nota < 10.0) {
     System.out.println("Sobresaliente");
@@ -861,242 +1254,420 @@ if (nota < 0.0 || nota > 10.0) {
 }
 ```
 
-### 10.3 Selección Múltiple Clásica: `switch` con `break`
+:::caution[El Peligro Mortal de Omitir las Llaves `{}`]
+En Java, si una cláusula `if` o `else` contiene una única sentencia, las llaves `{}` son opcionales según la gramática del compilador. **Sin embargo, en el desarrollo de software profesional está terminantemente prohibido omitirlas**.
 
-La sentencia `switch` evalúa una única expresión y salta directamente a la etiqueta `case` cuyo valor coincida. Puede evaluar tipos `byte`, `short`, `char`, `int`, `String` y tipos `enum` (pero **no** `float` ni `double`):
+Observa este clásico desastre:
 
 ```java
-int opcionMenu = 2;
+// Código engañoso sin llaves:
+if (usuarioEsAdmin)
+    registrarAcceso();
+    borrarBaseDeDatos(); // ¡PELIGRO! Esta línea se ejecuta SIEMPRE, sea admin o no
+```
 
-switch (opcionMenu) {
+La sangría visual engaña al ojo humano, pero el compilador solo vincula la primera sentencia (`registrarAcceso()`) al `if`. La segunda línea no forma parte del condicional. El infame fallo de seguridad SSL de Apple en 2014 (*goto fail;*) que costó millones de dólares se debió exactamente a omitir las llaves. **Pon siempre llaves `{}` en todos tus bloques de control**.
+:::
+
+---
+
+### 10.2 La Sentencia `switch` Clásica
+
+Cuando una misma variable debe compararse frente a múltiples valores constantes discretos, encadenar decenas de `if-else if` resulta farragoso y poco eficiente. Para estos escenarios, Java proporciona la sentencia `switch`:
+
+#### Tipos de Datos Admitidos por `switch`:
+Java permite utilizar `switch` únicamente con los siguientes tipos:
+- Primitivos enteros pequeños: `byte`, `short`, `char`, `int`.
+- Sus correspondientes clases envoltorio: `Byte`, `Short`, `Character`, `Integer`.
+- Cadenas de texto `String` (admitido desde Java 7).
+- Tipos enumerados `enum` (admitido desde Java 5).
+
+:::warning[Tipos NO admitidos en switch]
+En Java **está prohibido** utilizar `switch` con variables de tipo `long`, `float`, `double` y `boolean`. Para números decimales o rangos continuos debes emplear `if-else`.
+:::
+
+```java
+int diaSemana = 3;
+String nombreDia;
+
+switch (diaSemana) {
     case 1:
-        System.out.println("Cargando partida guardada...");
-        break; // Imprescindible para salir del switch
+        nombreDia = "Lunes";
+        break; // Detiene la ejecución y sale del bloque switch
     case 2:
-        System.out.println("Iniciando nueva partida...");
+        nombreDia = "Martes";
         break;
     case 3:
-        System.out.println("Saliendo del juego.");
+        nombreDia = "Miércoles";
+        break;
+    case 4:
+        nombreDia = "Jueves";
+        break;
+    case 5:
+        nombreDia = "Viernes";
+        break;
+    case 6:
+        nombreDia = "Sábado";
+        break;
+    case 7:
+        nombreDia = "Domingo";
+        break;
+    default: // Se ejecuta si ningún caso anterior coincide
+        nombreDia = "Día inválido";
+        break;
+}
+
+System.out.println("Hoy es: " + nombreDia);
+```
+
+#### El Fenómeno de Caída Secuencial (*Fall-Through*)
+En el `switch` clásico heredado del lenguaje C, si olvidas colocar la sentencia `break` al final de un `case`, la JVM continuará ejecutando las instrucciones de los siguientes `case` de manera secuencial, sin importar si sus condiciones coinciden o no:
+
+- **Caída Involuntaria (Bug común)**: Si olvidas el `break` en `case 1:`, al valer 1 ejecutará el código del caso 1 y también el código del caso 2.
+- **Caída Intencionada (Técnica útil)**: Podemos agrupar deliberadamente múltiples casos para que compartan la misma lógica:
+
+```java
+int mes = 2;
+int anio = 2024;
+int diasEnElMes;
+
+switch (mes) {
+    case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+        diasEnElMes = 31;
+        break;
+    case 4: case 6: case 9: case 11:
+        diasEnElMes = 30;
+        break;
+    case 2:
+        // Comprobación de año bisiesto
+        if ((anio % 4 == 0 && anio % 100 != 0) || (anio % 400 == 0)) {
+            diasEnElMes = 29;
+        } else {
+            diasEnElMes = 28;
+        }
         break;
     default:
-        System.out.println("Opción no reconocida.");
+        diasEnElMes = 0;
+        System.out.println("Mes erróneo");
         break;
 }
 ```
 
-:::caution[El Peligro del *Fall-Through*]
-En el `switch` clásico, si olvidas colocar la instrucción `break` al final de un `case`, el flujo de ejecución continuará cayendo en cascada (*fall-through*) y ejecutando el código de los siguientes bloques `case`, independientemente de que sus valores coincidan o no.
-:::
+---
 
-### 10.4 Expresiones `switch` Modernas (Java 14/17/21 LTS)
+### 10.3 El `switch` Moderno: Expresiones `switch` y Flechas `->` (Java 14+)
 
-Java modernizó profundamente la sintaxis de `switch` para erradicar los errores del `break` y permitir su uso tanto como sentencia como en calidad de **expresión que devuelve un valor**.
+Java 14 estandarizó una revolución en la sintaxis de control: las **expresiones `switch`** con operadores de flecha (`->`). Esta sintaxis moderna resuelve todos los problemas históricos del `switch` clásico:
 
-#### Ventajas de las Expresiones Switch con Flecha (`->`):
-1. **Sin *fall-through*:** No requiere la instrucción `break`; solo se ejecuta la rama correspondiente.
-2. **Casos Múltiples:** Permite agrupar varios valores en una sola línea separados por comas.
-3. **Retorno de Valor:** El `switch` puede colocarse a la derecha de una asignación.
-4. **Palabra clave `yield`:** Si una de las ramas requiere un bloque multilínea entre llaves `{ }`, se utiliza `yield` para producir el valor final retornado.
+1. **Elimina el peligro de *fall-through***: No se requiere escribir `break`. Solo se ejecuta la instrucción situada tras la flecha.
+2. **Agrupación limpia por comas**: Múltiples etiquetas pueden separarse sencillamente con comas (`case 1, 2, 3 ->`).
+3. **Funciona como expresión**: Puede devolver un valor directamente para asignarlo a una variable.
+4. **Comprobación exhaustiva**: El compilador verifica que todos los casos posibles estén cubiertos (o que exista una cláusula `default`).
 
 ```java
 int dia = 6;
 
-// El switch moderno devuelve directamente un String asignado a la variable
-String tipoDia = switch (dia) {
-    case 1, 2, 3, 4, 5 -> "Día laborable";
-    case 6, 7 -> {
-        System.out.println("¡A disfrutar del descanso!");
-        yield "Fin de semana"; // yield devuelve el valor dentro de un bloque
-    }
-    default -> throw new IllegalArgumentException("Día inválido: " + dia);
+// 1. Switch moderno como sentencia de acción (sin break, sin fall-through)
+switch (dia) {
+    case 1, 2, 3, 4, 5 -> System.out.println("Día laborable: ¡A trabajar!");
+    case 6, 7          -> System.out.println("Fin de semana: ¡A descansar!");
+    default            -> System.out.println("Número de día inválido.");
+}
+
+// 2. Switch moderno como EXPRESIÓN (asigna el resultado directamente)
+String tipoDeDia = switch (dia) {
+    case 1, 2, 3, 4, 5 -> "Laborable";
+    case 6, 7          -> "Festivo";
+    default            -> "Desconocido";
 };
 
-System.out.println("El día " + dia + " es: " + tipoDia);
+System.out.println("El día seleccionado es de tipo: " + tipoDeDia);
+```
+
+#### La Palabra Clave Contextual `yield`
+Si un caso de una expresión `switch` requiere un bloque de varias líneas de código para realizar cálculos antes de devolver el valor, se utilizan llaves `{ ... }` y la palabra clave `yield` para emitir el resultado:
+
+```java
+int nivelUsuario = 2;
+
+double descuento = switch (nivelUsuario) {
+    case 1 -> 0.05;
+    case 2 -> {
+        double bonusFidelidad = 0.03;
+        double base = 0.10;
+        yield base + bonusFidelidad; // Emite 0.13 como valor resultante
+    }
+    case 3 -> 0.20;
+    default -> {
+        System.out.println("Nivel no reconocido, asignando descuento cero.");
+        yield 0.0;
+    }
+};
 ```
 
 ---
 
-## 11. Tipología Práctica de Errores en Java
+## 11. Tipología Práctica de Errores en Java y Depuración con IntelliJ IDEA
 
-Retomando la clasificación de la Unidad 1, al programar en Java nos enfrentamos a tres categorías de errores bien diferenciadas:
+El desarrollo de software no consiste únicamente en escribir código; una gran parte de la labor diaria de un desarrollador es diagnosticar, aislar y corregir errores (*debugging*).
 
-### 1. Errores de Compilación (Sintácticos y Semánticos Estáticos)
-* **Cuándo ocurren:** Antes de que el programa pueda ejecutarse. El compilador `javac` analiza el código y detecta que se violan las reglas gramaticales de Java (olvidar un punto y coma, cometer erratas en palabras reservadas, tipos incompatibles como `int n = "hola";` o variables no declaradas).
-* **Cómo te ayuda IntelliJ IDEA:** Subraya inmediatamente el error con una línea roja ondulada. Al colocar el cursor sobre ella y pulsar <kbd>Alt</kbd> + <kbd>Enter</kbd> (*Show Context Actions*), el IDE te ofrece sugerencias automáticas de corrección (*Quick-fixes*).
+En Java, los errores se dividen en tres grandes categorías según la etapa en la que se manifiestan:
 
-### 2. Errores en Tiempo de Ejecución (*Runtime Exceptions*)
-* **Cuándo ocurren:** El código es sintácticamente impecable y compila sin problemas a Bytecode, pero la JVM se topa con una operación imposible al ejecutarse con determinados datos (dividir un número entero entre cero `10 / 0`, introducir letras en la consola cuando `Scanner.nextInt()` esperaba dígitos, o intentar acceder a una posición inexistente).
-* **Cómo se manifiestan:** El programa aborta bruscamente lanzando una **Excepción** en la consola acompañada de un volcado de pila (*Stack Trace*) en texto rojo, indicando la clase, método y línea exacta del colapso:
-  ```text
-  Exception in thread "main" java.util.InputMismatchException
-      at java.base/java.util.Scanner.throwFor(Scanner.java:947)
-      at java.base/java.util.Scanner.nextInt(Scanner.java:2267)
-      at es.iesperenxisa.primerospasos.Main.main(Main.java:14)
-  ```
-  *(En la Unidad 3 aprenderás a capturar y gestionar estas excepciones de forma elegante con bloques `try-catch`).*
-
-### 3. Errores Lógicos (*Bugs*)
-* **Cuándo ocurren:** El programa compila perfectamente y se ejecuta sin lanzar ninguna excepción, pero **el resultado obtenido es incorrecto** (por ejemplo, calcular una media dividiendo entre 2 en vez de entre 3, o aplicar una condición `>` en lugar de `>=`).
-* **Cómo resolverlos:** Son los errores más desafiantes en la vida profesional. Para localizarlos, se recurre al **depurador (*Debugger*) de IntelliJ IDEA** (<kbd>Shift</kbd> + <kbd>F9</kbd>), colocando puntos de interrupción (*breakpoints*) para pausar la ejecución y ver paso a paso el contenido de cada variable en memoria RAM.
+```
+Clasificación de Errores en Java
+├── 1. Errores de Compilación (Sintácticos / Semánticos) → Detectados por javac / IntelliJ
+├── 2. Errores en Tiempo de Ejecución (Excepciones)    → Detienen la JVM abruptamente
+└── 3. Errores Lógicos (Bugs de Algoritmo)            → El programa corre, pero el resultado es erróneo
+```
 
 ---
 
-## 12. ⭐ Be the Code: Análisis de Traza y Memoria
+### 11.1 Errores de Compilación (*Compile-time Errors*)
+Ocurren cuando el código viola las reglas sintácticas o semánticas del lenguaje Java. El compilador `javac` no genera el archivo `.class` y el programa no puede ser ejecutado.
 
-Para ser un programador competente, debes ser capaz de "ejecutar" mentalmente el código como si fueras la propia CPU. Vamos a analizar dos de los enigmas más desconcertantes de Java.
-
-### Desafío 1: La Trampa de los Operadores de Pre/Post-Incremento
-
-Observa con máxima atención el siguiente fragmento de código:
+IntelliJ IDEA detecta estos errores en tiempo real conforme tecleas, subrayando el código con una línea ondulada roja y ofreciendo soluciones contextuales mediante el atajo universal `Alt + Enter`:
 
 ```java
-int x = 5;
-int y = 10;
-int z = ++x * 2 + y-- - x++ + y;
+// Ejemplos típicos:
+int numero = "Hola";       // Incompatibilidad de tipos: String no puede asignarse a int
+int total                  // Falta el punto y coma final
+System.out.println(valor); // Variable 'valor' no declarada o fuera de ámbito
+int x; int y = x + 1;      // Variable local 'x' no inicializada
 ```
 
-¿Qué valores exactos tienen `x`, `y` y `z` tras completarse la línea?
+---
 
-#### Análisis Paso a Paso de la CPU:
+### 11.2 Errores en Tiempo de Ejecución (*Runtime Errors / Excepciones*)
+El programa compila limpiamente a Bytecode, pero durante la ejecución ocurre una situación anómala o imprevista que la Máquina Virtual no puede resolver por sí misma. Como consecuencia, el hilo principal (`Thread "main"`) se estrella, aborta el programa y escupe por consola una traza de error denominada **Stack Trace**.
+
+#### Las 4 Excepciones Clásicas de la Unidad 2:
+
+1. **`java.lang.ArithmeticException: / by zero`**:  
+   Ocurre al intentar dividir un número entero por cero (`10 / 0`).  
+   *(Curiosidad: en números decimales, `10.0 / 0.0` no lanza excepción; devuelve `Infinity` según el estándar IEEE 754).*
+
+2. **`java.lang.NullPointerException` (NPE)**:  
+   El error más famoso del ecosistema Java. Ocurre cuando intentas invocar un método o acceder a un atributo a través de una variable de referencia que vale `null` (no apunta a ningún objeto real en la memoria Heap):
+   ```java
+   String nombre = null;
+   System.out.println(nombre.length()); // ¡Lanza NullPointerException!
+   ```
+
+3. **`java.util.InputMismatchException`**:  
+   Ocurre cuando la clase `Scanner` espera recibir un token de un tipo específico y el usuario teclea algo incompatible:
+   ```java
+   System.out.print("Introduce tu edad: ");
+   int edad = sc.nextInt(); // El usuario teclea "veinte" → ¡InputMismatchException!
+   ```
+
+4. **`java.lang.NumberFormatException`**:  
+   Ocurre al intentar parsear una cadena alfanumérica mediante `Integer.parseInt("abc")` o `Double.parseDouble("12,5")` (con coma en vez de punto en configuración US).
+
+#### Cómo Leer e Interpretar un Stack Trace
+Cuando veas un mensaje de error rojo en la consola de IntelliJ IDEA, no te asustes: es un mapa exacto que te guía directamente hacia el culpable:
 
 ```text
-ESTADO INICIAL DE MEMORIA:
-  x = 5
-  y = 10
-
-EVALUACIÓN DE IZQUIERDA A DERECHA DE LA EXPRESIÓN:
-  Término 1: ++x
-    - Es un pre-incremento. 'x' pasa inmediatamente de 5 a 6 en memoria.
-    - El término aporta el valor: 6.
-    - Estado actual de variables: [x = 6, y = 10]
-
-  Término 2: * 2
-    - Se multiplica el 6 por 2: 6 * 2 = 12.
-
-  Término 3: + y--
-    - Es un post-decremento. Primero se usa el valor actual de 'y' (10) para la suma.
-    - Acumulado provisional: 12 + 10 = 22.
-    - Justo después de usarlo, 'y' se reduce en memoria a 9.
-    - Estado actual de variables: [x = 6, y = 9]
-
-  Término 4: - x++
-    - Es un post-incremento. Primero se usa el valor actual de 'x' (6) para la resta.
-    - Acumulado provisional: 22 - 6 = 16.
-    - Justo después de usarlo, 'x' se incrementa en memoria a 7.
-    - Estado actual de variables: [x = 7, y = 9]
-
-  Término 5: + y
-    - Se toma el valor actual de 'y' (9) y se suma.
-    - Acumulado final de 'z': 16 + 9 = 25.
-
-ESTADO FINAL DE MEMORIA:
-  x = 7
-  y = 9
-  z = 25
+Exception in thread "main" java.lang.ArithmeticException: / by zero
+    at es.iesperenxisa.primerospasos.Calculadora.dividir(Calculadora.java:24)
+    at es.iesperenxisa.primerospasos.Calculadora.main(Calculadora.java:12)
 ```
 
-### Desafío 2: El Enigma del *String Pool* y la Memoria Stack vs Heap
+**Pasos para interpretarlo:**
+1. **Primera línea**: Nombre de la excepción y causa (`ArithmeticException: / by zero`).
+2. **Segunda línea**: Método donde ocurrió la catástrofe (`dividir`), archivo (`Calculadora.java`) y **número exacto de línea (`24`)**. En IntelliJ IDEA, ese texto es un hipervínculo azul: ¡haz clic sobre él y el editor te llevará directamente a la línea que falló!
 
-Considera este código:
+---
+
+### 11.3 Errores Lógicos (*Bugs*)
+Son los más traicioneros y difíciles de detectar. El programa compila sin advertencias y se ejecuta sin lanzar ninguna excepción, pero el resultado que arroja es matemáticamente o lógicamente incorrecto.
 
 ```java
-String a = "hola";
-String b = "hola";
-String c = new String("hola");
+// Ejemplo de Bug Lógico:
+double nota1 = 8.0;
+double nota2 = 6.0;
 
-System.out.println(a == b);      // ¿Qué imprime?
-System.out.println(a == c);      // ¿Qué imprime?
-System.out.println(a.equals(c)); // ¿Qué imprime?
+// Intención: calcular la media aritmética (8 + 6) / 2 = 7.0
+// Error: por precedencia de operadores, primero divide 6.0 / 2 = 3.0, y luego suma 8.0 = 11.0
+double media = nota1 + nota2 / 2; // ¡Error lógico! Faltan los paréntesis: (nota1 + nota2) / 2
 ```
 
-#### Lo que Ocurre en la Memoria RAM:
+---
 
-```text
-PILA (Stack)                        MEMORIA DINÁMICA (Heap)
-┌──────────────┐                     ┌──────────────────────────────────────────────┐
-│  Ref. a      │ ──────────────────► │  String Pool (Piscina de Literales):         │
-│  (Dir: 0x10) │                     │  ┌────────────────────────┐                  │
-├──────────────┤                     │  │ Objeto: "hola" (0x10)  │                  │
-│  Ref. b      │ ──────────────────► │  └────────────────────────┘                  │
-│  (Dir: 0x10) │                     │                                              │
-├──────────────┤                     │  Zona de Objetos Estándar:                   │
-│  Ref. c      │ ─────────┐          │  ┌────────────────────────┐                  │
-│  (Dir: 0x99) │          └────────► │  │ Objeto: "hola" (0x99)  │                  │
-└──────────────┘                     │  └────────────────────────┘                  │
-                                     └──────────────────────────────────────────────┘
+### 11.4 Depuración Profesional (*Debugging*) con IntelliJ IDEA
+
+Para cazar errores lógicos, los principiantes suelen llenar el código de `System.out.println()`. Los ingenieros de software profesionales utilizan el **Depurador Integrado** (*Debugger*).
+
+El depurador te permite "congelar el tiempo", detener la ejecución de tu programa en una línea exacta y avanzar paso a paso mientras inspeccionas el valor vivo de cada variable en la memoria RAM:
+
+#### Guía Rápida de Depuración en IntelliJ IDEA:
+1. **Poner un Punto de Interrupción (*Breakpoint*)**: Haz clic con el ratón en el margen gris izquierdo (*gutter*) justo al lado del número de línea donde deseas que el programa se pause. Aparecerá un círculo rojo sólido.
+2. **Lanzar en Modo Debug**: En lugar de pulsar el botón verde de Play normal, pulsa el icono de la **cucaracha verde** (*Debug*) o utiliza el atajo `Shift + F9`.
+3. **Inspección en Pausa**: Cuando la ejecución alcance tu breakpoint, la línea se resaltará en azul y el programa quedará congelado. En la parte inferior se abrirá el panel **Debug**:
+   - Pestaña **Variables**: Muestra el valor en tiempo real de cada variable en el Stack y en el Heap.
+4. **Controles de Avance Paso a Paso**:
+   - **Step Over (`F8`)**: Ejecuta la línea actual y avanza a la siguiente línea del mismo método.
+   - **Step Into (`F7`)**: Si la línea actual contiene una llamada a un método propio, se adentra en su código para ver qué hace por dentro.
+   - **Step Out (`Shift + F8`)**: Sale del método actual y regresa al llamador.
+   - **Resume Program (`F9`)**: Reanuda la ejecución continua hasta encontrar el siguiente breakpoint.
+   - **Stop (`Ctrl + F2`)**: Detiene la sesión de depuración.
+5. **Evaluar Expresiones al Vuelo (*Evaluate Expression* - `Alt + F8`)**: Puedes abrir una ventana flotante para escribir cualquier cálculo de Java y evaluarlo al instante utilizando los valores vivos de las variables congeladas.
+
+---
+
+## 12. ⭐ Be the Code: Desafíos de Traza Mental y Memoria
+
+Para ser un programador excepcional debes ser capaz de "ser el código": proyectar mentalmente el estado de la memoria RAM y predecir con exactitud qué valor adoptará cada variable en cada ciclo de instrucción.
+
+### Desafío 1: El Laberinto de los Incrementos y la Precedencia
+Analiza el siguiente fragmento de código sin ejecutarlo en la máquina. ¿Qué valor imprimirán las variables `a`, `b` y `c`?
+
+```java
+int a = 10;
+int b = 20;
+int c = a++ + ++b * 2;
 ```
 
-1. **`a == b` imprime `true`:**
-   * Al escribir literales directos (`"hola"`), Java optimiza la memoria guardándolos en una zona especial del Heap llamada **String Pool**.
-   * Cuando defines `b = "hola"`, Java comprueba que ya existe un objeto idéntico en el pool y hace que `b` apunte exactamente a la misma dirección física que `a` (`0x10 == 0x10`).
-2. **`a == c` imprime `false`:**
-   * Al forzar la creación explícita con `new String("hola")`, obligas a la JVM a reservar un bloque de memoria nuevo e independiente en el Heap fuera del pool (`0x99`).
-   * Como `0x10 != 0x99`, la comparación por identidad de direcciones físicas con `==` devuelve `false`.
-3. **`a.equals(c)` imprime `true`:**
-   * El método `equals` va a las dos direcciones de memoria, abre el contenido de ambos objetos y comprueba que ambos encierran la secuencia de letras `'h'`, `'o'`, `'l'`, `'a'`.
+#### Traza de Ejecución Paso a Paso:
+1. Inicialmente: `a = 10`, `b = 20`.
+2. Evaluamos la expresión de derecha a izquierda respetando la precedencia:
+   - El operador `++` prefijo sobre `b` (`++b`) tiene máxima prioridad: `b` se incrementa inmediatamente de 20 a **21**, y ese valor `21` se utiliza en la expresión.
+   - Operador multiplicativo `*`: se multiplica `21 * 2 = 42`.
+   - El operador `++` postfijo sobre `a` (`a++`): se utiliza en la suma su valor actual (**10**), y justo después de ser leído, `a` se incrementa en memoria a **11**.
+   - Operador aditivo `+`: se suma `10 + 42 = 52`.
+3. Asignación a `c`: `c` recibe el valor **52**.
+
+| Variable | Valor Final en Memoria |
+| :---: | :---: |
+| `a` | **11** |
+| `b` | **21** |
+| `c` | **52** |
+
+---
+
+### Desafío 2: Algoritmo de Descomposición de Cifras con `/` y `%`
+Supongamos que un usuario introduce el número entero `7429`. Diseña mentalmente el algoritmo aritmético para aislar de forma independiente las unidades, decenas, centenas y millares:
+
+```java
+int numero = 7429;
+
+int unidades = numero % 10;        // 7429 % 10 = 9
+int decenas  = (numero / 10) % 10;  // 7429 / 10 = 742 -> 742 % 10 = 2
+int centenas = (numero / 100) % 10; // 7429 / 100 = 74 -> 74 % 10 = 4
+int millares = numero / 1000;       // 7429 / 1000 = 7
+```
+
+**Principio algorítmico universal:**
+- El operador `% 10` extrae siempre el último dígito menos significativo de un número decimal.
+- La división entera `/ 10` desplaza el número hacia la derecha, descartando el último dígito.
+
+---
+
+### Desafío 3: El String Pool y el Mapa de Memoria Stack vs Heap
+Observa detenidamente este código y predice qué imprimirá cada una de las 4 comparaciones:
+
+```java
+String texto1 = "Java";
+String texto2 = "Java";
+String texto3 = new String("Java");
+String texto4 = "Ja" + "va"; // Expresión constante evaluada por el compilador
+
+System.out.println(texto1 == texto2);      // ¿true o false?
+System.out.println(texto1 == texto3);      // ¿true o false?
+System.out.println(texto1 == texto4);      // ¿true o false?
+System.out.println(texto1.equals(texto3)); // ¿true o false?
+```
+
+#### Solución Razonada con Arquitectura de Memoria:
+1. `texto1 == texto2` devuelve **`true`**: Ambas variables apuntan a la misma entrada compartida en el *String Constant Pool*.
+2. `texto1 == texto3` devuelve **`false`**: La palabra clave `new` fuerza la creación de un nuevo objeto independiente en el Heap general, con una dirección física de memoria distinta.
+3. `texto1 == texto4` devuelve **`true`**: Como `"Ja"` y `"va"` son literales constantes conocidos en tiempo de compilación, el compilador `javac` optimiza la concatenación y la resuelve como `"Java"`, reutilizando la referencia del String Pool.
+4. `texto1.equals(texto3)` devuelve **`true`**: El método `.equals()` no compara direcciones de memoria física, sino la secuencia exacta de caracteres alfanuméricos (`'J'`, `'a'`, `'v'`, `'a'`).
 
 ---
 
 ## 13. ¡No Hay Preguntas Tontas!
 
-### ¿Por qué `1 / 2` da `0` en Java cuando cualquier calculadora dice `0.5`?
-> Porque en Java rige la regla de **preservación de tipos en operaciones binarias**: si los dos operandos son de tipo entero (`int`), el operador división `/` ejecuta obligatoriamente una **división entera**, truncando cualquier resto o parte decimal. Para que el resultado conserve decimales, al menos uno de los operandos debe ser de tipo decimal: escribe `1.0 / 2`, `1 / 2.0` o aplica un cast explícito `(double) 1 / 2`.
+### 1. ¿Por qué Java tiene tantos tipos enteros (`byte`, `short`, `int`, `long`) si lenguajes modernos como JavaScript o Python usan uno solo?
+Porque Java fue diseñado desde su origen para sistemas de misión crítica, servidores de alto rendimiento y dispositivos embebidos. Si tienes un array de 10 millones de números que solo van del 0 al 100:
+- Con `int` (4 bytes por número) consumes **40 MB** de RAM.
+- Con `byte` (1 byte por número) consumes solo **10 MB** de RAM (un 75% menos de memoria).  
+En aplicaciones a gran escala o microservicios que procesan millones de peticiones por segundo, la gestión milimétrica de la memoria y la caché del procesador marca la diferencia entre un sistema fluido y uno colapsado.
 
-### ¿Por qué `"test" + 2 + 3` produce `"test23"` pero `2 + 3 + "test"` produce `"5test"`?
-> Por la **asociatividad de izquierda a derecha** del operador `+`:
-> * En `2 + 3 + "test"`: Primero se evalúa `2 + 3`. Como ambos son enteros, se realiza una suma aritmética tradicional que da `5`. Luego se evalúa `5 + "test"`; al haber un `String`, se activa la concatenación textual produciendo `"5test"`.
-> * En `"test" + 2 + 3`: Primero se evalúa `"test" + 2`, lo cual concatena produciendo la cadena `"test2"`. Después se evalúa `"test2" + 3`, que vuelve a concatenar dando como resultado `"test23"`.
-> * ¿Y cuánto vale `"test" + 2 * 3`? La multiplicación tiene mayor precedencia que la suma: primero se calcula `2 * 3 = 6`, y luego se concatena dando `"test6"`.
+### 2. ¿Por qué `Scanner` me lanza un error si escribo `1.75` con punto en lugar de coma?
+Porque la clase `Scanner` por defecto utiliza la **configuración regional (*Locale*) del sistema operativo** de tu máquina. En los sistemas configurados en España u otros países europeos, el separador decimal estándar oficial es la coma (`,`), por lo que espera `1,75`. Si introduces `1.75` con punto, lanza `InputMismatchException`. Para forzar a que tu programa utilice siempre el punto decimal estándar internacional, añade la siguiente línea tras instanciar el Scanner:  
+`sc.useLocale(Locale.US);`
 
-### ¿Por qué es obligatorio poner una `F` al final de `float f = 3.14F;` pero no hace falta nada especial en `double d = 3.14;`?
-> Porque en la especificación formal de Java, todo número con coma decimal escrito como literal en el código fuente es clasificado automáticamente como `double` (64 bits). Intentar meter un `double` de 64 bits en un `float` de 32 bits supone un estrechamiento con riesgo de pérdida de precisión que el compilador bloquea por seguridad. La `F` le indica explícitamente al compilador: *"Este literal debe crearse directamente como un float de 32 bits"*.
+### 3. ¿Por qué `String` no es un tipo primitivo si lo usamos constantemente como si lo fuera?
+Porque un texto no tiene un tamaño fijo en bytes en la memoria física: puede tener cero caracteres, una palabra o una enciclopedia completa de millones de caracteres. Los tipos primitivos tienen un tamaño estrictamente inmutable en hardware (8, 16, 32 o 64 bits). Por ello, `String` es un objeto complejo alojado en el Heap que internamente encapsula un array de bytes y ofrece decenas de métodos utilitarios.
 
-### Si `char` almacena letras, ¿por qué puedo escribir `char c = 65;` o hacer `c++`?
-> Porque bajo el capó de la CPU, un `char` en Java no es más que un **número entero sin signo de 16 bits** que almacena el código numérico Unicode del símbolo correspondiente. El número `65` corresponde a la letra `'A'` en la tabla Unicode/ASCII. Si ejecutas `c++`, la celda de memoria pasa a valer `66`, que corresponde al símbolo `'B'`.
+### 4. ¿Es `var` una señal de pereza o mala práctica de programación?
+Rotundamente no, siempre que se use con criterio profesional. `var` fue incorporado en Java 10 para eliminar la redundancia innecesaria que ensuciaba el código clásico:  
+`Map<String, List<Pedido>> mapa = new HashMap<String, List<Pedido>>();`  
+Con `var`, la línea se reduce limpiamente a:  
+`var mapa = new HashMap<String, List<Pedido>>();`  
+No se pierde ninguna información de tipos (el compilador sabe exactamente qué es) y el código gana en claridad y limpieza visual.
 
-### ¿Puedo tener un proyecto con varias clases que contengan su propio método `main`?
-> **Sí, rotundamente.** Puedes tener decenas de clases distintas con su correspondiente método `public static void main(String[] args)` en un mismo proyecto. Cada una de ellas representará un punto de entrada independiente. En IntelliJ IDEA puedes elegir cuál de ellas ejecutar haciendo clic derecho sobre el archivo y pulsando *Run 'NombreClase.main()'*.
+### 5. ¿Por qué Java mantiene `float` y `double` si tienen errores de redondeo y en banca se usa `BigDecimal`?
+Porque `double` y `float` están implementados directamente en la circuitería de hardware del procesador (la FPU, *Floating Point Unit*), lo que permite ejecutar **miles de millones de cálculos por segundo**. En videojuegos 3D, simulaciones físicas, renderizado gráfico e inteligencia artificial, la velocidad extrema es prioritaria y una diferencia en el decimosexto decimal es irrelevante. En cambio, `BigDecimal` es una clase de software: sus operaciones son miles de veces más lentas, pero garantizan precisión matemática absoluta. Cada herramienta tiene su propósito.
 
-### ¿Qué diferencia práctica hay entre `System.out.print` y `System.out.println`?
-> `System.out.print()` imprime el texto indicado y mantiene el cursor de la consola en esa misma línea, justo a continuación del último carácter. Por su parte, `System.out.println()` imprime el texto e introduce automáticamente un salto de línea invisible (`
-`), desplazando el cursor al principio de la siguiente línea de la consola.
+### 6. ¿Por qué un `char` puede sumarse con un número `int` sin que el compilador se queje?
+Porque en la arquitectura de Java, un `char` es en realidad un número entero sin signo de 16 bits que almacena el código numérico Unicode del carácter. Por ejemplo, el carácter `'A'` equivale internamente al número `65`. Al hacer `'A' + 1`, Java promociona el `char` a `int` y efectúa la suma matemática `65 + 1 = 66`. Si luego haces un casting explícito `(char) 66`, obtendrás el carácter `'B'`.
 
----
-
-## 14. Resumen de la Unidad y Enlace con Java Avanzado
-
-En esta intensa unidad didáctica has dado el salto definitivo al desarrollo profesional:
-* Has asimilado la arquitectura del ecosistema Java: cómo el compilador `javac` genera Bytecode neutral y cómo la **JVM** lo ejecuta a la velocidad de la luz mediante el compilador **JIT**.
-* Has instalado y configurado el IDE de referencia en la industria: **IntelliJ IDEA**, dominando sus atajos esenciales (`psvm`, `sout`, `Shift+F10`, `Ctrl+Alt+L`).
-* Has diseccionado la estructura de una clase Java y el método de arranque `public static void main`.
-* Conoces al detalle los **8 tipos primitivos de datos**, sus tamaños en bits y rangos, y sabes evitar los peligros de desbordamiento en el **casting explícito**.
-* Dominas la jerarquía de operadores, la evaluación en cortocircuito de `&&` y `||`, y las particularidades de pre/post-incremento.
-* Conoces las herramientas más potentes del JDK básico: cadenas inmutables con `String`, funciones matemáticas con `Math`, fechas con `java.time`, precisión monetaria con `BigDecimal` y tipos enumerados con `enum`.
-* Sabes formatear salidas elegantes con `printf` y leer datos del teclado con `Scanner`, previniendo el error del salto de línea residual.
-* Controlas el flujo de decisión mediante estructuras `if-else` y las modernas expresiones `switch` con sintaxis de flecha `->` y `yield`.
-
-En la **Unidad 3**, ampliaremos este control del flujo incorporando **bucles e iteraciones** (`while`, `for`, `do-while`), aprenderemos a gestionar situaciones anómalas con **excepciones** (`try-catch`), estructuraremos información masiva mediante **arrays** y dividiremos la lógica en subprogramas reutilizables mediante **métodos**.
+### 7. ¿Qué diferencia real hay entre `&&` y `&`, o `||` y `|` si ambos dan el mismo resultado lógico?
+La diferencia radica en la **evaluación en cortocircuito**:  
+`&&` y `||` se detienen tan pronto como conocen el resultado definitivo, ahorrando tiempo de CPU y permitiendo programar barreras de protección contra excepciones como `NullPointerException` o división por cero. En cambio, `&` y `|` evalúan obligatoriamente ambos lados de la expresión, sin importar lo que haya devuelto el primero. En lógica condicional ordinaria, **debes usar siempre `&&` y `||`**.
 
 ---
 
-## 15. Relación Curricular: Resultados de Aprendizaje y Criterios de Evaluación
+## 14. Resumen de la Unidad y Enlace con la Unidad 3
 
-Esta unidad cubre íntegramente los siguientes Resultados de Aprendizaje y Criterios de Evaluación del currículo oficial del módulo **0485 - Programación (DAM)**:
+### Lo que hemos conquistado en esta Unidad:
+1. **Ecosistema**: La JVM, el compilador `javac`, el Bytecode independiente de plataforma y el IDE IntelliJ IDEA con soporte para Java 21 LTS.
+2. **Anatomía**: Estructura de clases, paquetes de dominio inverso, imports y el método canónico `public static void main(String[] args)`.
+3. **Tipos y Memoria**: Los 8 tipos primitivos, variables vs constantes (`final`), inferencia con `var`, y el desbordamiento en complemento a dos.
+4. **Conversiones**: Promoción implícita (*widening*), casting explícito (*narrowing*), parseo de texto y clases envoltorio (*wrappers*) con autoboxing.
+5. **Operadores**: Aritmética entera vs real, módulo `%`, incrementos pre/post, operadores relacionales y operadores lógicos con evaluación en cortocircuito.
+6. **Biblioteca Estándar**: Cálculos y aleatoriedad con `Math`, inmutabilidad y String Pool con `String`, precisión monetaria con `BigDecimal`, tipos cerrados con `enum` y fechas modernas con `java.time`.
+7. **Entrada/Salida**: Formateo con `printf`, lectura por teclado con `Scanner` y la técnica de purga del salto de línea residual.
+8. **Decisiones**: Ramificaciones lógicas con `if-else` y la potencia del `switch` moderno con sintaxis de flecha `->` y `yield`.
+9. **Depuración**: Diagnóstico de excepciones y rastreo paso a paso con puntos de interrupción en IntelliJ IDEA.
 
-| Resultado de Aprendizaje (RA) | Criterios de Evaluación Oficiales Cubiertos |
-|---|---|
-| **RA1.** Reconoce la estructura de un programa informático, identificando y relacionando los elementos propios del lenguaje de programación utilizado. | **CE 1.a)** Se ha reconocido la estructura de un programa informático.<br/>**CE 1.b)** Se han identificado los componentes de la plataforma de desarrollo (JDK, JRE, JVM).<br/>**CE 1.c)** Se ha utilizado un entorno integrado de desarrollo (IntelliJ IDEA).<br/>**CE 1.d)** Se han utilizado las herramientas de compilación y ejecución de programas.<br/>**CE 1.e)** Se han identificado los diferentes tipos de variables y su ámbito de utilización.<br/>**CE 1.f)** Se ha reconocido la necesidad de utilizar constantes.<br/>**CE 1.g)** Se han utilizado los tipos de datos básicos y operadores provistos por el lenguaje.<br/>**CE 1.h)** Se han aplicado conversiones de tipo explícitas e implícitas.<br/>**CE 1.i)** Se han introducido comentarios explicativos y documentación adecuada (JavaDoc).<br/>**CE 1.j)** Se han utilizado clases estándar del lenguaje (`String`, `Math`, `Scanner`). |
-| **RA4.** Desarrolla programas organizados en clases aplicando criterios de encapsulamiento y modularidad. | **CE 4.a)** Se han utilizado estructuras de control condicionales (`if`, `switch`).<br/>**CE 4.b)** Se han evaluado expresiones lógicas y relacionales complejas.<br/>**CE 4.c)** Se han aplicado buenas prácticas en el control del flujo del programa. |
-| **RA5.** Realiza operaciones de entrada y salida de información. | **CE 5.a)** Se ha utilizado la consola para realizar operaciones de entrada y salida de información.<br/>**CE 5.b)** Se han aplicado formatos en la visualización de la información (`printf`).<br/>**CE 5.c)** Se han identificado las posibilidades de entrada/salida de la consola (`System.out`, `Scanner`). |
+### ¿Hacia dónde vamos en la Unidad 3?
+Hasta ahora nuestros programas han tomado decisiones y ejecutado instrucciones de arriba hacia abajo una única vez. Pero el verdadero poder de la computación reside en la **automatización repetitiva masiva**:
+- En la **Unidad 3: Estructuras de Control Iterativas, Bucles y Métodos**, aprenderemos a repetir bloques de código miles o millones de veces con bucles `while`, `do-while` y `for`.
+- Descubriremos cómo empaquetar conjuntos de datos en **arrays** unidimensionales y matrices bidimensionales.
+- Dividiremos programas complejos en bloques reutilizables mediante **métodos estáticos** modulares.
+- Blindaremos nuestras aplicaciones ante fallos del usuario implementando una gestión profesional de excepciones con bloques `try-catch-finally`.
 
-:::note[Aclaración curricular sobre los Resultados de Aprendizaje de la Unidad 2]
-En la programación didáctica oficial del centro se asignan formalmente las 24 horas de esta unidad didáctica a **RA1** y **RA4**. No obstante, las competencias relativas a entrada y salida de datos por consola (`System.out`, `Scanner`, formatos con `printf`) se encuentran tipificadas en el Real Decreto estatal del título bajo el **RA5**. Se han integrado con total naturalidad en esta unidad para dotar al alumno de herramientas prácticas de interacción interactiva desde el primer día de trabajo en IntelliJ IDEA.
-:::
+---
+
+## 15. Relación Curricular Oficial (CFGS DAM - Módulo 0485)
+
+Esta unidad cubre de manera directa y exhaustiva los siguientes **Resultados de Aprendizaje (RA)** y **Criterios de Evaluación (CE)** establecidos en el currículo oficial del ciclo formativo:
+
+- **RA 1: Reconoce la estructura de un programa informático, identificando y relacionando los elementos propios del lenguaje de programación utilizado.**
+  - **CE 1.a**: Se ha identificado la estructura general de un programa y sus bloques constituyentes.
+  - **CE 1.b**: Se han utilizado entornos integrados de desarrollo (IntelliJ IDEA) para la edición, compilación y ejecución de programas.
+  - **CE 1.c**: Se han identificado los diferentes tipos de datos primitivos disponibles en el lenguaje.
+  - **CE 1.d**: Se han declarado y utilizado variables, constantes y literales respetando las normas léxicas y de estilo.
+  - **CE 1.e**: Se han utilizado operadores aritméticos, relacionales y lógicos respetando la precedencia de operadores.
+  - **CE 1.f**: Se han clasificado y documentado los programas utilizando comentarios descriptivos de línea, bloque y Javadoc.
+
+- **RA 4: Desarrolla programas organizados en clases analizando y aplicando los principios de la programación orientada a objetos.**
+  - **CE 4.a**: Se ha reconocido la sintaxis, estructura y componentes de una clase en Java.
+  - **CE 4.e**: Se han utilizado métodos estándar de la biblioteca del lenguaje (`Math`, `String`, `BigDecimal`, `LocalDate`).
+
+- **RA 5: Realiza operaciones de entrada y salida de información utilizando la consola y clases estándar.**
+  - **CE 5.a**: Se han utilizado los flujos estándar de entrada y salida (`System.out`, `System.in`).
+  - **CE 5.b**: Se ha utilizado la clase `Scanner` para la lectura interactiva de datos por teclado, gestionando delimitadores y configuraciones regionales.
+  - **CE 5.c**: Se ha aplicado formato avanzado a los datos de salida mediante cadenas de formato y `printf`.
 
 ---
 
 ## 16. Boletines de Ejercicios y Retos Prácticos
 
-:::note[Boletines en preparación]
-Los boletines de ejercicios y retos prácticos de esta unidad se encuentran actualmente en fase de revisión y no están accesibles todavía. Se publicarán próximamente.
-:::
+Para afianzar cada uno de los conceptos aprendidos, dispones de una batería progresiva de ejercicios prácticos especialmente diseñados para este nivel:
+
+1. **Boletín 2.1 — Inicial**: Ejercicios guiados paso a paso sobre declaración de variables, cálculos aritméticos elementales, conversiones de tipos y salida formateada por consola.
+2. **Boletín 2.2 — Intermedio**: Ejercicios sobre sentencias condicionales `if-else` y `switch`, manipulación de cadenas con `String`, uso de `Math` y control de la entrada de datos con `Scanner`.
+3. **Boletín 2.3 — Retos y Extras**: Desafíos algorítmicos procedentes de plataformas de competición como *Acepta el Reto* y *CodeWars*, diseñados para desarrollar pensamiento crítico y resolución de problemas complejos.
