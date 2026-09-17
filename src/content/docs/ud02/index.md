@@ -8,7 +8,7 @@ next: false
 
 ¡Enhorabuena por haber superado la Unidad 1! Ya dominas los cimientos del pensamiento algorítmico, la representación mediante diagramas de flujo ANSI y el diseño estructurado con pseudocódigo. Ahora ha llegado el momento más esperado por todo estudiante de desarrollo de software: **traducir esa lógica conceptual a un lenguaje de programación real, industrial y de propósito general**.
 
-En esta unidad nos sumergiremos en **Java** (en su versión estándar moderna **Java 21 LTS**), uno de los lenguajes más robustos, seguros y demandados del panorama tecnológico mundial. Utilizaremos como entorno de trabajo oficial **IntelliJ IDEA**, la herramienta de referencia en la industria del desarrollo de software profesional.
+En esta unidad nos sumergiremos en **Java** (en su versión estándar moderna **Java 25 LTS**, manteniendo compatibilidad plena con Java 21 LTS), uno de los lenguajes más robustos, seguros y demandados del panorama tecnológico mundial. Utilizaremos como entorno de trabajo oficial **IntelliJ IDEA**, la herramienta de referencia en la industria del desarrollo de software profesional.
 
 Aprenderás cómo viaja tu código desde el editor hasta los transistores del procesador a través de la Máquina Virtual de Java (JVM), dominarás los 8 tipos primitivos de datos, comprenderás cómo manipular texto, números y fechas con precisión matemática, interactuarás con el usuario mediante la consola y controlarás el flujo de ejecución mediante sentencias condicionales clásicas y modernas.
 
@@ -110,7 +110,8 @@ Desde 2018, Java adoptó un ritmo de lanzamientos semestral (cada 6 meses, en ma
   * **Java 8 LTS:** El hito de la programación funcional (Lambdas y Streams).
   * **Java 11 LTS:** Sistema de módulos e inferencia local con `var`.
   * **Java 17 LTS:** Registros (*records*), clases selladas y nuevo switch.
-  * **Java 21 LTS (La versión de nuestro curso):** La versión actual de referencia en la industria, con hilos virtuales (*Virtual Threads*), pattern matching exhaustivo y máxima optimización.
+  * **Java 21 LTS:** Gran salto con hilos virtuales (*Virtual Threads*), pattern matching exhaustivo y máxima optimización.
+* **Java 25 LTS (La versión LTS más reciente):** El estándar LTS más actual de la plataforma Java (publicado en septiembre de 2025), consolidando las características modernas, estabilidad empresarial y optimizaciones de la máquina virtual.
 
 #### OpenJDK vs. Oracle JDK
 * **OpenJDK:** La implementación oficial de código abierto y libre distribución con licencia GNU GPL v2. Es el estándar sobre el que se basan los compiladores modernos.
@@ -166,7 +167,7 @@ Para crear tu primer proyecto profesional en IntelliJ IDEA Community Edition:
 2. En el panel lateral izquierdo, selecciona **Java**.
 3. En el campo **Name**, escribe el nombre del proyecto (por ejemplo, `Unidad02_PrimerosPasos`).
 4. En **Location**, elige la carpeta de tu disco donde se guardará tu código.
-5. En el desplegable **JDK**, selecciona tu versión de **Java 21**. Si no aparece ninguna instalada, pulsa sobre **Download JDK...** y elige el proveedor *Eclipse Temurin* o *Amazon Corretto*: IntelliJ lo descargará e instalará automáticamente.
+5. En el desplegable **JDK**, selecciona tu versión instalada de **Java 25** (o **Java 21**). Si no aparece ninguna instalada, pulsa sobre **Download JDK...** y elige el proveedor *Eclipse Temurin* o *Amazon Corretto*: IntelliJ lo descargará e instalará automáticamente.
 6. Marca la casilla **Add sample code** si deseas que IntelliJ cree automáticamente un archivo de ejemplo con el método `main`.
 7. Pulsa **Create**.
 
@@ -1622,7 +1623,7 @@ La diferencia radica en la **evaluación en cortocircuito**:
 ## 14. Resumen de la Unidad y Enlace con la Unidad 3
 
 ### Lo que hemos conquistado en esta Unidad:
-1. **Ecosistema**: La JVM, el compilador `javac`, el Bytecode independiente de plataforma y el IDE IntelliJ IDEA con soporte para Java 21 LTS.
+1. **Ecosistema**: La JVM, el compilador `javac`, el Bytecode independiente de plataforma y el IDE IntelliJ IDEA con soporte para las últimas versiones LTS (Java 21 / Java 25 LTS).
 2. **Anatomía**: Estructura de clases, paquetes de dominio inverso, imports y el método canónico `public static void main(String[] args)`.
 3. **Tipos y Memoria**: Los 8 tipos primitivos, variables vs constantes (`final`), inferencia con `var`, y el desbordamiento en complemento a dos.
 4. **Conversiones**: Promoción implícita (*widening*), casting explícito (*narrowing*), parseo de texto y clases envoltorio (*wrappers*) con autoboxing.

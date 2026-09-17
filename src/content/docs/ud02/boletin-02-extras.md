@@ -1,6 +1,6 @@
 ---
 title: 🧠 Boletín 02 Extras — Retos y Plataformas Competitivas
-description: Retos de algorítmica matemática y lógica en Java 21 LTS sin bucles complejos (DNI oficial, año bisiesto gregoriano, simulación probabilística, BigInteger, cambio voraz exacto y ecuaciones cuadráticas completas).
+description: Retos de algorítmica matemática y lógica en Java 21 / 25 LTS sin bucles complejos (DNI oficial, año bisiesto gregoriano, simulación probabilística, BigInteger, cambio voraz exacto y ecuaciones cuadráticas completas).
 draft: true
 prev: false
 next: false
@@ -37,7 +37,7 @@ Escribe un programa en Java que:
 * Letra esperada: `char letraCorrecta = LETRAS.charAt(indice);`
 :::
 
-#### Solución de Referencia en Java 21
+#### Solución de Referencia en Java 21 / 25 LTS
 
 ```java
 package es.iesperenxisa.primerospasos.retos;
@@ -110,7 +110,7 @@ La condición matemática canónica se resume en:
 `(anio % 4 == 0 && anio % 100 != 0) || (anio % 400 == 0)`
 :::
 
-#### Solución de Referencia en Java 21
+#### Solución de Referencia en Java 21 / 25 LTS
 
 ```java
 package es.iesperenxisa.primerospasos.retos;
@@ -160,7 +160,7 @@ Escribe un programa que:
 2. Calcule la suma de ambos dados.
 3. Mediante una expresión `switch` moderna, imprima la puntuación obtenida, las combinaciones favorables y su probabilidad teórica asociada en forma de porcentaje.
 
-#### Solución de Referencia en Java 21
+#### Solución de Referencia en Java 21 / 25 LTS
 
 ```java
 package es.iesperenxisa.primerospasos.retos;
@@ -211,7 +211,7 @@ El factorial de un número entero positivo `n` (representado como `n!`) es el pr
 Escribe un programa en Java que solicite al usuario calcular el factorial de un número como `50` o `100`.  
 Utiliza la clase `java.math.BigInteger` para realizar la multiplicación encadenada sin ningún límite de precisión numérica, mostrando la cifra gigantesca resultante en consola junto con el número total de dígitos que contiene su representación textual.
 
-#### Solución de Referencia en Java 21
+#### Solución de Referencia en Java 21 / 25 LTS
 
 ```java
 package es.iesperenxisa.primerospasos.retos;
@@ -265,7 +265,7 @@ Escribe un programa que pida el coste total de una compra en euros (por ejemplo 
 2. Calcula la diferencia a devolver en céntimos enteros (en este caso, `653` céntimos).
 3. Desglosa el cambio utilizando el menor número de monedas posible: `200` (2 €), `100` (1 €), `50`, `20`, `10`, `5`, `2` y `1` céntimo.
 
-#### Solución de Referencia en Java 21
+#### Solución de Referencia en Java 21 / 25 LTS
 
 ```java
 package es.iesperenxisa.primerospasos.retos;
@@ -352,7 +352,7 @@ El programa debe implementar el árbol de decisión completo:
      Parte real: `u = -b / (2·a)`  
      Parte imaginaria: `v = √(-Δ) / (2·a)`
 
-#### Solución de Referencia en Java 21
+#### Solución de Referencia en Java 21 / 25 LTS
 
 ```java
 package es.iesperenxisa.primerospasos.retos;

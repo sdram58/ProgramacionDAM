@@ -1,6 +1,6 @@
 ---
 title: 📝 Boletín 02 Inicial — Primeros Pasos con Java
-description: 13 ejercicios prácticos fundamentales en Java 21 LTS con IntelliJ IDEA sobre tipos primitivos, variables, operadores aritméticos y lógicos, entrada/salida por consola y sentencias condicionales.
+description: 13 ejercicios prácticos fundamentales en Java 21 / 25 LTS con IntelliJ IDEA sobre tipos primitivos, variables, operadores aritméticos y lógicos, entrada/salida por consola y sentencias condicionales.
 draft: true
 prev: false
 next: false
