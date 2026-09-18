@@ -1,9 +1,6 @@
 ---
 title: 📝 Boletín 02 Intermedio (Resuelto) — Primeros Pasos con Java
 description: Soluciones completas, verificadas y comentadas línea a línea en Java 21 / 25 LTS con IntelliJ IDEA para los 13 ejercicios del Boletín Intermedio de la Unidad 2.
-draft: true
-prev: false
-next: false
 ---
 
 A continuación se presentan las soluciones comentadas a los 13 ejercicios propuestos en el [Boletín Intermedio](./boletin-02-intermedio/). Cada solución ha sido optimizada y probada con Java 21 / 25 LTS en IntelliJ IDEA.

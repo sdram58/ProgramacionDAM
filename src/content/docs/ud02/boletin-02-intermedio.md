@@ -1,9 +1,6 @@
 ---
 title: 📝 Boletín 02 Intermedio — Primeros Pasos con Java
 description: 13 ejercicios de nivel intermedio en Java 21 / 25 LTS sobre métodos de String, funciones de Math, expresiones switch con yield, enum, fechas con java.time, desbordamiento de tipos y geometría computacional.
-draft: true
-prev: false
-next: false
 ---
 
 Este boletín contiene **13 ejercicios prácticos aplicados** para consolidar el manejo avanzado de tipos primitivos, la inmutabilidad y los métodos de búsqueda de la clase `String`, la precisión matemática con `Math`, los tipos enumerados `enum`, la manipulación de fechas con `java.time`, el control riguroso de memoria y la resolución de problemas de geometría computacional.

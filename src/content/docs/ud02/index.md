@@ -1,9 +1,6 @@
 ---
-draft: true
 title: 🔤 Unidad 2. Primeros pasos con Java
 description: El ecosistema Java (JDK, JVM, Bytecode), instalación y configuración de IntelliJ IDEA, estructura canónica de un programa, tipos de datos primitivos, variables, constantes, operadores, clases estándar (String, Math, java.time, BigDecimal), sentencias condicionales y entrada/salida por consola.
-prev: false
-next: false
 ---
 
 ¡Enhorabuena por haber superado la Unidad 1! Ya dominas los cimientos del pensamiento algorítmico, la representación mediante diagramas de flujo ANSI y el diseño estructurado con pseudocódigo. Ahora ha llegado el momento más esperado por todo estudiante de desarrollo de software: **traducir esa lógica conceptual a un lenguaje de programación real, industrial y de propósito general**.

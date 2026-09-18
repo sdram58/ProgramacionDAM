@@ -39,13 +39,13 @@ hero:
     <a class="unit-link" href="/ProgramacionDAM/ud01/">Ver unidad →</a>
   </div>
 
-  <div class="unit-card unit-card-disabled" style="border: 1px dashed var(--sl-color-gray-4); border-radius: 8px; padding: 1.25rem;">
+  <div class="unit-card" style="border: 1px solid var(--sl-color-accent); border-radius: 8px; padding: 1.25rem; background: rgba(45, 138, 78, 0.06);">
     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem;">
       <h3 style="margin: 0; font-size: 1.2rem;">🔤 02. Primeros pasos con Java</h3>
-      <span class="unit-badge-unavailable">🔒 No disponible</span>
+      <span class="unit-badge-available">Disponible</span>
     </div>
     <p><strong>RA1, RA4 (24 h)</strong> — Estructura de un programa en Java, entorno IntelliJ IDEA, compilación y JVM, tipos primitivos, variables, constantes, operadores, clases estándar (String, Math, java.time), estructuras condicionales (if/else, switch moderno) y entrada/salida por consola.</p>
-    <span class="unit-link-disabled">🔒 No disponible</span>
+    <a class="unit-link" href="/ProgramacionDAM/ud02/">Ver unidad →</a>
   </div>
 
   <div class="unit-card unit-card-disabled" style="border: 1px dashed var(--sl-color-gray-4); border-radius: 8px; padding: 1.25rem;">
@@ -140,6 +140,9 @@ Accede a las relaciones de problemas prácticos clasificados por nivel de dificu
 * **[Unidad 01: Boletín Inicial](/ProgramacionDAM/ud01/boletin-01-inicial/)** | **[Resuelto](/ProgramacionDAM/ud01/boletin-01-inicial-resuelto/)** · *(Descargar: [PDF](/ProgramacionDAM/pdf/ud01/Boletin-01-Inicial.pdf) · [PDF Soluciones](/ProgramacionDAM/pdf/ud01/Boletin-01-Inicial-Resuelto.pdf))*
 * **[Unidad 01: Boletín Intermedio](/ProgramacionDAM/ud01/boletin-01-intermedio/)** | **[Resuelto](/ProgramacionDAM/ud01/boletin-01-intermedio-resuelto/)** · *(Descargar: [PDF](/ProgramacionDAM/pdf/ud01/Boletin-01-Intermedio.pdf) · [PDF Soluciones](/ProgramacionDAM/pdf/ud01/Boletin-01-Intermedio-Resuelto.pdf))*
 * **[Unidad 01: Retos Extras](/ProgramacionDAM/ud01/boletin-01-extras/)** · *(Descargar: [PDF](/ProgramacionDAM/pdf/ud01/Boletin-01-Extras-Retos.pdf))*
+* **[Unidad 02: Boletín Inicial](/ProgramacionDAM/ud02/boletin-02-inicial/)** | **[Resuelto](/ProgramacionDAM/ud02/boletin-02-inicial-resuelto/)**
+* **[Unidad 02: Boletín Intermedio](/ProgramacionDAM/ud02/boletin-02-intermedio/)** | **[Resuelto](/ProgramacionDAM/ud02/boletin-02-intermedio-resuelto/)**
+* **[Unidad 02: Retos Extras](/ProgramacionDAM/ud02/boletin-02-extras/)**
 
 ---
 

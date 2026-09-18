@@ -1,9 +1,6 @@
 ---
 title: 📝 Boletín 02 Inicial — Primeros Pasos con Java
 description: 13 ejercicios prácticos fundamentales en Java 21 / 25 LTS con IntelliJ IDEA sobre tipos primitivos, variables, operadores aritméticos y lógicos, entrada/salida por consola y sentencias condicionales.
-draft: true
-prev: false
-next: false
 ---
 
 Este boletín reúne **13 ejercicios prácticos fundamentales** diseñados para consolidar tu soltura con el entorno de desarrollo **IntelliJ IDEA**, la sintaxis básica del lenguaje **Java** (versión moderna 21 LTS), el uso de la clase `Scanner`, la salida formateada con `printf` y las bifurcaciones condicionales `if-else` y `switch`.
