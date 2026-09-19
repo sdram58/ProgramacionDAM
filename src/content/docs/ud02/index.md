@@ -9,6 +9,14 @@ En esta unidad nos sumergiremos en **Java** (en su versión estándar moderna **
 
 Aprenderás cómo viaja tu código desde el editor hasta los transistores del procesador a través de la Máquina Virtual de Java (JVM), dominarás los 8 tipos primitivos de datos, comprenderás cómo manipular texto, números y fechas con precisión matemática, interactuarás con el usuario mediante la consola y controlarás el flujo de ejecución mediante sentencias condicionales clásicas y modernas.
 
+:::tip[📥 Recursos y Descargas en PDF de la Unidad 2]
+Puedes estudiar esta unidad tanto en la plataforma web como en formato documento digital/impreso:
+* 📄 **[Descargar Teoría Completa de la Unidad 2 en PDF](/ProgramacionDAM/pdf/ud02/UD02-Teoria-Primeros-Pasos-Java.pdf)** (41 páginas)
+* 📝 **Boletín Inicial:** [Descargar Propuestos (PDF)](/ProgramacionDAM/pdf/ud02/Boletin-02-Inicial.pdf) · [Descargar Resueltos (PDF)](/ProgramacionDAM/pdf/ud02/Boletin-02-Inicial-Resuelto.pdf)
+* 📝 **Boletín Intermedio:** [Descargar Propuestos (PDF)](/ProgramacionDAM/pdf/ud02/Boletin-02-Intermedio.pdf) · [Descargar Resueltos (PDF)](/ProgramacionDAM/pdf/ud02/Boletin-02-Intermedio-Resuelto.pdf)
+* 🧠 **Retos y Extras:** [Descargar Retos (PDF)](/ProgramacionDAM/pdf/ud02/Boletin-02-Extras-Retos.pdf)
+:::
+
 ---
 
 ## 1. El Ecosistema de la Plataforma Java
