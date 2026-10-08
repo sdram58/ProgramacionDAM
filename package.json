@@ -9,7 +9,8 @@
     "preview": "astro preview",
     "pdf:ud01": "python scripts/generate_ud01_pdfs.py",
     "pdf:ud02": "python scripts/generate_ud02_pdfs.py",
-    "pdf:all": "python scripts/generate_ud01_pdfs.py && python scripts/generate_ud02_pdfs.py"
+    "pdf:ud03": "python scripts/generate_ud03_pdfs.py",
+    "pdf:all": "python scripts/generate_ud01_pdfs.py && python scripts/generate_ud02_pdfs.py && python scripts/generate_ud03_pdfs.py"
   },
   "dependencies": {
     "@astrojs/starlight": "^0.32.6",

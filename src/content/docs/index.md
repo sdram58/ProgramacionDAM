@@ -140,12 +140,12 @@ Accede a las relaciones de problemas prácticos clasificados por nivel de dificu
 * **[Unidad 01: Boletín Inicial](/ProgramacionDAM/ud01/boletin-01-inicial/)** | **[Resuelto](/ProgramacionDAM/ud01/boletin-01-inicial-resuelto/)** · *(Descargar: [PDF](/ProgramacionDAM/pdf/ud01/Boletin-01-Inicial.pdf) · [PDF Soluciones](/ProgramacionDAM/pdf/ud01/Boletin-01-Inicial-Resuelto.pdf))*
 * **[Unidad 01: Boletín Intermedio](/ProgramacionDAM/ud01/boletin-01-intermedio/)** | **[Resuelto](/ProgramacionDAM/ud01/boletin-01-intermedio-resuelto/)** · *(Descargar: [PDF](/ProgramacionDAM/pdf/ud01/Boletin-01-Intermedio.pdf) · [PDF Soluciones](/ProgramacionDAM/pdf/ud01/Boletin-01-Intermedio-Resuelto.pdf))*
 * **[Unidad 01: Retos Extras](/ProgramacionDAM/ud01/boletin-01-extras/)** · *(Descargar: [PDF](/ProgramacionDAM/pdf/ud01/Boletin-01-Extras-Retos.pdf))*
-* **[Unidad 02: Boletín Inicial](/ProgramacionDAM/ud02/boletin-02-inicial/)** | **[Resuelto](/ProgramacionDAM/ud02/boletin-02-inicial-resuelto/)**
-* **[Unidad 02: Boletín Intermedio](/ProgramacionDAM/ud02/boletin-02-intermedio/)** | **[Resuelto](/ProgramacionDAM/ud02/boletin-02-intermedio-resuelto/)**
-* **[Unidad 02: Retos Extras](/ProgramacionDAM/ud02/boletin-02-extras/)**
-* **[Unidad 03: Boletín Inicial](/ProgramacionDAM/ud03/boletin-03-inicial/)** | **[Resuelto](/ProgramacionDAM/ud03/boletin-03-inicial-resuelto/)**
-* **[Unidad 03: Boletín Intermedio](/ProgramacionDAM/ud03/boletin-03-intermedio/)** | **[Resuelto](/ProgramacionDAM/ud03/boletin-03-intermedio-resuelto/)**
-* **[Unidad 03: Retos Extras](/ProgramacionDAM/ud03/boletin-03-extras/)**
+* **[Unidad 02: Boletín Inicial](/ProgramacionDAM/ud02/boletin-02-inicial/)** | **[Resuelto](/ProgramacionDAM/ud02/boletin-02-inicial-resuelto/)** · *(Descargar: [PDF](/ProgramacionDAM/pdf/ud02/Boletin-02-Inicial.pdf) · [PDF Soluciones](/ProgramacionDAM/pdf/ud02/Boletin-02-Inicial-Resuelto.pdf))*
+* **[Unidad 02: Boletín Intermedio](/ProgramacionDAM/ud02/boletin-02-intermedio/)** | **[Resuelto](/ProgramacionDAM/ud02/boletin-02-intermedio-resuelto/)** · *(Descargar: [PDF](/ProgramacionDAM/pdf/ud02/Boletin-02-Intermedio.pdf) · [PDF Soluciones](/ProgramacionDAM/pdf/ud02/Boletin-02-Intermedio-Resuelto.pdf))*
+* **[Unidad 02: Retos Extras](/ProgramacionDAM/ud02/boletin-02-extras/)** · *(Descargar: [PDF](/ProgramacionDAM/pdf/ud02/Boletin-02-Extras-Retos.pdf))*
+* **[Unidad 03: Boletín Inicial](/ProgramacionDAM/ud03/boletin-03-inicial/)** | **[Resuelto](/ProgramacionDAM/ud03/boletin-03-inicial-resuelto/)** · *(Descargar: [PDF](/ProgramacionDAM/pdf/ud03/Boletin-03-Inicial.pdf) · [PDF Soluciones](/ProgramacionDAM/pdf/ud03/Boletin-03-Inicial-Resuelto.pdf))*
+* **[Unidad 03: Boletín Intermedio](/ProgramacionDAM/ud03/boletin-03-intermedio/)** | **[Resuelto](/ProgramacionDAM/ud03/boletin-03-intermedio-resuelto/)** · *(Descargar: [PDF](/ProgramacionDAM/pdf/ud03/Boletin-03-Intermedio.pdf) · [PDF Soluciones](/ProgramacionDAM/pdf/ud03/Boletin-03-Intermedio-Resuelto.pdf))*
+* **[Unidad 03: Retos Extras](/ProgramacionDAM/ud03/boletin-03-extras/)** · *(Descargar: [PDF](/ProgramacionDAM/pdf/ud03/Boletin-03-Extras-Retos.pdf))*
 
 ---
 

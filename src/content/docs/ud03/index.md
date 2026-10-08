@@ -5,9 +5,9 @@ description: Control estructurado de errores con excepciones (try-catch-finally)
 
 Hasta este punto de tu formación como desarrollador de software, tus programas han seguido una lógica eminentemente lineal y selectiva: el código se ejecutaba de arriba abajo y tomaba bifurcaciones mediante sentencias `if-else` o `switch`. Sin embargo, la auténtica potencia de la computación reside en su capacidad para **procesar millones de datos en fracciones de segundo mediante la repetición controlada**, **blindarse ante fallos imprevistos** y **estructurar algoritmos complejos en piezas reutilizables y modulares**.
 
-En esta unidad nos adentramos en el núcleo de la programación estructurada profesional con **Java 25 LTS** (con compatibilidad plena para Java 21 LTS) y nuestro entorno de trabajo oficial, **IntelliJ IDEA**:
+En esta unidad nos adentramos en el núcleo de la programación estructurada con **Java 25 LTS** (con compatibilidad plena para Java 21 LTS) y nuestro entorno de trabajo oficial, **IntelliJ IDEA (Visual Studio Code)**:
 
-1. **Gestión Profesional de Excepciones**: Cómo evitar que nuestras aplicaciones se cuelguen ante entradas incorrectas del usuario, recursos no disponibles o errores aritméticos mediante bloques `try-catch-finally` y `try-with-resources`.
+1. **Gestión de Excepciones**: Cómo evitar que nuestras aplicaciones se cuelguen ante entradas incorrectas del usuario, recursos no disponibles o errores aritméticos mediante bloques `try-catch-finally` y `try-with-resources`.
 2. **Sentencias de Repetición (Bucles)**: Automatización iterativa con `while`, `do-while` y `for`, junto con técnicas de control de flujo (`break`, `continue` y variables centinela).
 3. **Arrays y Matrices**: Almacenamiento contiguo y masivo de información en memoria, recorridos optimizados, algoritmos clásicos de búsqueda y ordenación, y herramientas de la clase estándar `java.util.Arrays`.
 4. **Procesamiento de Cadenas**: Técnicas de recorrido e inspección sobre textos y optimización de memoria mediante la clase `StringBuilder`.
@@ -934,6 +934,8 @@ La **programación modular** se basa en el principio clásico de *divide y vence
 ### 6.1. Anatomía y Firma de un Método
 
 Un método en Java se declara con la siguiente estructura sintáctica:
+
+**[modificadores] tipoRetorno nombreMetodo([parámetros]) [throws Excepciones]**
 
 ```java
 // [modificadores] tipoRetorno nombreMetodo([parámetros]) [throws Excepciones]
