@@ -48,13 +48,13 @@ hero:
     <a class="unit-link" href="/ProgramacionDAM/ud02/">Ver unidad →</a>
   </div>
 
-  <div class="unit-card unit-card-disabled" style="border: 1px dashed var(--sl-color-gray-4); border-radius: 8px; padding: 1.25rem;">
+  <div class="unit-card" style="border: 1px solid var(--sl-color-accent); border-radius: 8px; padding: 1.25rem; background: rgba(45, 138, 78, 0.06);">
     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem;">
       <h3 style="margin: 0; font-size: 1.2rem;">🔀 03. Excepciones, bucles, arrays y métodos</h3>
-      <span class="unit-badge-unavailable">🔒 No disponible</span>
+      <span class="unit-badge-available">Disponible</span>
     </div>
     <p><strong>RA1, RA2, RA3, RA6 (28 h)</strong> — Estructuras condicionales y bucles iterativos, depuración con breakpoints en IntelliJ IDEA, arrays unidimensionales y bidimensionales, diseño modular con métodos y gestión de excepciones.</p>
-    <span class="unit-link-disabled">🔒 No disponible</span>
+    <a class="unit-link" href="/ProgramacionDAM/ud03/">Ver unidad →</a>
   </div>
 
   <div class="unit-card unit-card-disabled" style="border: 1px dashed var(--sl-color-gray-4); border-radius: 8px; padding: 1.25rem;">
@@ -143,6 +143,9 @@ Accede a las relaciones de problemas prácticos clasificados por nivel de dificu
 * **[Unidad 02: Boletín Inicial](/ProgramacionDAM/ud02/boletin-02-inicial/)** | **[Resuelto](/ProgramacionDAM/ud02/boletin-02-inicial-resuelto/)**
 * **[Unidad 02: Boletín Intermedio](/ProgramacionDAM/ud02/boletin-02-intermedio/)** | **[Resuelto](/ProgramacionDAM/ud02/boletin-02-intermedio-resuelto/)**
 * **[Unidad 02: Retos Extras](/ProgramacionDAM/ud02/boletin-02-extras/)**
+* **[Unidad 03: Boletín Inicial](/ProgramacionDAM/ud03/boletin-03-inicial/)** | **[Resuelto](/ProgramacionDAM/ud03/boletin-03-inicial-resuelto/)**
+* **[Unidad 03: Boletín Intermedio](/ProgramacionDAM/ud03/boletin-03-intermedio/)** | **[Resuelto](/ProgramacionDAM/ud03/boletin-03-intermedio-resuelto/)**
+* **[Unidad 03: Retos Extras](/ProgramacionDAM/ud03/boletin-03-extras/)**
 
 ---
 

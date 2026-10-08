@@ -1,14 +1,6 @@
 ---
-title: "Boletín 3.1: Nivel Inicial — Soluciones Resueltas"
+title: "📝 Boletín 03 Inicial (Resuelto) — Soluciones Comentadas"
 description: "Soluciones completas y comentadas de los 12 ejercicios iniciales de la Unidad 3 en Java 25 LTS."
-draft: true
-prev: false
-next: false
-sidebar:
-  order: 2
-  badge:
-    text: "Soluciones"
-    variant: "success"
 ---
 
 A continuación se presentan las soluciones comentadas de los 12 ejercicios del boletín inicial, desarrolladas siguiendo las directrices de robustez, legibilidad y buenas prácticas en Java 25 LTS.

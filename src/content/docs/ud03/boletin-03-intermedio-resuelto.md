@@ -1,14 +1,6 @@
 ---
-title: "Boletín 3.2: Nivel Intermedio — Soluciones Resueltas"
+title: "📝 Boletín 03 Intermedio (Resuelto) — Soluciones Comentadas"
 description: "Soluciones completas, comentadas y optimizadas de los 12 ejercicios de nivel intermedio de la Unidad 3 en Java 25 LTS."
-draft: true
-prev: false
-next: false
-sidebar:
-  order: 4
-  badge:
-    text: "Soluciones"
-    variant: "success"
 ---
 
 A continuación se detallan las soluciones completas a los 12 ejercicios de nivel intermedio, haciendo hincapié en la modularidad limpia, la optimización algorítmica y el manejo de excepciones.

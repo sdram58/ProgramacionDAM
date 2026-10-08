@@ -1,14 +1,6 @@
 ---
-title: "Boletín 3.2: Nivel Intermedio — Ejercicios Prácticos"
+title: "📝 Boletín 03 Intermedio — Ejercicios Prácticos"
 description: "Ejercicios avanzados de matrices 2D, algoritmos de ordenación y búsqueda, manipulación con StringBuilder, recursividad y expresiones regulares en Java."
-draft: true
-prev: false
-next: false
-sidebar:
-  order: 3
-  badge:
-    text: "Intermedio"
-    variant: "caution"
 ---
 
 Bienvenido al boletín de nivel intermedio de la **Unidad 3: Excepciones, bucles, arrays y métodos**.

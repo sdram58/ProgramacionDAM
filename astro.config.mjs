@@ -55,7 +55,24 @@ export default defineConfig({
             },
           ],
         },
-        { label: '🔀 03. Excepciones, bucles, arrays y métodos', link: '#', badge: { text: 'Próximamente', variant: 'note' }, attrs: { class: 'sidebar-link-disabled' } },
+        {
+          label: '🔀 03. Excepciones, bucles, arrays y métodos',
+          collapsed: true,
+          items: [
+            { label: '📖 Teoría y Contenidos', link: '/ud03/' },
+            {
+              label: '📝 Boletines de Ejercicios',
+              collapsed: true,
+              items: [
+                { label: 'Boletín Inicial', link: '/ud03/boletin-03-inicial/' },
+                { label: 'Boletín Inicial (Resuelto)', link: '/ud03/boletin-03-inicial-resuelto/' },
+                { label: 'Boletín Intermedio', link: '/ud03/boletin-03-intermedio/' },
+                { label: 'Boletín Intermedio (Resuelto)', link: '/ud03/boletin-03-intermedio-resuelto/' },
+                { label: 'Retos y Extras', link: '/ud03/boletin-03-extras/' },
+              ],
+            },
+          ],
+        },
         { label: '🏗️ 04. Clases y objetos', link: '#', badge: { text: 'Próximamente', variant: 'note' }, attrs: { class: 'sidebar-link-disabled' } },
         { label: '🧬 05. Programación orientada a objetos avanzada', link: '#', badge: { text: 'Próximamente', variant: 'note' }, attrs: { class: 'sidebar-link-disabled' } },
         { label: '📚 06. Genéricos y colecciones de datos', link: '#', badge: { text: 'Próximamente', variant: 'note' }, attrs: { class: 'sidebar-link-disabled' } },

@@ -1,14 +1,6 @@
 ---
-title: "Boletín 3.1: Nivel Inicial — Ejercicios Prácticos"
+title: "📝 Boletín 03 Inicial — Ejercicios Prácticos"
 description: "Ejercicios fundamentales de bucles, excepciones básicas, arrays unidimensionales y modularidad con métodos en Java."
-draft: true
-prev: false
-next: false
-sidebar:
-  order: 1
-  badge:
-    text: "Inicial"
-    variant: "note"
 ---
 
 Bienvenido al boletín de nivel inicial de la **Unidad 3: Excepciones, bucles, arrays y métodos**.

@@ -1,14 +1,6 @@
 ---
 title: 🔀 Unidad 3. Excepciones, bucles, arrays y métodos
 description: Control estructurado de errores con excepciones (try-catch-finally), estructuras iterativas (while, do-while, for, for-each), estructuras de datos homogéneas (arrays y matrices), procesamiento avanzado de texto con StringBuilder, y diseño modular de software con métodos, paso de parámetros y recursividad en Java 25 LTS.
-draft: true
-prev: false
-next: false
-sidebar:
-  order: 3
-  badge:
-    text: "En revisión"
-    variant: "caution"
 ---
 
 Hasta este punto de tu formación como desarrollador de software, tus programas han seguido una lógica eminentemente lineal y selectiva: el código se ejecutaba de arriba abajo y tomaba bifurcaciones mediante sentencias `if-else` o `switch`. Sin embargo, la auténtica potencia de la computación reside en su capacidad para **procesar millones de datos en fracciones de segundo mediante la repetición controlada**, **blindarse ante fallos imprevistos** y **estructurar algoritmos complejos en piezas reutilizables y modulares**.

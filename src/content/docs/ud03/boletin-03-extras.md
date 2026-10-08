@@ -1,14 +1,6 @@
 ---
-title: "Boletín 3.3: Retos Algorítmicos y Programación Competitiva"
+title: "🧠 Boletín 03 Extras — Retos Algorítmicos y Competitivos"
 description: "Retos de alta intensidad algorítmica inspirados en plataformas de programación competitiva (CodeWars, Acepta el Reto, LeetCode) para la Unidad 3 en Java 25 LTS."
-draft: true
-prev: false
-next: false
-sidebar:
-  order: 5
-  badge:
-    text: "Retos Extras"
-    variant: "danger"
 ---
 
 Bienvenido al boletín de retos competitivos de la **Unidad 3: Excepciones, bucles, arrays y métodos**.
