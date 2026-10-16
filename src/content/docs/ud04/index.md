@@ -234,7 +234,95 @@ Un **método de instancia** es una función que opera en el contexto de un objet
 
 ---
 
-## 3. Control de Visibilidad y Encapsulamiento (*Information Hiding*)
+### 2.4 Las Variables Objeto son Referencias (Continente vs. Contenido)
+
+Cuando declaras una variable de tipo primitivo (`int edad = 8;`), la variable almacena directamente los bits del valor numérico en la pila (*Stack*). Sin embargo, en el caso de los objetos, **declarar una variable no crea el objeto ni lo almacena dentro de ella**: lo que guarda la variable es una **referencia** (un puntero o dirección de memoria) que señala el lugar del **Heap** donde vive realmente el objeto.
+
+```java
+public class Persona {
+    private String nombre;
+    private int edad;
+
+    public Persona(String nombre, int edad) {
+        this.nombre = nombre;
+        this.edad = edad;
+    }
+
+    public void presentar() {
+        System.out.println("Hola, me llamo " + this.nombre + " y tengo " + this.edad + " años.");
+    }
+
+    public String getNombre() { return this.nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+}
+```
+
+#### ¿Qué ocurre cuando asignamos una variable objeto a otra (`p2 = p1`)?
+
+Observa con mucha atención el siguiente fragmento de código:
+
+```java
+Persona p1 = new Persona("Ada", 36);
+Persona p2 = p1; // ¡NO se duplica el objeto! Se copia únicamente la referencia (dirección)
+
+p2.setNombre("Grace");
+System.out.println(p1.getNombre()); // Imprime: "Grace"
+```
+
+:::important[Asignar Referencias NO Clona Objetos]
+Cuando asignas una variable objeto a otra (`Persona p2 = p1;`), **no se crea una copia del objeto en el Heap**, sino que se copia la dirección de memoria. Ambas variables (`p1` y `p2`) acaban apuntando exactamente **al mismo objeto físico**. Por tanto, cualquier modificación realizada a través de `p2` será inmediatamente visible al consultar `p1`.
+:::
+
+```
+       MEMORIA STACK                             MEMORIA HEAP
++------------------------+           +----------------------------------+
+| Variable: p1 (0x4a10)  | --------> | Objeto Persona (0x4a10)          |
++------------------------+     ▲     | - nombre: "Grace" (antes "Ada")  |
+                               │     | - edad: 36                       |
++------------------------+     │     +----------------------------------+
+| Variable: p2 (0x4a10)  | ----+
++------------------------+
+```
+
+#### La Metáfora del Continente y el Contenido (`==` frente al estado interno)
+
+Imagina dos recipientes físicos distintos: una **copa** y una **taza**, ambos llenos con el mismo líquido (`0xCAFE`):
+
+```java
+public class Recipiente {
+    private int contenido = 0xCAFE;
+
+    public static void main(String[] args) {
+        Recipiente copa = new Recipiente();
+        Recipiente taza = new Recipiente();
+
+        System.out.println("¿Mismo continente (copa == taza)? " + (copa == taza)); // false
+        System.out.println("Contenido de la copa: " + copa.contenido);             // 51966 (0xCAFE)
+        System.out.println("Contenido de la taza: " + taza.contenido);             // 51966 (0xCAFE)
+    }
+}
+```
+
+- El operador `==` aplicado a referencias pregunta: **«¿Son exactamente el mismo recipiente físico?»** (`false`, porque se crearon con dos `new` distintos).
+- Para saber si dos recipientes distintos albergan **el mismo contenido**, nunca debemos usar `==`, sino el método `.equals()` (que estudiaremos en profundidad en la Sección 6).
+
+#### La Referencia Nula (`null`) y `NullPointerException`
+
+Cuando una variable de tipo objeto no apunta a ninguna instancia en la memoria Heap, decimos que contiene una **referencia nula (`null`)**:
+
+```java
+Persona p3 = null; // p3 no apunta a ningún objeto vivo
+
+if (p3 != null) {
+    p3.presentar(); // Comprobación defensiva segura
+}
+```
+
+Si intentas acceder a un atributo o invocar un método sobre una variable cuyo valor es `null` (por ejemplo, `p3.presentar()`), la JVM abortará la ejecución de inmediato lanzando la célebre excepción **`java.lang.NullPointerException`**.
+
+---
+
+## 3. Control de Visibilidad, Encapsulamiento y Ampliación de Métodos
 
 El **encapsulamiento** es el escudo protector que garantiza la integridad del software. Consiste en declarar los atributos como **`private`** para que ningún código exterior pueda manipularlos directamente de forma arbitraria, y proporcionar métodos públicos (**`getters`** y **`setters`**) con lógica de validación.
 
@@ -259,8 +347,9 @@ Si no antepones ninguna palabra clave de visibilidad antes de un atributo o mét
 
 Para permitir la lectura o actualización segura de atributos privados, la convención estándar de Java (*JavaBeans standard*) define:
 
-- **Getters (Lectura):** Prefijo `get` seguido del nombre del atributo con la primera letra en mayúscula (ej. `getTitular()`). En variables booleanas es común usar el prefijo `is` (ej. `isActivo()`, `isBloqueada()`).
+- **Getters (Lectura):** Prefijo `get` seguido del nombre del atributo con la primera letra en mayúscula (ej. `getTitular()`). En variables booleanas es convención estándar usar el prefijo **`is`** (ej. `isActivo()`, `isAgotado()`, `isBloqueada()`).
 - **Setters (Escritura controlada):** Prefijo `set` seguido del nombre del atributo. Deben incorporar validaciones de invariantes para proteger al objeto frente a estados corruptos.
+- **Getters y Setters para Arrays:** Cuando una clase encapsula un array (como `private String[] autores`), además del getter/setter de la colección completa es muy buena práctica ofrecer métodos indexados para consultar o modificar un elemento individual (`getAutor(int i)` y `setAutor(int i, String autor)`).
 
 ```java
 public class Alumno {
@@ -328,6 +417,148 @@ public class Empleado {
     }
 }
 ```
+
+---
+
+### 3.4 La Interfaz Pública de una Clase y la Reducción del Acoplamiento
+
+El conjunto de todos los métodos `public` de una clase constituye su **interfaz pública**: el contrato visible a través del cual el resto del programa puede comunicarse con los objetos de esa clase sin necesidad de saber cómo están programados por dentro.
+
+```
+   ❌ SIN ENCAPSULAMIENTO (Alto Acoplamiento)
+   [Código Externo] -------- acceso directo --------> [Atributos internos: saldo, eval1...]
+   (Si cambia el tipo o nombre del atributo interno, se rompe todo el código externo)
+
+   ✅ CON INTERFAZ PÚBLICA (Bajo Acoplamiento)
+   [Código Externo] ---> [Interfaz Pública: getMedia(), setNota()] ---> [Estado Interno Privado]
+   (La implementación interna puede cambiar libremente sin romper ningún programa externo)
+```
+
+Ocultar los detalles internos tras una interfaz pública de getters y setters aporta tres ventajas de ingeniería decisivas:
+1. **Propiedades calculadas al vuelo:** Un getter no tiene por qué corresponderse con una variable física guardada en memoria. Por ejemplo, `getMedia()` puede calcular en tiempo real `(eval1 + eval2 + eval3) / 3.0`, o `getPrecioConIva()` devolver `this.precio * 1.21`.
+2. **Validación y seguridad centralizada:** Cualquier intento de lectura o escritura pasa por un único punto de control donde podemos verificar permisos o lanzar `IllegalArgumentException` si el dato es inválido.
+3. **Desacoplamiento y mantenibilidad:** Si dos años después decides cambiar la estructura interna de la clase (por ejemplo, sustituir tres variables `eval1, eval2, eval3` por un array `double[] evaluaciones`), ningún programa externo se romperá mientras mantengas intacta la firma de los métodos públicos `getEval1()`, `getMedia()`, etc.
+
+---
+
+### 3.5 Ampliación de Métodos: Firma, Sobrecarga, Sobrescritura, Paso de Parámetros y Recursividad
+
+#### 1. La Firma de un Método (*Method Signature*)
+La **firma** de un método está compuesta exclusivamente por **su nombre y la secuencia ordenada de tipos de datos de sus parámetros formales**. La firma identifica de forma única a un método dentro de su clase:
+
+```java
+public int procesarPedido(int idCliente, double importe, boolean urgente)
+// Firma del método: procesarPedido(int, double, boolean)
+```
+*(Nota: El tipo de retorno, los modificadores de visibilidad y los nombres de los parámetros NO forman parte de la firma).*
+
+#### 2. Sobrecarga (*Ligadura Estática*) vs. Sobrescritura (*Ligadura Dinámica*)
+Es fundamental no confundir estos dos mecanismos polimórficos:
+
+| Característica | Sobrecarga (*Overloading*) | Sobrescritura (*Overriding*) |
+| :--- | :--- | :--- |
+| **Definición** | Dos o más métodos en la misma clase (o jerarquía) con el **mismo nombre pero distinta firma** (diferente número o tipo de parámetros). | Una subclase redefine un método heredado de su superclase manteniendo **exactamente la misma firma** y un retorno compatible. |
+| **Propósito** | Ofrecer varias formas de invocar una misma operación según los datos de entrada (ej. `println(int)`, `println(String)`). | Sustituir o especializar el comportamiento heredado del padre (ej. redefinir `toString()` o `equals()` de `Object`). |
+| **Resolución (*Binding*)** | **Ligadura Estática (Temprana):** El compilador decide qué método ejecutar en tiempo de compilación mirando los tipos de los argumentos. | **Ligadura Dinámica (Tardía):** La JVM decide qué método ejecutar en tiempo de ejecución según la clase real del objeto en el Heap. |
+
+```java
+public class CalculadoraTextual {
+    // Tres métodos SOBRECARGADOS (mismo nombre 'dobla', distinta firma -> Ligadura Estática)
+    public static int dobla(int n) { return n + n; }
+    public static double dobla(double n) { return n + n; }
+    public static String dobla(String texto) { return texto + texto; }
+}
+```
+
+#### 3. Paso de Parámetros Objeto: Objetos Mutables vs. Inmutables
+En Java, todos los argumentos se pasan **por valor**: cuando pasas un objeto a un método, el método recibe una **copia de la referencia** (que apunta al mismo objeto en el Heap).
+- Si el objeto es **mutable** (como un array `int[]` o un `StringBuilder`), cualquier cambio realizado sobre sus elementos internos dentro del método **sí afectará al objeto original externo**.
+- Si el objeto es **inmutable** (como un `String` o un `Integer`), sus datos internos no pueden alterarse; si el método hace `s = s.toLowerCase()`, simplemente reasigna su variable local `s` a un nuevo `String`, dejando intacta la variable del programa principal:
+
+```java
+import java.util.Arrays;
+
+public class DemostracionParametros {
+    public static void transformar(String cadena, int[] vector) {
+        vector[0] = -99;              // Modifica el contenido del array original en el Heap
+        cadena = cadena.toLowerCase(); // Crea un nuevo String y cambia solo la referencia local
+        vector = new int[]{3, 3};     // Reasigna solo la referencia local; no afecta al main
+    }
+
+    public static void main(String[] args) {
+        int[] miArray = {1, 2, 3};
+        String miTexto = "HOLA DAM";
+
+        transformar(miTexto, miArray);
+
+        System.out.println("Texto: " + miTexto);                   // Imprime: HOLA DAM (intacto)
+        System.out.println("Array: " + Arrays.toString(miArray));  // Imprime: [-99, 2, 3] (mutado)
+    }
+}
+```
+
+#### 4. Pasar Argumentos al Programa Principal (`String[] args`) en IntelliJ IDEA
+El método de entrada `public static void main(String[] args)` recibe un array de cadenas llamado `args` que recoge los argumentos enviados al programa desde la línea de comandos del sistema operativo:
+
+```java
+public class ProcesadorArgumentos {
+    public static void main(String[] args) {
+        System.out.println("Has pasado " + args.length + " argumentos.");
+        for (int i = 0; i < args.length; i++) {
+            System.out.println("Argumento [" + i + "]: " + args[i]);
+        }
+    }
+}
+```
+
+:::tip[Cómo Configurar Argumentos de Programa en IntelliJ IDEA]
+Para probar un programa que recibe parámetros en `String[] args` sin salir de **IntelliJ IDEA**:
+1. Haz clic en el desplegable de ejecución en la esquina superior derecha (junto al botón verde **Run** ▶) y selecciona **Edit Configurations...**.
+2. En el campo **Program arguments**, escribe los argumentos separados por espacios (por ejemplo: `fichero_entrada.txt --modo-rapido 50`). Si un argumento contiene espacios, enciérralo entre comillas dobles (`"Juan Pérez"`).
+3. Pulsa **Apply** y **OK**. Al ejecutar el programa, `args` contendrá automáticamente esos valores.
+:::
+
+#### 5. Recursividad: Soluciones Elegantes y Las Torres de Hanói
+La **recursividad** es la técnica mediante la cual un método se llama a sí mismo para resolver un problema descomponiéndolo en subproblemas idénticos de menor tamaño, hasta alcanzar un **caso base (o condición de parada)** cuya solución es directa:
+
+- **Ejemplo matemático (Potencia entera):** Calcular `base` elevado a `exponente` (`b^e`) sabiendo que el caso base es `b^0 = 1` y el caso recursivo es `b × potencia(b, e - 1)`:
+  ```java
+  public static long potenciaRecursiva(long base, int exponente) {
+      if (exponente < 0) throw new IllegalArgumentException("El exponente debe ser >= 0");
+      if (exponente == 0) return 1; // Caso base: detiene la recursión
+      return base * potenciaRecursiva(base, exponente - 1); // Llamada recursiva
+  }
+  ```
+
+- **El Clásico Universal de la Recursividad: Las Torres de Hanói**  
+  Disponemos de 3 postes verticales (`Origen`, `Auxiliar` y `Destino`) y `n` discos de distinto diámetro apilados de mayor (abajo) a menor (arriba) en el poste `Origen`. El objetivo es trasladar toda la torre al poste `Destino` moviendo un solo disco cada vez y sin colocar jamás un disco grande sobre uno más pequeño. El número mínimo de movimientos necesarios es `2^n - 1`:
+
+  ```java
+  public class TorresDeHanoi {
+      private int movimientos = 0;
+
+      public void resolverHanoi(int numDiscos, char origen, char auxiliar, char destino) {
+          if (numDiscos == 1) {
+              // Caso base: mover directamente el disco más pequeño de origen a destino
+              movimientos++;
+              System.out.printf("Movimiento %d: Mover disco 1 de poste %c a poste %c%n",
+                      movimientos, origen, destino);
+          } else {
+              // 1. Mover los n-1 discos superiores al poste auxiliar (usando destino como apoyo)
+              resolverHanoi(numDiscos - 1, origen, destino, auxiliar);
+
+              // 2. Mover el disco grande (n) de origen al poste destino final
+              movimientos++;
+              System.out.printf("Movimiento %d: Mover disco %d de poste %c a poste %c%n",
+                      movimientos, numDiscos, origen, destino);
+
+              // 3. Mover los n-1 discos desde el poste auxiliar hasta el poste destino
+              resolverHanoi(numDiscos - 1, auxiliar, origen, destino);
+          }
+      }
+  }
+  ```
+
 
 ## 4. Ciclo de Vida de los Objetos: Instanciación, Constructores y Destrucción
 
@@ -437,26 +668,41 @@ La llamada delegada a otro constructor mediante `this(...)` debe ser **estrictam
 
 ---
 
-### 4.5 Bloques de Inicialización de Instancia
+### 4.5 Bloques de Inicialización y Orden Cronológico Exacto
 
-Además de los constructores, Java permite definir **bloques de inicialización de instancia**: fragmentos de código delimitados por llaves `{ ... }` directamente en el cuerpo de la clase (fuera de cualquier método).
+Además de los constructores, Java permite definir **bloques de inicialización de instancia** (`{ ... }`) y **bloques de inicialización estáticos** (`static { ... }`) directamente en el cuerpo de la clase.
 
-El código contenido en estos bloques se copia e inserta automáticamente al principio de cada constructor generado. Su uso es poco frecuente, pero resulta útil para inicializaciones complejas compartidas por constructores anónimos:
+Cuando se utiliza una clase por primera vez y se instancia un objeto con `new`, la JVM respeta un orden cronológico estricto:
+1. **Carga de la clase (una sola vez):** Se inicializan las variables `static` (con su valor por defecto o en línea) y se ejecutan los bloques `static { ... }` en orden de aparición.
+2. **Reserva en el Heap:** Al ejecutar `new`, se reserva memoria para el objeto y todos sus atributos de instancia toman primero su valor por defecto (`0`, `false`, `null`).
+3. **Inicialización en línea y bloques `{ ... }` de instancia:** Se asignan los valores declarados en la propia línea del atributo y se ejecutan los bloques `{ ... }` de arriba abajo.
+4. **Cuerpo del constructor:** Finalmente se ejecuta el código dentro del constructor invocado.
 
 ```java
-public class DispositivoRed {
-    private final String idUnico;
+public class AlumnoCFGS {
+    private static int edadMinima = 18;
+    private int nia;
+    private String nombre;
+    private int[] notas = new int[3];
+    private boolean repetidor;
 
-    // Bloque de inicialización de instancia: se ejecuta antes de cualquier constructor
-    {
-        this.idUnico = java.util.UUID.randomUUID().toString();
+    // 1. Bloque estático: se ejecuta una única vez al cargar la clase en la JVM
+    static {
+        edadMinima--; // Pasa de 18 a 17
     }
 
-    public DispositivoRed() {
-        // idUnico ya ha sido generado
+    // 2. Bloque de instancia: se ejecuta cada vez que nace un objeto, ANTES del constructor
+    {
+        this.nia = (int) (Math.random() * 900000) + 100000;
+    }
+
+    // 3. Constructor: último paso de inicialización
+    public AlumnoCFGS(String nombre) {
+        this.nombre = nombre;
     }
 }
 ```
+Tras ejecutar `AlumnoCFGS a1 = new AlumnoCFGS("Pepe");`, el estado resultante es: `edadMinima = 17`, `nia` aleatorio de 6 cifras, `nombre = "Pepe"`, `notas = {0, 0, 0}` y `repetidor = false`.
 
 ---
 
@@ -494,7 +740,7 @@ Para liberar recursos del sistema (archivos abiertos, conexiones a bases de dato
 
 ---
 
-## 5. Miembros Estáticos: La Palabra Reservada `static`
+## 5. Miembros Estáticos: La Palabra Reservada `static` y Combinaciones con `final`
 
 Hasta ahora, todos los atributos y métodos estudiados pertenecían a **instancias individuales**: cada objeto tenía su propio `saldo` y su propio `titular`.
 
@@ -541,48 +787,41 @@ Empleado e3 = new Empleado("Elena");   // id: 3
 System.out.println(Empleado.getContadorTotalEmpleados()); // Imprime: 3
 ```
 
-#### Constantes Globales (`public static final`)
-La combinación de modificadores más famosa de Java se utiliza para definir constantes públicas universales:
-- `public`: Accesible desde cualquier lugar del proyecto.
-- `static`: Existe una única copia compartida a nivel de clase (no requiere instanciar objetos).
-- `final`: Su valor es inmutable y no puede reasignarse.
-
-Por convención estándar (*Java Naming Conventions*), las constantes se escriben siempre en **`MAYÚSCULAS_CON_GUIONES_BAJOS`**:
-
-```java
-public class ConfiguracionFinanciera {
-    public static final double TIPO_IVA_GENERAL = 21.0;
-    public static final double TIPO_IVA_REDUCIDO = 10.0;
-    public static final int DIAS_PLAZO_DEVOLUCION = 30;
-    public static final String MONEDA_DEFECTO = "EUR";
-}
-```
-
 ---
 
-### 5.2 Métodos Estáticos (Métodos de Clase)
+### 5.2 Métodos Estáticos y Reglas de Acceso entre Contextos
 
-Un **método estático** es una función asociada a la clase, no a ningún objeto. Se invoca directamente utilizando el nombre de la clase, sin necesidad de crear ninguna instancia con `new`:
+Un **método estático** es una función asociada a la clase, no a ningún objeto. Se invoca directamente utilizando el nombre de la clase (`Clase.metodo()`), sin necesidad de crear ninguna instancia con `new`:
 
 ```java
 double hipotenusa = Math.sqrt(Math.pow(3, 2) + Math.pow(4, 2)); // Métodos estáticos de java.lang.Math
 ```
 
-#### La Gran Restricción de los Métodos Estáticos:
-Puesto que un método estático no se ejecuta en el contexto de ningún objeto en el Heap:
-1. **NO existe la referencia `this`** dentro de un método estático.
-2. **NO puede acceder directamente a atributos o métodos de instancia**. Intentar leer un campo no estático desde un método estático generará el clásico error de compilación: `non-static variable saldo cannot be referenced from a static context`.
+#### La Regla de Oro entre Contexto Estático y Contexto de Instancia:
+Puesto que un método estático se ejecuta a nivel de clase (incluso cuando se han creado 0 objetos en el Heap):
+1. **Dentro de un método `static` NO existe la referencia `this`**.
+2. **Un método `static` NO puede acceder directamente a atributos ni métodos de instancia** (salvo que instancie primero un objeto con `new` o lo reciba por parámetro).
+3. **Un método de instancia SÍ puede acceder libremente tanto a miembros de instancia (`this`) como a miembros `static` de su clase**.
 
 ```java
-public class UtilidadesConversor {
+public class EjemploContextos {
+    private static int variableDeClase = 1;
+    private int variableDeObjeto = 2;
 
-    // Método estático de utilidad pura: depende únicamente de sus parámetros
-    public static double celsiusAFahrenheit(double celsius) {
-        return (celsius * 9.0 / 5.0) + 32.0;
+    public static void metodoDeClase() {
+        variableDeClase = 3;      // ✅ OK: acceso de estático a estático
+        // variableDeObjeto = 2;  // ❌ ERROR DE COMPILACIÓN: ¿de qué objeto si no hay 'this'?
+        // metodoDeObjeto();      // ❌ ERROR DE COMPILACIÓN
+
+        // Solo podemos acceder a miembros de objeto si referenciamos una instancia concreta:
+        EjemploContextos obj = new EjemploContextos();
+        obj.variableDeObjeto = 20; // ✅ OK: indicamos explícitamente el objeto 'obj'
     }
 
-    public static double fahrenheitACelsius(double fahrenheit) {
-        return (fahrenheit - 32.0) * 5.0 / 9.0;
+    public void metodoDeObjeto() {
+        variableDeClase = 10;     // ✅ OK: un objeto conoce a su clase
+        metodoDeClase();          // ✅ OK
+        this.variableDeObjeto = 5;// ✅ OK: acceso al propio objeto actual (this)
     }
 }
 ```
@@ -608,27 +847,62 @@ public class PaletaColores {
 
 ---
 
+### 5.4 Tabla Maestra: Combinaciones de `static` y `final` (Matriz 2×2)
+
+Los modificadores **`static`** y **`final`** responden a dos preguntas completamente distintas pero complementarias:
+- **`static`** responde a **«¿a quién pertenece?»**: sin `static` pertenece a cada objeto individual; con `static` pertenece a la clase y se comparte entre todas las instancias.
+- **`final`** responde a **«¿puede cambiar de valor?»**: sin `final` puede reasignarse; con `final` solo admite una única asignación inicial.
+
+Al cruzar ambos modificadores obtenemos cuatro combinaciones fundamentales en el diseño en Java:
+
+| | **Sin `static`** *(uno por cada objeto)* | **Con `static`** *(uno compartido en la clase)* |
+| :--- | :--- | :--- |
+| **Sin `final`** *(puede cambiar)* | **1. Atributo de instancia normal**<br>`private String nombre;`<br>Cada objeto tiene el suyo y puede cambiar a lo largo de su vida. | **3. Variable de clase compartida**<br>`private static int contador = 0;`<br>Común a todos los objetos y su valor varía durante la ejecución. |
+| **Con `final`** *(no puede cambiar)* | **2. Constante de instancia**<br>`private final String dni;`<br>Se asigna en el constructor de cada objeto y ya no cambia jamás para ese objeto. | **4. Constante global de clase**<br>`public static final double IVA = 0.21;`<br>Valor único, fijo y universal para toda la clase. Se escribe en `MAYUSCULAS`. |
+
+```java
+public class Factura {
+    // 4. Constante de clase (static + final): única e inmutable para todo el programa
+    public static final double IVA_GENERAL = 0.21;
+
+    // 3. Variable de clase (static sin final): compartida pero mutable
+    private static int totalFacturasEmitidas = 0;
+
+    // 2. Constante de instancia (final sin static): distinta en cada factura, pero fija tras nacer
+    private final int numeroFactura;
+
+    // 1. Atributo de instancia normal (sin static ni final): propio de cada objeto y modificable
+    private String concepto;
+
+    public Factura(String concepto) {
+        totalFacturasEmitidas++;
+        this.numeroFactura = totalFacturasEmitidas; // Se asigna una sola vez y queda sellado
+        this.concepto = concepto;
+    }
+}
+```
+
+:::caution[Cuándo NO usar `static`]
+No utilices variables `static` como «atajo» para compartir datos entre métodos sin pasarlos por parámetro. Una variable `static` mutable sin justificación real es, en la práctica, una **variable global encubierta** que rompe el encapsulamiento, acopla las clases entre sí y provoca errores gravísimos difíciles de rastrear. Usa `static` únicamente para **constantes (`public static final`)**, **contadores/registros de clase** o **métodos de utilidad pura** (como `Math.sqrt()`).
+:::
+
+---
+
 ## 6. La Clase Raíz del Universo Java: `java.lang.Object`
 
 En la jerarquía de tipos de Java, **toda clase desciende directa o indirectamente de la clase universal `java.lang.Object`**. Si no especificas la cláusula `extends` al declarar una clase, el compilador añade automáticamente `extends Object`.
 
 Esto garantiza que cualquier objeto en Java herede un conjunto de métodos fundamentales:
 
-```
-                  +--------------------------------+
-                  |       java.lang.Object         |
-                  +--------------------------------+
-                  | + toString(): String           |
-                  | + equals(obj: Object): boolean |
-                  | + hashCode(): int              |
-                  | + getClass(): Class<?>         |
-                  +--------------------------------+
-                                  ▲
-                                  │ (herencia implícita)
-                  +---------------+----------------+
-                  |         CuentaBancaria         |
-                  +--------------------------------+
-```
+| Método en `java.lang.Object` | Propósito | ¿Se puede / debe sobrescribir? |
+| :--- | :--- | :---: |
+| **`String toString()`** | Devuelve la representación textual del objeto. Por defecto devuelve `Clase@hashHex`. | **Sí (Recomendado siempre)** |
+| **`boolean equals(Object obj)`** | Comprueba si dos objetos contienen la misma información semántica. Por defecto evalúa `this == obj`. | **Sí (Según identidad de negocio)** |
+| **`int hashCode()`** | Devuelve el código hash entero del objeto para colecciones (`HashSet`, `HashMap`). | **Sí (Obligatorio si se sobrescribe `equals`)** |
+| **`protected Object clone()`** | Crea y devuelve una copia superficial (*shallow copy*) del objeto (requiere `Cloneable`). | Se puede (se prefiere constructor de copia) |
+| **`final Class<?> getClass()`** | Devuelve el objeto `Class` que representa la clase real en tiempo de ejecución. | **No (`final`)** |
+| **`final void notify() / notifyAll() / wait()`** | Sincronización y coordinación de hilos concurrentes (*threads*). | **No (`final`)** |
+| **`protected void finalize()`** | Invocado históricamente por el GC antes de destruir el objeto. | **Obsoleto / Prohibido desde Java 9+** |
 
 ---
 
@@ -644,21 +918,20 @@ public String toString() { ... }
 ```
 
 :::tip[¿Por qué es indispensable usar @Override?]
-Si cometes una errata al escribir el nombre del método (por ejemplo `public String tostring()`), sin `@Override` el compilador creerá que estás creando un método nuevo ordinario. Con `@Override`, el compilador comprobará si el método existe en la superclase; si no existe, detendrá la compilación informándote del error de inmediato.
+Si cometes una errata al escribir el nombre del método (por ejemplo `public String tostring()` o `public boolean equals(Cliente c)` en vez de `equals(Object obj)`), sin `@Override` el compilador creerá que estás sobrecargando o creando un método nuevo y tu clase no sustituirá el comportamiento heredado de `Object`. Con `@Override`, el compilador verifica la firma exacta y detiene la compilación informándote del error al instante.
 :::
 
 ---
 
 ### 6.2 Sobrescribir `toString()`: Representación Textual Legible
 
-La implementación por defecto de `toString()` en la clase `Object` devuelve una cadena poco informativa con el nombre de la clase y el código hash en hexadecimal:
-
+La implementación por defecto de `toString()` en la clase `Object` es:
 ```java
-System.out.println(miCuenta); 
-// Salida por defecto sin sobrescribir: es.ies.dam.banco.CuentaBancaria@7b4a2f
+public String toString() {
+    return getClass().getName() + "@" + Integer.toHexString(hashCode());
+}
 ```
-
-Sobrescribir `toString()` es una práctica obligatoria para que el objeto muestre una representación clara de su estado, fundamental para depuración y logs:
+Por ello, imprimir un objeto sin `toString()` produce una salida críptica como `es.ies.dam.banco.CuentaBancaria@7b4a2f`. Al sobrescribirlo:
 
 ```java
 @Override
@@ -668,7 +941,7 @@ public String toString() {
 }
 ```
 
-Ahora:
+Ahora, al pasar el objeto a `System.out.println(miCuenta)` o concatenarlo con un `String` (`"Cuenta: " + miCuenta`), Java invoca automáticamente nuestro `toString()`:
 ```java
 System.out.println(miCuenta); 
 // Salida legible: CuentaBancaria[IBAN='ES912100...', Titular='Sofía Morales', Saldo=1450.50€, Bloqueada=false]
@@ -690,10 +963,10 @@ System.out.println(c1.equals(c2)); // Imprime TRUE (si sobrescribimos equals cor
 
 ¿Por qué ocurre esto?
 - **El operador `==`:** Compara **identidad física de referencia** (si ambas variables apuntan a la misma dirección física en el Heap). Como `c1` y `c2` fueron creados con dos sentencias `new` distintas, residen en posiciones de memoria diferentes; por tanto `c1 == c2` es `false`.
-- **El método `equals()`:** Compara **igualdad de contenido o semántica de negocio** (si dos objetos representan la misma entidad real, por ejemplo dos cuentas con el mismo IBAN).
+- **El método `equals()`:** Compara **igualdad de contenido o semántica de negocio** (si dos objetos representan la misma entidad real, por ejemplo dos cuentas con el mismo IBAN o dos cartas con el mismo palo y valor).
 
 #### El Contrato Riguroso de `equals()` en Java
-Según la especificación oficial de la JVM, cualquier implementación de `equals` debe ser:
+Según la especificación oficial de la JVM, cualquier implementación de `equals` debe cumplir cinco propiedades matemáticas:
 1. **Reflexiva:** `x.equals(x)` debe devolver siempre `true`.
 2. **Simétrica:** `x.equals(y)` debe devolver `true` si y solo si `y.equals(x)` devuelve `true`.
 3. **Transitiva:** Si `x.equals(y)` y `y.equals(z)` son `true`, entonces `x.equals(z)` debe ser `true`.
@@ -718,17 +991,17 @@ public class Cliente {
 
     @Override
     public boolean equals(Object obj) {
-        // 1. Comprobación rápida de identidad física
+        // 1. Comprobación rápida de identidad física (¿apuntan a la misma dirección?)
         if (this == obj) {
             return true;
         }
 
-        // 2. Comprobación de tipo y cast seguro mediante Pattern Matching de Java moderno
+        // 2. Comprobación de null, tipo compatible y cast seguro con Pattern Matching
         if (!(obj instanceof Cliente other)) {
-            return false; // Si es null o de una clase incompatible, devuelve false
+            return false;
         }
 
-        // 3. Comparación de los atributos clave que determinan la identidad de negocio
+        // 3. Comparación de los atributos clave (Objects.equals protege frente a posibles nulls)
         return Objects.equals(this.dni, other.dni);
     }
 
@@ -739,17 +1012,22 @@ public class Cliente {
     }
 }
 ```
+*(Nota: Para comparar atributos primitivos dentro de `equals`, se usa `==` para `int`, `long`, `boolean` o `char`, y `Double.compare(this.precio, other.precio) == 0` para `double`).*
 
 ---
 
-### 6.4 El Contrato Indisociable con `hashCode()`
+### 6.4 El Contrato Indisociable con `hashCode()` y la Metáfora de los Cajones
 
-El método `hashCode()` devuelve un número entero de 32 bits utilizado por estructuras de almacenamiento basadas en tablas hash (como `HashSet`, `HashMap` o `Hashtable`, estudiadas en la Unidad 6).
+El método `hashCode()` devuelve un número entero (`int`) que resume el contenido del objeto. Las colecciones basadas en tablas hash (como `HashSet` o `HashMap`, que estudiaremos en la Unidad 6) utilizan este número para organizar los objetos en **"cajones" (*buckets*)** de búsqueda ultrarrápida:
+
+1. Cuando insertas un objeto en un `HashSet`, Java calcula primero su `hashCode()` para decidir en qué cajón guardarlo.
+2. Cuando preguntas si un objeto ya existe (`.contains(obj)`), Java **no recorre toda la colección**: calcula su `hashCode()`, va directamente a ese cajón concreto y **solo dentro de ese cajón** compara los objetos usando `equals()`.
 
 :::danger[La Regla de Oro de equals y hashCode]
-**Si dos objetos son iguales según el método `equals()`, ambos DEBEN devolver obligatoriamente el mismo valor entero en `hashCode()`.**
+- **Si `a.equals(b)` es `true`, entonces `a.hashCode()` y `b.hashCode()` DEBEN devolver obligatoriamente el mismo número entero.**
+- *(El inverso no es obligatorio: dos objetos distintos pueden coincidir por azar en el mismo `hashCode` —colisión de hash—, en cuyo caso `equals()` los desempatará dentro del cajón).*
 
-Si sobrescribes `equals()` pero olvidas sobrescribir `hashCode()`, romperás por completo el funcionamiento interno de las colecciones de Java: al añadir un objeto a un `HashSet`, la colección no será capaz de encontrarlo ni detectará duplicados, causando fallos lógicos gravísimos en producción.
+Si sobrescribes `equals()` pero olvidas sobrescribir `hashCode()`, dos objetos con el mismo DNI tendrán distinto `hashCode` (calculado por defecto según su dirección de memoria), caerán en cajones diferentes y `HashSet` jamás detectará que están duplicados. **Usa siempre exactamente los mismos atributos en `Objects.equals(...)` y en `Objects.hash(...)`.**
 :::
 
 ---
@@ -764,49 +1042,77 @@ En el desarrollo profesional nadie pica a mano el código de `equals()` y `hashC
 4. Marca las casillas de los campos que identifican de forma única a tu entidad (por ejemplo, el `dni` o el `iban`).
 5. Pulsa *Finish*. El IDE generará el código canónico optimizado y libre de errores.
 
-## 7. Diseño Avanzado de Clases y Patrones Esenciales
+---
+
+## 7. Diseño Avanzado de Clases, Clases Especiales y Patrones
 
 El dominio de la orientación a objetos no concluye con la creación de clases ordinarias. La arquitectura de software moderna exige patrones de diseño contrastados y mecanismos para garantizar la inmutabilidad y la claridad semántica.
 
 ---
 
-### 7.1 Clases Inmutables: Robustez y Ausencia de Efectos Colaterales
+### 7.1 Clases Inmutables: El Peligro de las Referencias Mutables y la Copia Defensiva
 
-Un **objeto inmutable** es aquel cuyo estado no puede alterarse en absoluto tras su instanciación. Ejemplos eminentes de clases inmutables en la biblioteca estándar de Java son `java.lang.String`, `java.lang.Integer`, `java.time.LocalDate` y `java.math.BigDecimal`.
+Un **objeto inmutable** es aquel cuyo estado no puede alterarse en absoluto tras su instanciación. Ejemplos eminentes en el JDK son `String`, `Integer`, `LocalDate` y `BigDecimal`.
 
 #### Ventajas Fundamentales de la Inmutabilidad:
-1. **Seguridad frente a hilos (*Thread-Safety*):** Al no poder mutar, múltiples hilos pueden compartir el mismo objeto simultáneamente sin necesidad de sincronización ni bloqueos.
-2. **Ausencia de efectos colaterales:** Un método que reciba un objeto inmutable puede operar con él con la absoluta certeza de que nadie modificará su contenido de forma imprevista.
-3. **Fiabilidad en colecciones:** Son candidatos idóneos para actuar como claves en mapas (`HashMap`) o elementos en conjuntos (`HashSet`), ya que su `hashCode` nunca cambiará.
+1. **Seguridad frente a hilos (*Thread-Safety*):** En aplicaciones multihilo no se necesitan bloques de sincronización (`synchronized`) ni cerrojos, ya que ningún hilo puede corromper un estado de solo lectura.
+2. **Ausencia de efectos colaterales:** Puedes pasar un objeto inmutable a cualquier método con la garantía absoluta de que regresará intacto.
+3. **Fiabilidad en colecciones:** Su `hashCode()` nunca cambia tras insertarse en un `HashSet` o `HashMap`.
 
-#### Reglas para Diseñar una Clase Inmutable en Java Tradicional:
-1. Declarar la clase como **`final`** (para impedir que una subclase herede de ella y sobrecargue o añada mutabilidad).
+#### El Error Clásico: La Implementación "Ingenua" (*Naive*) frente a la Copia Defensiva
+Muchos programadores creen que basta con poner `private final` y quitar los setters para que una clase sea inmutable. Observa qué ocurre cuando la clase contiene un atributo cuyo tipo es un **objeto mutable** (como un array `int[] notas`):
+
+```java
+// ❌ IMPLEMENTACIÓN INGENUA (VULNERABLE): ¡Fuga de referencias!
+public class AlumnoInmutableRotura {
+    private final String nombre;
+    private final int[] notas; // El array en sí es un objeto MUTABLE en el Heap
+
+    public AlumnoInmutableRotura(String nombre, int[] notas) {
+        this.nombre = nombre;
+        this.notas = notas; // ¡PELIGRO 1! Guarda la misma referencia del array externo
+    }
+
+    public int[] getNotas() {
+        return this.notas;  // ¡PELIGRO 2! Devuelve la referencia directa al array interno
+    }
+}
+```
+Si alguien hace `int[] misNotas = {8, 9}; AlumnoInmutableRotura a = new AlumnoInmutableRotura("Ana", misNotas);`, y acto seguido escribe `misNotas[0] = 0;` o `a.getNotas()[1] = 0;`, ¡habrá modificado las notas internas del supuesto objeto inmutable!
+
+#### Las 4 Reglas de Oro para Blindar una Clase Inmutable:
+1. Declarar la clase como **`final`** (`public final class ...`) para impedir que una subclase herede de ella y rompa la inmutabilidad.
 2. Declarar todos los atributos como **`private final`**.
-3. **No proporcionar ningún método mutador (*setter*)**.
-4. Si la clase contiene referencias a objetos mutables (por ejemplo, arrays o colecciones), aplicar **copias defensivas** tanto en el constructor como en los getters:
+3. **No definir ningún método setter** ni métodos que alteren el estado (si se requiere una operación de cambio, debe devolver una **nueva instancia**).
+4. **Realizar copias defensivas (`.clone()` o `Arrays.copyOf()`)** de cualquier objeto mutable tanto al **entrar** por el constructor como al **salir** por un getter:
 
 ```java
 import java.util.Arrays;
 
-public final class SecuenciaPuntosInmutable {
-    private final String etiqueta;
-    private final int[] coordenadas;
+// ✅ IMPLEMENTACIÓN BLINDADA Y VERDADERAMENTE INMUTABLE
+public final class AlumnoInmutable {
+    private final int id;
+    private final String nombre; // String ya es inmutable por naturaleza
+    private final int[] notas;   // Array mutable: exige copia defensiva en entrada y salida
 
-    public SecuenciaPuntosInmutable(String etiqueta, int[] coordenadas) {
-        this.etiqueta = (etiqueta != null) ? etiqueta : "Sin etiqueta";
-        // COPIA DEFENSIVA EN EL CONSTRUCTOR:
-        // Clona el array exterior para que modificaciones posteriores del invocador no afecten al objeto
-        this.coordenadas = (coordenadas != null) ? Arrays.copyOf(coordenadas, coordenadas.length) : new int[0];
+    public AlumnoInmutable(int id, String nombre, int[] notas) {
+        this.id = id;
+        this.nombre = (nombre != null) ? nombre : "Sin nombre";
+        // COPIA DEFENSIVA DE ENTRADA (con .clone() o Arrays.copyOf):
+        this.notas = (notas != null) ? notas.clone() : new int[0];
     }
 
-    public String getEtiqueta() {
-        return this.etiqueta; // String es inmutable por naturaleza
+    public int getId() { return this.id; }
+    public String getNombre() { return this.nombre; }
+
+    public int[] getNotas() {
+        // COPIA DEFENSIVA DE SALIDA: devuelve un clon independiente
+        return this.notas.clone();
     }
 
-    public int[] getCoordenadas() {
-        // COPIA DEFENSIVA EN EL GETTER:
-        // Devuelve un nuevo array clonado; si el exterior muta la copia devuelta, el objeto permanece intacto
-        return Arrays.copyOf(this.coordenadas, this.coordenadas.length);
+    @Override
+    public String toString() {
+        return "AlumnoInmutable[id=" + id + ", nombre='" + nombre + "', notas=" + Arrays.toString(notas) + "]";
     }
 }
 ```
@@ -815,7 +1121,7 @@ public final class SecuenciaPuntosInmutable {
 
 ### 7.2 Los `record` en Java Moderno (Java 16+, 21 LTS y 25 LTS)
 
-En aplicaciones corporativas, una gran parte de las clases son meros **transportadores de datos inmutables** (*Data Carriers* o DTOs - *Data Transfer Objects*). Escribir manualmente constructores, getters, `equals()`, `hashCode()` y `toString()` para 10 atributos genera cientos de líneas de código redundante (*boilerplate*).
+En aplicaciones corporativas, una gran parte de las clases son meros **transportadores de datos inmutables** (*Data Carriers* o DTOs - *Data Transfer Objects*). Escribir manualmente constructores, getters, `equals()`, `hashCode()` y `toString()` genera decenas de líneas de código repetitivo (*boilerplate*).
 
 Para solucionar esto, Java moderno introdujo los **`record`**: una forma concisa y declarativa de definir clases de datos inmutables:
 
@@ -839,7 +1145,7 @@ public record CoordenadaGPS(double latitud, double longitud, String descripcion)
 ```
 
 #### ¿Qué Genera Automáticamente la JVM para un `record`?
-1. Una clase final inmutable que hereda de `java.lang.Record`.
+1. Una clase `final` inmutable que hereda de `java.lang.Record`.
 2. Todos los campos declarados como componentes `private final`.
 3. Un constructor canónico con todos los componentes.
 4. Métodos accesores con el **mismo nombre que el componente, sin prefijo `get`** (por ejemplo: `punto.latitud()`, `punto.longitud()`).
@@ -847,115 +1153,366 @@ public record CoordenadaGPS(double latitud, double longitud, String descripcion)
 
 ---
 
-### 7.3 El Patrón de Diseño Singleton
+### 7.3 El Patrón de Diseño Singleton (Inicialización Temprana vs. Perezosa)
 
-El **Singleton** es un patrón de diseño creacional cuyo objetivo es garantizar que una clase tenga **una única instancia viva en toda la memoria de la JVM**, proporcionando un único punto de acceso global a ella.
+El **Singleton** es un patrón de diseño creacional cuyo objetivo es garantizar que una clase tenga **una única instancia viva en toda la aplicación**, proporcionando un punto de acceso global a ella (por ejemplo, un gestor de configuración, un registro de logs o una caché central).
 
-Se utiliza con frecuencia para representar componentes centralizados: gestores de configuración del sistema, pools de conexiones a bases de datos o servicios de auditoría.
+Se basa siempre en tres pilares:
+1. **Constructor `private`** para impedir que nadie haga `new` desde el exterior.
+2. **Atributo `private static`** del mismo tipo de la clase que guarda la referencia al objeto único.
+3. **Método `public static getInstancia()`** que devuelve siempre ese único objeto.
 
-#### Implementación Clásica Segura:
+Existen tres formas clásicas de implementarlo según cuándo y cómo se crea la instancia:
+
+#### Variante A: Inicialización Perezosa (*Lazy Initialization*)
+El objeto único no se crea al arrancar el programa, sino **solo en el instante en que alguien invoca `getInstancia()` por primera vez**:
+
+```java
+public class Configuracion {
+    // 1. Referencia estática inicialmente nula
+    private static Configuracion instancia;
+    private String idioma;
+
+    // 2. Constructor privado: prohibido hacer 'new Configuracion()' desde fuera
+    private Configuracion() {
+        this.idioma = "es";
+    }
+
+    // 3. Método de acceso global: crea el objeto solo en la primera llamada
+    public static Configuracion getInstancia() {
+        if (instancia == null) {
+            instancia = new Configuracion();
+        }
+        return instancia;
+    }
+
+    public String getIdioma() { return this.idioma; }
+    public void setIdioma(String idioma) { this.idioma = idioma; }
+}
+```
+Comprobación de identidad única:
+```java
+Configuracion c1 = Configuracion.getInstancia();
+Configuracion c2 = Configuracion.getInstancia();
+
+c1.setIdioma("en");
+System.out.println(c2.getIdioma()); // Imprime: "en"
+System.out.println(c1 == c2);       // Imprime: true (son exactamente el mismo objeto en el Heap)
+```
+
+#### Variante B: Inicialización Temprana (*Eager Initialization*) y Seguridad Multihilo
+En aplicaciones con múltiples hilos (*threads*), la inicialización perezosa básica puede fallar si dos hilos entran a la vez en `if (instancia == null)`. Para garantizar seguridad total sin bloqueos:
+- Podemos añadir `synchronized` a la cabecera (`public static synchronized Configuracion getInstancia()`), o bien:
+- Crear la instancia directamente en una constante `private static final` (**Eager Initialization**) o mediante una clase interna estática (*Holder Pattern*), donde la propia JVM garantiza por diseño la creación atómica de una sola instancia:
 
 ```java
 public class ConfiguracionSistema {
-
-    // 1. Instancia estática única y privada (Eager Initialization)
+    // Instancia única creada de forma segura al cargar la clase (Eager Initialization)
     private static final ConfiguracionSistema INSTANCIA = new ConfiguracionSistema();
 
-    // Atributos de configuración
-    private String urlServidor;
-    private int puerto;
+    private String urlServidor = "https://api.empresa.es";
 
-    // 2. CONSTRUCTOR PRIVADO: Nadie desde el exterior puede ejecutar 'new ConfiguracionSistema()'
-    private ConfiguracionSistema() {
-        this.urlServidor = "https://api.empresa.es";
-        this.puerto = 8443;
-    }
+    private ConfiguracionSistema() {}
 
-    // 3. Método estático público de acceso universal
-    public static ConfiguracionSistema getInstance() {
+    public static ConfiguracionSistema getInstancia() {
         return INSTANCIA;
     }
 
-    public String getUrlServidor() {
-        return this.urlServidor;
-    }
-
-    public void setUrlServidor(String urlServidor) {
-        this.urlServidor = urlServidor;
-    }
-
-    public int getPuerto() {
-        return this.puerto;
-    }
+    public String getUrlServidor() { return this.urlServidor; }
 }
-```
-
-**Uso desde cualquier punto de la aplicación:**
-```java
-ConfiguracionSistema config = ConfiguracionSistema.getInstance();
-System.out.println("Conectando a: " + config.getUrlServidor());
 ```
 
 ---
 
-### 7.4 Enumeraciones (`enum`) en Java
+### 7.4 Enumeraciones (`enum`): De las Constantes Simbólicas a Objetos de Pleno Derecho
 
-En otros lenguajes (como C o C++), un `enum` es simplemente un alias numérico entero. En Java, **un `enum` es una clase de pleno derecho** con superclase base `java.lang.Enum`.
+Imagina una empresa de alquiler de vehículos donde alquilar un coche cuesta `100.0 €` y una moto `50.0 €`.
+- Si codificamos los tipos con números enteros (`1` para coche, `2` para moto) o constantes sueltas (`public static final int COCHE = 1;`), cualquier método `getPrecioAlquiler(int tipo)` nos obliga a validar manualmente que nadie pase un `99` o un `-4`.
+- En Java, una **enumeración (`enum`) es una clase completa** donde cada constante declarada es, internamente, una instancia `public static final` de esa clase:
 
-Una enumeración define un conjunto cerrado, exhaustivo y seguro frente a tipos de valores constantes.
-
-#### Enumeración Básica:
 ```java
-public enum DiaSemana {
-    LUNES, MARTES, MIERCOLES, JUEVES, VIERNES, SABADO, DOMINGO
-}
+// Definir enum Vehiculo { COCHE, MOTO } equivale conceptualmente a:
+// class Vehiculo {
+//     public static final Vehiculo COCHE = new Vehiculo();
+//     public static final Vehiculo MOTO  = new Vehiculo();
+// }
 ```
 
-#### Enumeración Rica con Atributos y Métodos:
-Las enumeraciones en Java pueden tener sus propios atributos, constructores privados y lógica de negocio:
+Al ser una clase real, un `enum` puede tener **atributos `private final`, constructores privados y métodos getters o de negocio**:
 
 ```java
-public enum NivelAcceso {
-    INVITADO(1, "Acceso solo de lectura básico"),
-    OPERADOR(2, "Acceso a operaciones estándar y reportes"),
-    ADMINISTRADOR(3, "Acceso total de administración y configuración");
+public enum Vehiculo {
+    // Al declarar cada constante se invoca implícitamente al constructor privado
+    COCHE(100.0, "Turismo de 5 plazas"),
+    MOTO(50.0, "Motocicleta urbana"),
+    FURGONETA(140.0, "Vehículo industrial de carga");
 
-    private final int nivelNumerico;
+    private final double precioDia;
     private final String descripcion;
 
-    // Constructor del enum (siempre es implícita o explícitamente privado)
-    NivelAcceso(int nivelNumerico, String descripcion) {
-        this.nivelNumerico = nivelNumerico;
+    // El constructor de un enum es SIEMPRE privado
+    Vehiculo(double precioDia, String descripcion) {
+        this.precioDia = precioDia;
         this.descripcion = descripcion;
     }
 
-    public int getNivelNumerico() {
-        return this.nivelNumerico;
-    }
+    public double getPrecioDia() { return this.precioDia; }
+    public String getDescripcion() { return this.descripcion; }
+}
+```
 
-    public String getDescripcion() {
-        return this.descripcion;
-    }
+#### Métodos Nativos de todo `enum`:
+- `Vehiculo.values()`: Devuelve un array `Vehiculo[]` con todas las constantes definidas.
+- `Vehiculo.valueOf("COCHE")`: Devuelve la constante `Vehiculo.COCHE` a partir de su texto (o lanza `IllegalArgumentException` si no existe).
+- `v.name()`: Devuelve el nombre exacto de la constante (`"COCHE"`).
+- `v.ordinal()`: Devuelve el índice entero de posición (`0` para `COCHE`, `1` para `MOTO`, `2` para `FURGONETA`).
 
-    public boolean puedeModificarUsuarios() {
-        return this == ADMINISTRADOR;
+---
+
+### 7.5 Anotaciones en Java (`@interface`): Metadatos para el Compilador y Tiempo de Ejecución
+
+Las **anotaciones** son metadatos (como un *post-it* informático prefijado con `@`) que se incrustan sobre clases, métodos, atributos o parámetros. No alteran por sí mismas el flujo de instrucciones, pero proporcionan información vital al compilador, a herramientas de generación de código o al propio programa en tiempo de ejecución (vía *Reflection*).
+
+#### Las 9 Anotaciones Estándar del Lenguaje Java:
+
+1. **Anotaciones para el compilador (`java.lang`):**
+   - **`@Override`**: Verifica en compilación que el método sobrescribe realmente a uno de su superclase o interfaz.
+   - **`@Deprecated`**: Marca un método o clase como obsoleto para desaconsejar su uso (el IDE lo muestra tachado).
+   - **`@SuppressWarnings("...")`**: Indica al compilador que silencie advertencias específicas conocidas.
+   - **`@FunctionalInterface`**: Garantiza que una interfaz tenga exactamente un único método abstracto (para expresiones lambda).
+   - **`@SafeVarargs`**: Suprime advertencias de seguridad en métodos con argumentos variables genéricos (`T...`).
+2. **Meta-anotaciones (`java.lang.annotation` — sirven para configurar nuevas anotaciones):**
+   - **`@Target`**: Define dónde se puede colocar la anotación (`ElementType.TYPE`, `FIELD`, `METHOD`, `PARAMETER`...).
+   - **`@Retention`**: Define hasta qué fase sobrevive la anotación (`SOURCE`, `CLASS` o `RUNTIME` para leerla en ejecución).
+   - **`@Documented`** e **`@Inherited`**: Incluyen la anotación en Javadoc y permiten que las subclases la hereden.
+
+#### Creación y Procesamiento de una Anotación Propia con la API Reflection:
+Cuando trabajes en el futuro con frameworks profesionales como *Spring Boot*, *Hibernate/JPA* o *JUnit*, verás anotaciones como `@Entity`, `@Column` o `@Test`. Así es como funcionan por dentro:
+
+```java
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.reflect.Field;
+
+// 1. Definimos nuestra propia anotación @Imprimible
+@Target({ElementType.FIELD, ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME) // Disponible en tiempo de ejecución para Reflection
+@interface Imprimible {
+    boolean mayusculas() default false;
+}
+
+// 2. Aplicamos la anotación a los atributos de una clase
+class LibroAnotado {
+    @Imprimible(mayusculas = false)
+    String titulo;
+
+    @Imprimible(mayusculas = true)
+    String autor;
+
+    public LibroAnotado(String titulo, String autor) {
+        this.titulo = titulo;
+        this.autor = autor;
+    }
+}
+
+// 3. Procesamos los metadatos dinámicamente usando Reflection
+public class ProcesadorAnotaciones {
+    public static void imprimirCamposAnotados(Object objeto) throws IllegalAccessException {
+        for (Field campo : objeto.getClass().getDeclaredFields()) {
+            Imprimible anotacion = campo.getAnnotation(Imprimible.class);
+            if (anotacion != null) {
+                String valor = String.valueOf(campo.get(objeto));
+                System.out.println(anotacion.mayusculas() ? valor.toUpperCase() : valor);
+            }
+        }
     }
 }
 ```
 
-#### Métodos de Utilidad Nativos de los `enum`:
-- `values()`: Devuelve un array con todas las constantes en el orden en que fueron declaradas (`NivelAcceso.values()`).
-- `valueOf(String nombre)`: Convierte un String en la constante correspondiente (o lanza `IllegalArgumentException` si no existe).
-- `name()`: Devuelve el identificador textual exacto de la constante (`"ADMINISTRADOR"`).
-- `ordinal()`: Devuelve la posición entera indexada en base cero de la constante.
+---
+
+## 8. Expresiones Regulares (`java.util.regex`) y Otras Clases Esenciales de la API de Java
+
+La biblioteca estándar de Java (la **API de Java**) ofrece clases fundamentales ya programadas y optimizadas para resolver problemas cotidianos: validación de patrones de texto, manipulación eficiente de cadenas, cálculo financiero exacto y comunicación con el sistema operativo.
 
 ---
 
-## 8. Organización Modular: Paquetes e Importaciones
+### 8.1 Procesamiento de Texto con Expresiones Regulares (`Pattern` y `Matcher`)
+
+Una **expresión regular (*Regex*)** es una cadena de texto que define un patrón de búsqueda o validación mediante caracteres literales y **metacaracteres** con significado especial.
+
+Aunque `String` incluye métodos rápidos que aceptan expresiones regulares directamente (`texto.matches(regex)`, `texto.split(regex)`, `texto.replaceAll(regex, reemplazo)`), cuando necesitamos máxima eficiencia, búsquedas múltiples o extracción de bloques utilizamos el paquete **`java.util.regex`**:
+- **`Pattern`**: Representa la expresión regular compilada (`Pattern.compile(er)`).
+- **`Matcher`**: Es el motor que aplica el patrón sobre un texto concreto (`patron.matcher(texto)`).
+
+#### Tablas de Referencia Rápida de Expresiones Regulares en Java:
+
+| Categoría | Expresión | Significado y Ejemplo |
+| :--- | :--- | :--- |
+| **Clases de caracteres** | `[abc]` / `[^pqr]` | Cualquiera de las letras `a`, `b` o `c` / Cualquier carácter **excepto** `p`, `q` o `r`. |
+| **Rangos e intersección** | `[a-zA-Z0-9]` / `[a-z&&[^bc]]` | Letras o dígitos / De la `a` a la `z` excluyendo `b` y `c`. |
+| **Metacaracteres** | `.` / `\d` / `\D` | Cualquier carácter / Un dígito `[0-9]` / Un no-dígito `[^0-9]`. |
+| **Espacios y palabras** | `\s` / `\S` / `\w` / `\W` | Espacio en blanco / No-espacio / Carácter alfanumérico `[a-zA-Z_0-9]` / No-alfanumérico. |
+| **Posición (Anclas)** | `^` / `$` / `\b` | Inicio de línea / Final de línea / Límite de palabra completa. |
+| **Cuantificadores** | `?` / `*` / `+` | 0 o 1 vez / 0 o más veces / **1 o más veces**. |
+| **Repetición exacta** | `{n}` / `{n,}` / `{n,m}` | Exactamente `n` veces / Al menos `n` veces / Entre `n` y `m` veces. |
+| **Agrupación y lógica** | `( ... )` / `A\|B` | Define un grupo de captura y aplica cuantificadores al bloque / Alternativa OR (`A` o `B`). |
+
+:::warning[El Doble Escape `\\` en los `String` de Java]
+En un literal `String` de Java, la barra invertida `\` es ya un carácter de escape (como `\n` o `\t`). Por tanto, para escribir el metacarácter `\d` (dígito) o `\.` (punto literal) dentro de un `String` en Java, **debes duplicar siempre la barra invertida**:
+- `"\\d{8}[A-HJ-NP-TV-Z]"` → Patrón de un DNI español (8 dígitos seguidos de letra).
+- `"^\\d{5}$"` → Patrón de un código postal de exactamente 5 dígitos.
+:::
+
+#### Métodos Clave de `Matcher` y Flags de `Pattern`:
+- **`matcher.matches()`**: Devuelve `true` solo si **toda la cadena completa** de principio a fin encaja con el patrón.
+- **`matcher.lookingAt()`**: Devuelve `true` si el comienzo de la cadena encaja con el patrón.
+- **`matcher.find()`**: Busca la **siguiente subcadena** que encaje dentro del texto (ideal con un bucle `while (matcher.find())`), pudiendo consultar dónde empieza con `matcher.start()`, dónde acaba con `matcher.end()` y el texto hallado con `matcher.group()`.
+- **Flags de compilación (`Pattern.compile(regex, flags)`)**: `Pattern.CASE_INSENSITIVE` (ignora mayúsculas/minúsculas), `Pattern.MULTILINE` (`^` y `$` aplican a cada línea), `Pattern.DOTALL` (el punto `.` incluye saltos de línea), `Pattern.COMMENTS` (permite comentarios `#`) y `Pattern.CANON_EQ` (equivalencia canónica Unicode).
+
+#### Uso de Grupos de Captura (`group(i)` y referencias `$1`, `$2`)
+Al rodear partes de la expresión regular con paréntesis `(...)`, creamos **grupos de captura** numerados de izquierda a derecha desde `1` (`group(0)` devuelve siempre la coincidencia completa):
+
+```java
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class TransformadorFechasRegex {
+    public static void main(String[] args) {
+        String texto = "El límite es 11-18-2025 y el inicio fue 01-05-2025.";
+
+        // Grupo 1: (\d{2}) Mes | Grupo 2: (\d{2}) Día | Grupo 3: (\d{4}) Año
+        Pattern patron = Pattern.compile("(\\d{2})-(\\d{2})-(\\d{4})");
+        Matcher matcher = patron.matcher(texto);
+
+        // 1. Extracción iterativa de cada grupo con while(matcher.find())
+        while (matcher.find()) {
+            String fechaCompleta = matcher.group(0);
+            String mes  = matcher.group(1);
+            String dia  = matcher.group(2);
+            String anio = matcher.group(3);
+            System.out.printf("Detectada '%s' -> Año: %s, Mes: %s, Día: %s%n",
+                    fechaCompleta, anio, mes, dia);
+        }
+
+        // 2. Sustitución masiva usando referencias a grupos ($3 = Año, $1 = Mes, $2 = Día)
+        matcher.reset();
+        String textoConvertido = matcher.replaceAll("$3/$1/$2");
+        System.out.println("Texto reformateado: " + textoConvertido);
+        // Imprime: El límite es 2025/11/18 y el inicio fue 2025/01/05.
+    }
+}
+```
+
+También resulta sumamente útil para **anonimizar datos sensibles** (ej. `texto.replaceAll("\\b\\d{9}\\b", "[TELÉFONO OCULTO]")`) o **sanear entradas frente a ataques XSS** eliminando etiquetas HTML (`entrada.replaceAll("<[^>]*>", "")`).
+
+---
+
+### 8.2 Cadenas Mutables de Alto Rendimiento: `StringBuilder` y `StringBuffer`
+
+Como sabemos, `String` es inmutable: cada vez que concatenas texto dentro de un bucle (`str = str + caracter;`), la JVM se ve obligada a reservar un nuevo objeto `String`, copiar todos los caracteres anteriores y desechar el objeto viejo al Garbage Collector. Si el bucle da 50.000 vueltas, el rendimiento se desploma.
+
+Para modificar texto intensivamente existen **`StringBuilder`** (más rápido, para un solo hilo) y **`StringBuffer`** (sincronizado y *thread-safe* para múltiples hilos). Ambos gestionan una secuencia **mutable** de caracteres que crece dinámicamente sin copiar objetos innecesariamente:
+
+```java
+StringBuilder sb = new StringBuilder("Hola");
+sb.append(" Mundo");          // Añade al final -> "Hola Mundo"
+sb.insert(5, "Java ");        // Inserta en índice 5 -> "Hola Java Mundo"
+sb.replace(5, 9, "DAM");      // Reemplaza rango [5, 9) -> "Hola DAM Mundo"
+sb.delete(4, 8);              // Elimina rango [4, 8) -> "Hola Mundo"
+sb.deleteCharAt(4);           // Borra carácter en índice 4 -> "HolaMundo"
+sb.setCharAt(0, 'h');         // Cambia un carácter -> "holaMundo"
+sb.reverse();                 // Invierte la cadena -> "odnuMaloh"
+
+String resultadoFinal = sb.toString(); // Convierte a String inmutable al terminar
+```
+
+---
+
+### 8.3 Precisión Decimal Financiera Exacta: `java.math.BigDecimal`
+
+Si ejecutas en Java la siguiente suma con el tipo primitivo `double`:
+
+```java
+double centimo = 0.01;
+double suma = centimo + centimo + centimo + centimo + centimo + centimo;
+System.out.println(suma); // ¡Imprime 0.060000000000000005 en lugar de 0.06!
+```
+
+¿Por qué ocurre esto? Porque las CPUs trabajan en **sistema binario (base 2)** siguiendo el estándar IEEE 754. Al igual que en base 10 la fracción `1/3` tiene infinitos decimales periódicos (`0.333333...`), en binario la fracción `1/100` (`0.01`) es periódica infinita (`0.000000101000111101...`) y al truncarse en 64 bits introduce microerrores de redondeo.
+
+En **aplicaciones bancarias, contables o de facturación está prohibido usar `double` o `float` para dinero**. En su lugar se utiliza la clase inmutable **`java.math.BigDecimal`**, que opera en **base 10 exacta**:
+
+```java
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+public class CalculoFinancieroExacto {
+    public static void main(String[] args) {
+        // IMPORTANTE: Inicializar siempre con String o BigDecimal.valueOf()
+        BigDecimal centimo = new BigDecimal("0.01");
+        BigDecimal seisCentimos = centimo.multiply(BigDecimal.valueOf(6));
+        System.out.println("Total exacto: " + seisCentimos); // Imprime exactamente: 0.06
+
+        BigDecimal baseImponible = new BigDecimal("125.50");
+        BigDecimal iva = new BigDecimal("0.21");
+        BigDecimal cuotaIva = baseImponible.multiply(iva).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal totalFactura = baseImponible.add(cuotaIva);
+
+        System.out.println("Base: " + baseImponible + "€ | IVA: " + cuotaIva + "€ | Total: " + totalFactura + "€");
+    }
+}
+```
+*(Sus métodos principales —que siempre devuelven un nuevo `BigDecimal` por ser inmutable— son: `add()`, `subtract()`, `multiply()`, `divide(divisor, escala, RoundingMode)`, `pow()` y `negate()`).*
+
+---
+
+### 8.4 `Random`, `java.awt.Color` y Ejecución de Procesos (`Runtime` vs. `ProcessBuilder`)
+
+1. **`java.util.Random`:** Mucho más versátil y estadísticamente robusto que `Math.random()`. Permite generar enteros en un rango `[0, N-1]` con `gn.nextInt(N)`, booleanos con `nextBoolean()` o distribuciones normales con `nextGaussian()`:
+   ```java
+   java.util.Random gn = new java.util.Random();
+   int tiradaDado = gn.nextInt(6) + 1; // Entero aleatorio entre 1 y 6
+   ```
+2. **`java.awt.Color`:** Clase inmutable que representa colores en el espacio RGB/RGBA. Ofrece constantes predefinidas (`Color.RED`, `Color.BLUE`) y constructores por componentes entre `0` y `255` (`new Color(r, g, b)`, `new Color(r, g, b, opacidad)` o hexadecimal `new Color(0x2D8A4E)`).
+3. **`Runtime` vs. `ProcessBuilder` (Interacción con el Sistema Operativo):**  
+   Ambas clases permiten lanzar programas externos del sistema operativo desde Java, pero presentan diferencias críticas de seguridad y diseño:
+
+| Característica | `Runtime.getRuntime().exec(...)` | `java.lang.ProcessBuilder` (Recomendado) |
+| :--- | :--- | :--- |
+| **Introducción** | JDK 1.0 (Legado histórico) | JDK 5.0+ (API moderna y segura) |
+| **Paso de argumentos y Seguridad** | Si recibe un único `String`, lo evalúa en la shell del SO, siendo **vulnerable a inyección de comandos** (`&`, `;`, `\|`). | Recibe siempre una lista o array separado (`new ProcessBuilder("cmd", "arg1")`), evitando la inyección de comandos. |
+| **Directorio y Entorno** | Hereda rígidamente los de la JVM actual. | Permite configurar directorio de trabajo (`.directory(...)`) y variables de entorno (`.environment()`). |
+| **Redirección de E/S** | Manejo manual verboso de flujos (`InputStream`). | Simplificado con `.redirectOutput(...)` y **`.inheritIO()`** (conecta directamente la consola del proceso hijo con la de Java). |
+
+```java
+import java.io.IOException;
+
+public class LanzadorProcesos {
+    public static void main(String[] args) {
+        // Ejemplo seguro con ProcessBuilder: ejecuta 'java -version' heredando la consola
+        ProcessBuilder pb = new ProcessBuilder("java", "-version");
+        pb.inheritIO();
+        try {
+            Process proceso = pb.start();
+            int codigoSalida = proceso.waitFor(); // Espera a que termine el proceso externo
+            System.out.println("Proceso finalizado con código: " + codigoSalida);
+        } catch (IOException | InterruptedException e) {
+            System.err.println("Error al ejecutar el proceso: " + e.getMessage());
+        }
+    }
+}
+```
+
+---
+
+## 9. Organización Modular: Paquetes e Importaciones
 
 A medida que una aplicación crece y cuenta con decenas o cientos de clases, es indispensable organizarlas en carpetas lógicas para evitar el caos y prevenir colisiones de nombres.
 
-### 8.1 Concepto de Paquete (`package`)
+### 9.1 Concepto de Paquete (`package`)
 
 Un **paquete** en Java cumple una doble función:
 1. **Espacio de nombres (*Namespace*):** Permite que existan dos clases con el mismo nombre siempre que pertenezcan a paquetes diferentes (por ejemplo, `java.util.Date` frente a `java.sql.Date`).
@@ -971,7 +1528,7 @@ Físicamente en el disco duro, este fichero debe residir en la ruta:
 
 ---
 
-### 8.2 Sentencias `import` e Importaciones Estáticas
+### 9.2 Sentencias `import` e Importaciones Estáticas
 
 Para utilizar una clase situada en otro paquete, debemos indicárselo al compilador mediante la instrucción **`import`**:
 
@@ -999,7 +1556,7 @@ Todas las clases del paquete fundamental **`java.lang`** (como `String`, `Math`,
 
 ---
 
-## 9. ⭐ Be the Code: Desafíos de Traza y Memoria
+## 10. ⭐ Be the Code: Desafíos de Traza y Memoria
 
 Un programador que domina la POO debe visualizar instantáneamente qué ocurre en la memoria Stack y Heap ante cada sentencia. Resuelve mentalmente los siguientes tres retos.
 
@@ -1045,7 +1602,7 @@ public class RetoPOO1 {
 2. Al invocar `alterar(a, b)`:
    - `m1` recibe una copia de la referencia que apunta al objeto `a`. `m1.texto = "Modificado"` muta el atributo del objeto compartido. Por tanto, `a.texto` ahora vale `"Modificado"`.
    - `m2` recibe una copia de la referencia que apunta al objeto `b`. La sentencia `m2 = new Mensaje("Nuevo")` reasigna la variable local `m2` a un nuevo objeto. Esta reasignación no tiene ningún efecto sobre la referencia original `b` en el `main`. Por tanto, `b.texto` sigue siendo `"Original B"`.
-3. `a == c`: Ambas variables almacenan la misma dirección física en el Heap -> `true`.
+3. `a == c`: Ambas variables almacenan la misma dirección física en el Heap → `true`.
 4. `a.equals(c)`: Como `Mensaje` no sobrescribe `equals()`, hereda la implementación por defecto de `Object` (que evalúa `this == obj`), por lo que también es `true`.
 
 **Salida Final:**
@@ -1155,12 +1712,12 @@ public class RetoPOO3 {
 ```text
 [9999, 0]
 ```
-*(Para subsanar este grave fallo, la clase debería usar `Arrays.copyOf()` tanto en el constructor como en el getter)*.
+*(Para subsanar este grave fallo, la clase debería usar `.clone()` o `Arrays.copyOf()` tanto en el constructor como en el getter)*.
 </details>
 
 ---
 
-## 10. ¡No Hay Preguntas Tontas!
+## 11. ¡No Hay Preguntas Tontas!
 
 ---
 
@@ -1205,7 +1762,7 @@ Porque el propósito de un `enum` es definir un conjunto exhaustivo y cerrado de
 
 ---
 
-## 11. Resumen de la Unidad y Conexión con la Unidad 5
+## 12. Resumen de la Unidad y Conexión con la Unidad 5
 
 En esta Unidad 4 hemos dado el paso decisivo hacia la ingeniería del software orientada a objetos:
 
@@ -1229,7 +1786,7 @@ Ahora que sabemos crear clases robustas y encapsuladas, en la **Unidad 5: Progra
 
 ---
 
-## 12. Relación Curricular Oficial
+## 13. Relación Curricular Oficial
 
 Esta unidad cubre exhaustivamente los contenidos y criterios de evaluación prescritos en el currículo oficial del ciclo formativo **CFGS Desarrollo de Aplicaciones Multiplataforma (DAM)** para el módulo **0485: Programación**:
 
@@ -1238,20 +1795,21 @@ Esta unidad cubre exhaustivamente los contenidos y criterios de evaluación pres
 - **RA2. Escribe y depura código, analizando y utilizando las estructuras de control del lenguaje.**
   - *CE a, b, c, d, e, f, g, h, i, j:* Fundamentos de POO, instanciación en el Heap, invocación de métodos y propiedades, uso de miembros `static`, constructores y depuración con IntelliJ IDEA.
 - **RA3. Escribe y optimiza código estructurado aplicando los principios de la programación modular.**
-  - *CE a, b, c, d:* Modularización en clases, paso de parámetros de objetos por valor en el Heap y sobrecarga de constructores y métodos.
+  - *CE a, b, c, d:* Modularización en clases, paso de parámetros de objetos por valor en el Heap, sobrecarga de constructores y métodos, y recursividad.
 - **RA4. Desarrolla programas organizados en clases analizando y aplicando los principios de la programación orientada a objetos.**
   - *CE a, b, c, d, f:* Sintaxis y estructura de clases, definición de atributos y métodos, creación de constructores canónicos y sobrecargados, control de visibilidad (`private`, `public`, `protected`, package-private) e instanciación de objetos en aplicaciones integradas.
 
 ---
 
-## 13. Boletines de Ejercicios y Retos Prácticos
+## 14. Boletines de Ejercicios y Retos Prácticos
 
-Para afianzar y llevar a la práctica las habilidades de diseño y codificación orientadas a objetos, dispones de una batería completa de 5 boletines:
+Para afianzar y llevar a la práctica las habilidades de diseño y codificación orientadas a objetos, dispones de una batería completa y unificada de 5 boletines:
 
 | Recurso | Nivel / Enfoque | Descripción |
 | :--- | :--- | :--- |
-| [📝 **Boletín 04: Nivel Inicial**](./boletin-04-inicial) | Básico / Consolidación | 12 ejercicios guiados para asentar la creación de clases, atributos privados, constructores y getters/setters. |
-| [✅ **Boletín 04: Inicial Resuelto**](./boletin-04-inicial-resuelto) | Soluciones Comentadas | Soluciones completas con código Java 25 LTS, validaciones y comentarios pedagógicos. |
-| [🚀 **Boletín 04: Nivel Intermedio**](./boletin-04-intermedio) | Intermedio / Aplicado | 12 ejercicios de composición, sobrecarga, `equals`/`hashCode`, `static`, records inmutables, enums y singleton. |
-| [✅ **Boletín 04: Intermedio Resuelto**](./boletin-04-intermedio-resuelto) | Soluciones Comentadas | Soluciones completas con buenas prácticas de arquitectura y diseño orientado a objetos. |
-| [🏆 **Boletín 04: Retos Orientados a Objetos (Extras)**](./boletin-04-extras) | Avanzado / Arquitectura | 6 retos de alta exigencia: simulación de cuenta corriente, inventario transaccional, baraja con enums, matriz de objetos y máquina expendedora. |
+| [📝 **Boletín 04: Nivel Inicial**](./boletin-04-inicial) | Básico / Consolidación | 16 ejercicios progresivos: creación de clases (`Libro`, `Rectangulo`, `Punto2D`, `Empleado`), atributos `private` vs `public`, referencias compartidas, `this(...)`, `static` y sobrecarga. |
+| [✅ **Boletín 04: Inicial Resuelto**](./boletin-04-inicial-resuelto) | Soluciones Comentadas | Soluciones íntegras y razonadas con código Java 25 LTS, trazas de memoria y validaciones. |
+| [🚀 **Boletín 04: Nivel Intermedio**](./boletin-04-intermedio) | Intermedio / Aplicado | 16 ejercicios de arquitectura POO: `toString`/`equals`/`hashCode`, clases inmutables (`Coordenada`, `AlumnoInmutable`), `record`, Singleton (`ContadorGlobal`, `GestorConfiguracion`), `Racional`, arrays de objetos (`Circulo`), `StringBuilder` y Regex. |
+| [✅ **Boletín 04: Intermedio Resuelto**](./boletin-04-intermedio-resuelto) | Soluciones Comentadas | Soluciones completas con demostración de contratos de igualdad, copias defensivas y patrones de diseño. |
+| [🏆 **Boletín 04: Retos Orientados a Objetos (Extras)**](./boletin-04-extras) | Avanzado / Arquitectura | 8 grandes retos: `Fraccion` con MCD recursivo, `Mazo` de 40 cartas con Fisher-Yates, `ConjuntoEnteros` con varargs, clínica dietista con ficheros, máquina expendedora y referencias a CodeWars y Acepta el Reto. |
+

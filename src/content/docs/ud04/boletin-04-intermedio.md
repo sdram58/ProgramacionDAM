@@ -13,22 +13,23 @@ sidebar:
 
 Bienvenido al boletín de nivel intermedio de la **Unidad 4: Clases y objetos**.
 
-Este bloque de 12 ejercicios está diseñado para profundizar en la arquitectura y buenas prácticas del paradigma orientado a objetos: diseño de clases compuestas, implementación rigurosa de los contratos de `java.lang.Object`, clases inmutables con copias defensivas, los modernos `record`, enumeraciones complejas con comportamiento, el patrón de diseño Singleton y métodos de factoría estática.
+Este bloque de 16 ejercicios está diseñado para profundizar en la arquitectura y buenas prácticas del paradigma orientado a objetos: diseño de clases compuestas, implementación rigurosa de los contratos de `java.lang.Object` (`toString`, `equals`, `hashCode`), clases inmutables con copias defensivas, los modernos `record`, enumeraciones complejas con comportamiento, el patrón de diseño Singleton, procesamiento con `StringBuilder` y expresiones regulares.
 
 :::tip[Enfoque Arquitectural]
-Presta especial atención a la protección de datos: evita las fugas de encapsulamiento mediante copias defensivas y asegura que cualquier clase que sobrescriba `equals()` sobrescriba de forma coordinada `hashCode()`.
+Presta especial atención a la protección de datos: evita las fugas de encapsulamiento mediante copias defensivas (`.clone()` / `Arrays.copyOf()`) y asegura que cualquier clase que sobrescriba `equals()` sobrescriba de forma coordinada `hashCode()`.
 :::
 
 ---
 
-### Ejercicio 1: Sobrescritura Canónica de `equals()`, `hashCode()` y `toString()`
+### Ejercicio 1: Sobrescritura Canónica de `toString()`, `equals()` y `hashCode()` en `Libro`
 **Enunciado:**  
-Toma como base la clase `Libro` del boletín anterior, añadiendo un nuevo atributo inmutable `private final String isbn` (código identificativo único del libro).  
-- Dos libros deben considerarse idénticos según `equals()` si y solo si poseen el mismo `isbn` (independientemente de si sus páginas o títulos difieren).  
-- Implementa `equals(Object obj)` utilizando el operador `instanceof` con Pattern Matching de Java moderno.  
-- Sobrescribe `hashCode()` de forma coherente utilizando `Objects.hash(this.isbn)`.  
-- Sobrescribe `toString()` para mostrar un formato claro: `"Libro[ISBN='...', Título='...', Autor='...', Páginas=...]"`.  
-- Realiza una clase de prueba verificando el contrato de simetría y reflexividad.
+Toma como base la clase `Libro` (`titulo`, `autor`, `paginas`):  
+- Sobrescribe `toString()` con `@Override` para que devuelva el formato `"Ficciones, de Borges (200 páginas)"`. Prueba a pasar directamente un objeto `Libro` a `System.out.println(libro)`.  
+- Sobrescribe `equals(Object o)` y `hashCode()` de forma que dos objetos `Libro` se consideren iguales si tienen exactamente el mismo `titulo` y el mismo `autor` (aunque tengan diferente número de páginas).  
+- En `main`, prueba explícitamente estos **tres casos obligatorios**:  
+  1. Dos objetos distintos con igual título y autor pero distintas páginas → `equals()` debe devolver `true`.  
+  2. Dos objetos con distinto título → `equals()` debe devolver `false`.  
+  3. Un objeto comparado consigo mismo (`a.equals(a)`) → debe devolver `true` (propiedad reflexiva).
 
 ---
 
@@ -38,48 +39,40 @@ La composición (*"un objeto tiene otro objeto"*) es una de las relaciones más 
 - Crea la clase `Motor` con: `tipoCombustible` (String: Gasolina, Diésel, Eléctrico), `potenciaCv` (int) y `encendido` (boolean). Incluye métodos para encender, apagar y consultar estado.  
 - Crea la clase `Vehiculo` que contenga: `matricula` (String), `marca` (String) y un atributo de tipo objeto `Motor`.  
 - El constructor de `Vehiculo` debe instanciar o recibir su `Motor`.  
-- Proporciona métodos en `Vehiculo` para arrancar, acelerar y consultar la información completa delegando en su motor interno.
+- Proporciona métodos en `Vehiculo` para arrancar, detener y consultar la información completa delegando en su motor interno.
 
 ---
 
-### Ejercicio 3: La Clase Inmutable `Fraccion`
+### Ejercicio 3: La Clase `Racional` / `Fraccion` Inmutable con Simplificación MCD
 **Enunciado:**  
-Diseña una clase completamente inmutable llamada `Fraccion` para operar con números racionales exactos:  
-- Atributos `private final int numerador` y `private final int denominador`.  
-- El constructor debe rechazar denominadores iguales a cero (`IllegalArgumentException`). Si el denominador es negativo, debe normalizar el signo pasando el negativo al numerador.  
-- Debe simplificar automáticamente la fracción en el constructor dividiendo numerador y denominador por su Máximo Común Divisor (MCD) mediante el algoritmo de Euclides.  
-- Métodos aritméticos: `sumar(Fraccion otra)`, `restar(Fraccion otra)`, `multiplicar(Fraccion otra)` y `dividir(Fraccion otra)`.  
-- Cada operación aritmética debe devolver una **nueva instancia inmutable** de `Fraccion`.
+Diseña una clase inmutable llamada `Fraccion` (o `Racional`) definida por dos enteros `numerador` y `denominador` (distinto de cero):  
+- Incluye un constructor por defecto que genere el racional `1/1`, y un constructor parametrizado que lance `IllegalArgumentException` si `denominador == 0`, normalizando el signo y simplificando la fracción automáticamente mediante el **Máximo Común Divisor (algoritmo de Euclides)**.  
+- Implementa métodos de instancia `sumar(Fraccion otra)`, `restar(Fraccion otra)`, `multiplicar(Fraccion otra)` y `dividir(Fraccion otra)` que devuelvan siempre una **nueva instancia**, además de un método estático `Fraccion.sumar(Fraccion r1, Fraccion r2)`.  
+- Sobrescribe `toString()` (`"n/d"`) y `equals()` / `hashCode()`.
 
 ---
 
-### Ejercicio 4: Transportador Inmutable con `record CoordenadaGPS`
+### Ejercicio 4: Clase Inmutable Clásica `Coordenada` y `record CoordenadaGPS`
 **Enunciado:**  
-Utilizando la característica de Java moderno, declara un `record` llamado `CoordenadaGPS` con componentes `double latitud` y `double longitud`:  
-- Añade un constructor compacto que valide que la latitud se encuentre en `[-90.0, 90.0]` y la longitud en `[-180.0, 180.0]`.  
-- Implementa un método de instancia `public double distanciaKm(CoordenadaGPS destino)` que calcule la distancia geodésica aproximada entre dos puntos utilizando la fórmula simplificada del semiverseno (Haversine).  
-- Demuestra que el `record` genera automáticamente métodos accesores (`latitud()`, `longitud()`), `toString()` legible y comparación por valor en `equals()`.
+Practica las dos formas de crear tipos inmutables de coordenadas en Java:  
+1. **Enfoque tradicional:** Crea una clase `public final class Coordenada` con atributos `private final double x` e `y`, sin setters, con getters y un método `public double distanciaA(Coordenada otra)` que calcule la distancia euclídea: `Math.sqrt(Math.pow(otra.x - this.x, 2) + Math.pow(otra.y - this.y, 2))`.  
+2. **Enfoque Java moderno:** Declara un `record CoordenadaGPS(double latitud, double longitud)` con constructor compacto que valide los rangos `[-90, 90]` y `[-180, 180]` y un método `distanciaKm(CoordenadaGPS destino)` mediante la fórmula de Haversine.
 
 ---
 
-### Ejercicio 5: El Patrón Singleton (`GestorConfiguracion`)
+### Ejercicio 5: El Patrón Singleton (`ContadorGlobal` y `GestorConfiguracion`)
 **Enunciado:**  
-Implementa el patrón de diseño Singleton para centralizar la configuración de una aplicación:  
-- La clase `GestorConfiguracion` debe tener un constructor estrictamente `private`.  
-- Debe contener una instancia estática única privada y un método estático público `public static GestorConfiguracion getInstance()`.  
-- Debe gestionar internamente un mapa asociativo o matriz de propiedades clave-valor (`String clave`, `String valor`).  
-- Métodos: `setPropiedad(String clave, String valor)` y `getPropiedad(String clave, String valorPorDefecto)`.  
-- Demuestra en el `main` que dos variables que invoquen `getInstance()` hacen referencia exactamente al mismo objeto en el Heap (`ref1 == ref2` es `true`).
+Implementa el patrón de diseño Singleton en dos variantes:  
+1. **Inicialización perezosa (*Lazy*):** Crea la clase `ContadorGlobal` con constructor `private`, instancia estática única y métodos `getInstancia()`, `incrementar()` y `getValor()`. Comprueba en `main` que incrementarlo desde dos referencias distintas (`c1` y `c2`) afecta al mismo contador y que `c1 == c2` es `true`.  
+2. **Inicialización temprana (*Eager*):** Crea la clase `GestorConfiguracion` que centralice un mapa de propiedades clave-valor (`setPropiedad`, `getPropiedad`).
 
 ---
 
-### Ejercicio 6: La Clase `Mochila` y Copias Defensivas
+### Ejercicio 6: La Clase `Mochila` y Copias Defensivas (`.clone()` y `Arrays.copyOf()`)
 **Enunciado:**  
-Diseña una clase `Mochila` con una capacidad máxima fija de objetos (`maxElementos`) y un array interno `String[] contenido`:  
-- El constructor recibe un array `String[] itemsIniciales`. Para evitar que el invocador modifique el contenido de la mochila desde fuera, realiza una **copia defensiva** con `Arrays.copyOf()`.  
-- El getter `public String[] getContenido()` debe devolver un clon del array interno, jamás la referencia directa.  
-- Añade métodos `guardar(String item)` y `contiene(String item)`.  
-- En un programa de prueba, demuestra que modificar el array exterior antes o después no altera el estado interno de la mochila.
+Diseña una clase `Mochila` que almacene un array `private String[] objetos`:  
+- Tanto en el constructor al recibir el array como en el getter `getObjetos()`, realiza una **copia defensiva** usando `.clone()` o `Arrays.copyOf()` para que nadie pueda alterar el array interno desde fuera.  
+- En `main`, crea un array `String[] equipo = {"Linterna", "Cantimplora"}`, pásalo al constructor de `Mochila`, modifica después `equipo[0] = "ROTO"` y altera también el array devuelto por `getObjetos()[1] = "VACÍO"`. Imprime el contenido real de la mochila para demostrar que sigue intacto.
 
 ---
 
@@ -94,12 +87,12 @@ Modela una enumeración para un sistema de logging profesional llamada `NivelSev
 
 ---
 
-### Ejercicio 8: Cuenta Bancaria con Historial de Transacciones
+### Ejercicio 8: `CuentaBancaria` con Validación de Excepciones e Historial
 **Enunciado:**  
-Amplía la clase `CuentaBancaria`:  
-- Cada vez que se realice un ingreso o una retirada con éxito, debe registrarse un objeto inmutable de tipo `Transaccion` (con `fechaHora`, `tipo` [INGRESO/RETIRADA], `importe` y `saldoPosterior`).  
-- La cuenta mantiene un array con las últimas 10 transacciones realizadas.  
-- Método `public Transaccion[] getUltimosMovimientos()` que devuelva una copia del historial registrado.
+Crea una clase `CuentaBancaria` con `iban`, `titular`, `saldo` y un registro de las últimas 10 transacciones (`record Transaccion`):  
+- `ingresar(double cantidad)`: lanza `IllegalArgumentException` si `cantidad <= 0`.  
+- `retirar(double cantidad)`: lanza `IllegalArgumentException` con un mensaje descriptivo si `cantidad <= 0` o si `cantidad > saldo` (`"Saldo insuficiente"`).  
+- En `main`, envuelve las operaciones en un bloque `try-catch (IllegalArgumentException e)` intentando retirar más dinero del disponible y muestra el historial de movimientos.
 
 ---
 
@@ -149,6 +142,39 @@ Crea una clase `ColorRGB`:
 
 ---
 
+### Ejercicio 13: Array de Objetos `Circulo` y Búsqueda del Mayor Área (`mayorArea`)
+**Enunciado:**  
+Crea la clase `Circulo` con atributo `private double radio`, constructor, getter, `calcularArea()` y `toString()`.  
+- En `Main`, declara e inicializa un array de 5 objetos `Circulo` con radios distintos (`2.5`, `7.1`, `1.0`, `9.4`, `4.2`).  
+- Escribe un método estático `public static Circulo mayorArea(Circulo[] circulos)` que recorra el array y devuelva el objeto `Circulo` con mayor área (controlando que el array no sea nulo ni vacío).  
+- Muestra el círculo ganador y su área por consola.
+
+---
+
+### Ejercicio 14: El Contrato `equals()` / `hashCode()`, la Metáfora de los Cajones y `Punto2D`
+**Enunciado:**  
+1. **Razonamiento y demostración práctica:** ¿Por qué siempre que se sobrescribe `equals()` es obligatorio sobrescribir también `hashCode()`? ¿Qué ocurre exactamente con los "cajones" (*buckets*) cuando guardas dos objetos iguales según `equals()` en un `HashSet` si olvidaste sobrescribir `hashCode()`? Demuéstralo con código.  
+2. **Aplicación en `Punto2D`:** Añade a la clase `Punto2D(x, y)` el método `public Punto2D suma(Punto2D otro)`, sobrescribe `toString()` para que devuelva `"(x, y)"`, y sobrescribe `equals(Object obj)` y `hashCode()` anotados con `@Override` para que se pueda imprimir directamente `System.out.println(p1 + " + " + p2 + " = " + p3)` y comparar puntos por valor.
+
+---
+
+### Ejercicio 15: De Clase Mutable `Alumno` a `AlumnoInmutable`
+**Enunciado:**  
+1. Crea la clase `Alumno` con encapsulamiento: `int nia`, `String nombre` y `double[] notas`. Incluye un constructor con todos los datos, un constructor con solo `nombre` (que genere un `nia` aleatorio y array de 3 notas a `0.0`), getters/setters, `notaMedia()`, `toString()` y `equals()`/`hashCode()` (basados en el `nia`).  
+2. A continuación, crea la clase **`AlumnoInmutable`** que sea una versión 100% inmutable de `Alumno` (`final class`, atributos `private final`, sin setters y con copias defensivas `.clone()` del array `notas` en el constructor y en `getNotas()`).
+
+---
+
+### Ejercicio 16: `StringBuilder`, Conversión Hexadecimal y Expresiones Regulares (`Pattern` / `Matcher`)
+**Enunciado:**  
+Implementa una clase de utilidades avanzadas de texto que resuelva los siguientes tres problemas:  
+1. **Capitalizador eficiente (`StringBuilder`):** Método `public static String capitalizar(String frase)` que convierta en mayúscula la primera letra de cada palabra usando `StringBuilder`, `Character.isLetter(c)` y `Character.toUpperCase(c)` (ej. `"ha llegado el momento"` → `"Ha Llegado El Momento"`).  
+2. **Evaluador Hexadecimal (`hexValor`):** Método `public static int hexValor(char c)` con un `switch` que devuelva el valor de `0` a `15` de un dígito hexadecimal (mayúscula o minúscula) o `-1` si no es válido, y un método `hexADecimal(String hex)` que calcule su valor decimal aplicando `valor = valor * 16 + hexValor(s.charAt(i))`.  
+3. **Contador de Expresiones Regulares (`cuentaMatches`):** Método sobrecargado `cuentaMatches(String er, String texto)` y `cuentaMatches(String er, String texto, int flags)` usando `Pattern` y `Matcher.find()` que cuente cuántas subcadenas casan con el patrón, además de validar enteros (`"^[+-]?\\d+$"`) y octetos IPv4 (`0..255`).
+
+---
+
 :::note[¿Quieres revisar el código completo?]
 Consulta todas las implementaciones detalladas en el [Boletín 4.2 Resuelto](./boletin-04-intermedio-resuelto).
 :::
+

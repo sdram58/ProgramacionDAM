@@ -13,25 +13,29 @@ sidebar:
 
 Bienvenido al boletín de retos avanzados de la **Unidad 4: Clases y objetos**.
 
-Los siguientes 6 desafíos combinan la riqueza del modelado orientado a objetos con la exigencia algorítmica de plataformas de programación competitiva (CodeWars, LeetCode, Acepta el Reto). Cada reto incluye su contexto, especificación formal, análisis de diseño y la solución íntegra comentada en Java 25 LTS.
+> 💡 **Entrenamiento adicional recomendado:** Busca en [CodeWars](https://www.codewars.com/) katas de nivel **7-6 kyu** etiquetadas con `Object-oriented Programming`, y en [Acepta el Reto](https://www.aceptaelreto.com/) problemas de modelado y estructuración de datos. A continuación tienes **8 retos completos** diseñados con el mismo espíritu competitivo y de ingeniería de software, incluyendo pistas algorítmicas y soluciones íntegras comentadas en Java 25 LTS.
 
 ---
 
-### Reto 1: La Baraja de Cartas con Enums y Algoritmo de Fisher-Yates
+### Reto 1: La Baraja Española (40 cartas) y el Algoritmo de Fisher-Yates
 
 #### Contexto y Planteamiento
-Diseña un simulador completo de baraja de cartas utilizando las mejores prácticas de la POO moderna:
-1. Un `enum Palo` que defina los cuatro palos tradicionales (`OROS, COPAS, ESPADAS, BASTOS` o `CORAZONES, DIAMANTES, TREBOLES, PICAS`).
-2. Un `enum Valor` con los valores de las cartas y su puntuación numérica asociada.
-3. Un `record Carta(Palo palo, Valor valor)` inmutable con un método `toString()` compacto (ej. `"AS de ESPADAS"`).
-4. Una clase `Baraja` que gestione internamente una colección o array de cartas:
-   - Debe inicializar todas las combinaciones posibles en el constructor.
-   - Método `public void barajar()`: debe implementar el **algoritmo de barajado in-place de Fisher-Yates / Knuth**, garantizando que todas las permutaciones sean equiprobables en tiempo lineal `O(N)` sin crear arrays auxiliares.
+Diseña un simulador completo de la baraja española de **40 cartas** (palos `"Oros"`, `"Copas"`, `"Espadas"` y `"Bastos"`; valores del `1` al `12` excluyendo el `8` y el `9`, o numerados del `1` al `10` para Sota, Caballo y Rey) aplicando tanto el enfoque clásico de clases (`Carta` y `Mazo`) como el enfoque moderno con `enum` y `record`:
+1. Un `enum Palo` que defina los cuatro palos tradicionales (`OROS, COPAS, ESPADAS, BASTOS`).
+2. Un `enum Valor` con los 10 valores de la baraja española y su puntuación numérica asociada.
+3. Un `record Carta(Palo palo, Valor valor)` inmutable con un método `toString()` descriptivo (ej. `"As de OROS"`).
+4. Una clase `Baraja` (o `Mazo`) que contenga el array de **40 objetos `Carta`**:
+   - Debe inicializar las 40 combinaciones en el constructor (4 palos × 10 valores).
+   - Método `public void barajar()`: reordena el array al azar mediante el **algoritmo in-place de Fisher-Yates / Knuth**, garantizando que todas las permutaciones sean equiprobables en tiempo lineal `O(n)` sin crear arrays auxiliares.
    - Método `public Carta robar()`: retira y devuelve la carta superior de la baraja (lanzando `IllegalStateException` si la baraja está agotada).
-   - Método `public Carta[] repartirMano(int numCartas)`: devuelve una mano de cartas consecutivas.
+   - Método `public Carta[] repartir(int n)` (o `repartirMano(int n)`): devuelve un array con las primeras `n` cartas disponibles del mazo.
+
+:::tip[Pista para barajar (Algoritmo de Fisher-Yates)]
+Recorre el array de atrás hacia adelante (desde `i = cartas.length - 1` hasta `1`), y en cada posición intercambia la carta actual `cartas[i]` con una carta elegida en una posición aleatoria anterior o igual (`j` entre `0` e `i` inclusive).
+:::
 
 <details>
-<summary>💡 Ver Solución Comentada</summary>
+<summary>💡 Ver Solución Comentada (Versión Moderna con Enum/Record y Versión Clásica)</summary>
 
 ```java
 import java.util.Arrays;
@@ -642,3 +646,322 @@ public class Reto06SpoolerSingleton {
 }
 ```
 </details>
+
+---
+
+### Reto 7: Álgebra de Conjuntos con Varargs (`ConjuntoEnteros`) y Análisis de Complejidad
+
+#### Contexto y Planteamiento
+Implementa una estructura de datos propia llamada `ConjuntoEnteros` que represente un conjunto matemático finito de números enteros **sin elementos repetidos**, respaldado internamente por un array dinámico `int[]`:
+1. **Constructor con `varargs`** (`public ConjuntoEnteros(int... elementos)`): crea el conjunto a partir de una secuencia arbitraria de enteros (o vacío si no se pasan argumentos), descartando automáticamente cualquier valor duplicado.
+2. **Operaciones básicas y con `varargs`**:
+   - `public int getTamano()` y `public boolean vacio()`.
+   - `public boolean pertenece(int... elementos)`: devuelve `true` si **todos** los elementos pasados por parámetro pertenecen al conjunto.
+   - `public boolean inserta(int... elementos)`: añade los elementos que aún no pertenezcan al conjunto, redimensionando el array interno solo en la cantidad exacta necesaria. Devuelve `true` si el conjunto ha cambiado (al menos un elemento nuevo insertado).
+   - `public boolean borra(int... elementos)`: elimina del conjunto todos los elementos indicados que estén presentes y compacta el array. Devuelve `true` si el conjunto se ha modificado.
+3. **Operaciones algebraicas inmutables** (devuelven un nuevo `ConjuntoEnteros` sin alterar los operandos):
+   - `public ConjuntoEnteros union(ConjuntoEnteros otro)`: elementos presentes en `this` o en `otro` (`A ∪ B`).
+   - `public ConjuntoEnteros interseccion(ConjuntoEnteros otro)`: elementos comunes a ambos conjuntos (`A ∩ B`).
+   - `public ConjuntoEnteros menos(ConjuntoEnteros otro)`: diferencia de conjuntos (`A \ B`), es decir, elementos de `this` que no pertenecen a `otro`.
+4. **Identidad de `Object`**: sobrescribe `toString()` (ej. `"{1, 4, 7}"`), `equals(Object obj)` (dos conjuntos son iguales si tienen el mismo tamaño y exactamente los mismos elementos, **sin importar el orden** en que estén almacenados) y `hashCode()` (cuyo cálculo debe ser conmutativo para que el orden no altere el hash).
+5. **Pregunta de reflexión algorítmica:** ¿Cuál es el coste temporal en notación asintótica (`O(...)`) de `pertenece`, `union`, `interseccion` y `equals` sobre un array desordenado frente a mantener el array interno ordenado y usar búsqueda binaria?
+
+<details>
+<summary>💡 Ver Solución Comentada y Análisis de Complejidad</summary>
+
+```java
+import java.util.Arrays;
+
+public class ConjuntoEnteros {
+    private int[] datos;
+
+    public ConjuntoEnteros(int... elementos) {
+        this.datos = new int[0];
+        if (elementos != null && elementos.length > 0) {
+            inserta(elementos);
+        }
+    }
+
+    public int getTamano() {
+        return this.datos.length;
+    }
+
+    public boolean vacio() {
+        return this.datos.length == 0;
+    }
+
+    private boolean contieneUnico(int valor) {
+        for (int actual : this.datos) {
+            if (actual == valor) return true;
+        }
+        return false;
+    }
+
+    public boolean pertenece(int... elementos) {
+        if (elementos == null) return false;
+        for (int elem : elementos) {
+            if (!contieneUnico(elem)) return false;
+        }
+        return true;
+    }
+
+    public boolean inserta(int... elementos) {
+        if (elementos == null || elementos.length == 0) return false;
+        boolean modificado = false;
+        for (int elem : elementos) {
+            if (!contieneUnico(elem)) {
+                this.datos = Arrays.copyOf(this.datos, this.datos.length + 1);
+                this.datos[this.datos.length - 1] = elem;
+                modificado = true;
+            }
+        }
+        return modificado;
+    }
+
+    public boolean borra(int... elementos) {
+        if (elementos == null || elementos.length == 0 || vacio()) return false;
+        boolean modificado = false;
+        for (int elem : elementos) {
+            int pos = -1;
+            for (int i = 0; i < this.datos.length; i++) {
+                if (this.datos[i] == elem) {
+                    pos = i;
+                    break;
+                }
+            }
+            if (pos != -1) {
+                int[] nuevo = new int[this.datos.length - 1];
+                System.arraycopy(this.datos, 0, nuevo, 0, pos);
+                System.arraycopy(this.datos, pos + 1, nuevo, pos, this.datos.length - pos - 1);
+                this.datos = nuevo;
+                modificado = true;
+            }
+        }
+        return modificado;
+    }
+
+    public ConjuntoEnteros union(ConjuntoEnteros otro) {
+        ConjuntoEnteros resultado = new ConjuntoEnteros(this.datos);
+        if (otro != null) {
+            resultado.inserta(otro.datos);
+        }
+        return resultado;
+    }
+
+    public ConjuntoEnteros interseccion(ConjuntoEnteros otro) {
+        ConjuntoEnteros resultado = new ConjuntoEnteros();
+        if (otro == null) return resultado;
+        for (int elem : this.datos) {
+            if (otro.contieneUnico(elem)) {
+                resultado.inserta(elem);
+            }
+        }
+        return resultado;
+    }
+
+    public ConjuntoEnteros menos(ConjuntoEnteros otro) {
+        ConjuntoEnteros resultado = new ConjuntoEnteros();
+        for (int elem : this.datos) {
+            if (otro == null || !otro.contieneUnico(elem)) {
+                resultado.inserta(elem);
+            }
+        }
+        return resultado;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("{");
+        for (int i = 0; i < this.datos.length; i++) {
+            sb.append(this.datos[i]);
+            if (i < this.datos.length - 1) sb.append(", ");
+        }
+        return sb.append("}").toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        ConjuntoEnteros otro = (ConjuntoEnteros) obj;
+        if (this.datos.length != otro.datos.length) return false;
+        return this.pertenece(otro.datos);
+    }
+
+    @Override
+    public int hashCode() {
+        // Suma conmutativa para que {1, 2} y {2, 1} produzcan idéntico hashCode
+        int hash = 0;
+        for (int elem : this.datos) {
+            hash += Integer.hashCode(elem);
+        }
+        return hash;
+    }
+
+    public static void main(String[] args) {
+        ConjuntoEnteros a = new ConjuntoEnteros(1, 2, 3, 2, 4);
+        ConjuntoEnteros b = new ConjuntoEnteros(4, 3, 5, 6);
+
+        System.out.println("Conjunto A: " + a); // {1, 2, 3, 4}
+        System.out.println("Conjunto B: " + b); // {4, 3, 5, 6}
+        System.out.println("A U B: " + a.union(b));        // {1, 2, 3, 4, 5, 6}
+        System.out.println("A ∩ B: " + a.interseccion(b)); // {3, 4}
+        System.out.println("A \\ B: " + a.menos(b));       // {1, 2}
+
+        ConjuntoEnteros c = new ConjuntoEnteros(4, 2, 1, 3);
+        System.out.println("¿A.equals(C) con distinto orden? " + a.equals(c)); // true
+        System.out.println("¿Mismo hashCode? " + (a.hashCode() == c.hashCode())); // true
+    }
+}
+```
+
+#### Análisis de Complejidad Algorítmica
+- **Con array desordenado:**
+  - `contieneUnico(x)` requiere búsqueda lineal `O(n)`.
+  - `union`, `interseccion`, `menos` y `equals(otro)` comparan cada elemento del primer conjunto (`n`) contra los del segundo (`m`), resultando en un coste cuadrático **`O(n × m)`** (o `O(n²)` si tienen tamaño similar).
+- **Con array ordenado:**
+  - `contieneUnico(x)` puede implementarse con `Arrays.binarySearch` en tiempo logarítmico **`O(log n)`**.
+  - `union`, `interseccion`, `menos` y `equals` pueden resolverse avanzando dos punteros en paralelo (algoritmo *merge*) en tiempo estrictamente lineal **`O(n + m)`**.
+</details>
+
+---
+
+### Reto 8: Clínica Dietista (Cálculo de IMC) y Validador de Cuenta Bancaria Española (CCC)
+
+#### Contexto y Planteamiento
+Diseña un sistema integral de gestión de pacientes para una clínica de nutrición que combine el modelado de dominio con el algoritmo oficial de validación bancaria española:
+1. **Clase `Paciente` y `enum Sexo { HOMBRE, MUJER }`**:
+   - Atributos privados: `numPaciente` (código alfanumérico de 8 cifras + letra generado automáticamente al instanciar mediante un método privado `generaNumPaciente()`), `nombre`, `edad`, `sexo` (por defecto `MUJER`), `peso` (kg) y `altura` (metros), más su número de cuenta domiciliada `ccc`.
+   - Constantes estáticas de diagnóstico nutricional: `INFRAPESO = -1`, `PESO_IDEAL = 0` y `SOBREPESO = 1`.
+   - Tres constructores encadenados con `this(...)`: por defecto, con `(nombre, edad, sexo)` y completo con todos los parámetros.
+   - Método `public int calcularIMC()`: calcula `IMC = peso / (altura²)` y devuelve `INFRAPESO` (`< 20`), `PESO_IDEAL` (`20` a `25` incluidos) o `SOBREPESO` (`> 25`).
+   - Método `public boolean esMayorDeEdad()`: devuelve `true` si `edad >= 18`.
+2. **Validador de Código Cuenta Cliente (`EEEE-SSSS-DC-CCCCCCCCCC`)**:
+   - Método estático `public static boolean validarCCC(String ccc)` que verifique mediante expresión regular el formato de 20 dígitos (`4` de entidad, `4` de sucursal, `2` dígitos de control y `10` de número de cuenta) y compruebe matemáticamente los **dos dígitos de control (DC)** usando el algoritmo oficial de pesos módulo 11 (`{1, 2, 4, 8, 5, 10, 9, 7, 3, 6}`).
+
+<details>
+<summary>💡 Ver Solución Comentada</summary>
+
+```java
+import java.util.Random;
+
+public class Reto08ClinicaDietista {
+
+    public enum Sexo { HOMBRE, MUJER }
+
+    public static class Paciente {
+        public static final int INFRAPESO = -1;
+        public static final int PESO_IDEAL = 0;
+        public static final int SOBREPESO = 1;
+
+        private static final Sexo SEXO_DEFECTO = Sexo.MUJER;
+        private static final String LETRAS_CONTROL = "TRWAGMYFPDXBNJZSQVHLCKE";
+        private static final int[] PESOS_CCC = {1, 2, 4, 8, 5, 10, 9, 7, 3, 6};
+
+        private final String numPaciente;
+        private String nombre;
+        private int edad;
+        private Sexo sexo;
+        private double peso;   // en kg
+        private double altura; // en metros
+        private String ccc;
+
+        public Paciente() {
+            this("", 0, SEXO_DEFECTO, 0.0, 0.0, "");
+        }
+
+        public Paciente(String nombre, int edad, Sexo sexo) {
+            this(nombre, edad, sexo, 0.0, 0.0, "");
+        }
+
+        public Paciente(String nombre, int edad, Sexo sexo, double peso, double altura, String ccc) {
+            this.numPaciente = generaNumPaciente();
+            this.nombre = nombre != null ? nombre : "";
+            this.edad = Math.max(edad, 0);
+            this.sexo = comprobarSexo(sexo);
+            this.peso = Math.max(peso, 0.0);
+            this.altura = Math.max(altura, 0.0);
+            this.ccc = (ccc != null && validarCCC(ccc)) ? ccc : "SIN_DOMICILIAR";
+        }
+
+        private Sexo comprobarSexo(Sexo s) {
+            return (s != null) ? s : SEXO_DEFECTO;
+        }
+
+        private String generaNumPaciente() {
+            Random rng = new Random();
+            int numero = 10_000_000 + rng.nextInt(90_000_000); // 8 cifras
+            char letra = LETRAS_CONTROL.charAt(numero % 23);
+            return numero + "-" + letra;
+        }
+
+        public int calcularIMC() {
+            if (this.altura <= 0) return INFRAPESO;
+            double imc = this.peso / (this.altura * this.altura);
+            if (imc < 20.0) return INFRAPESO;
+            if (imc <= 25.0) return PESO_IDEAL;
+            return SOBREPESO;
+        }
+
+        public boolean esMayorDeEdad() {
+            return this.edad >= 18;
+        }
+
+        // Algoritmo oficial de validación de Cuenta Bancaria Española (20 dígitos)
+        public static boolean validarCCC(String cuenta) {
+            if (cuenta == null) return false;
+            String limpia = cuenta.replaceAll("[\\s-]", "");
+            if (!limpia.matches("\\d{20}")) return false;
+
+            String entidadSucursal = "00" + limpia.substring(0, 8);
+            String dc = limpia.substring(8, 10);
+            String numCuenta = limpia.substring(10, 20);
+
+            int dc1 = calcularDigitoControl(entidadSucursal);
+            int dc2 = calcularDigitoControl(numCuenta);
+            String dcCalculado = "" + dc1 + dc2;
+
+            return dc.equals(dcCalculado);
+        }
+
+        private static int calcularDigitoControl(String bloque10Digitos) {
+            int suma = 0;
+            for (int i = 0; i < 10; i++) {
+                int digito = bloque10Digitos.charAt(i) - '0';
+                suma += digito * PESOS_CCC[i];
+            }
+            int resto = 11 - (suma % 11);
+            if (resto == 11) return 0;
+            if (resto == 10) return 1;
+            return resto;
+        }
+
+        @Override
+        public String toString() {
+            String estadoIMC = switch (calcularIMC()) {
+                case INFRAPESO -> "Por debajo del peso ideal";
+                case PESO_IDEAL -> "Peso ideal";
+                default -> "Sobrepeso";
+            };
+            return String.format("Paciente[%s | %s, %d años (%s) | %.1f kg, %.2f m -> %s | CCC: %s]",
+                    this.numPaciente, this.nombre, this.edad,
+                    esMayorDeEdad() ? "Mayor de edad" : "Menor",
+                    this.peso, this.altura, estadoIMC, this.ccc);
+        }
+    }
+
+    public static void main(String[] args) {
+        // Ejemplo con CCC válido (2100-0418-40-1234567891 -> DC real calculado)
+        Paciente p1 = new Paciente("Laura Gómez", 29, Sexo.MUJER, 62.0, 1.68, "2100-0418-45-0200051332");
+        Paciente p2 = new Paciente("Marcos Ruiz", 42, Sexo.HOMBRE, 94.0, 1.75, "0000-0000-99-1234567890");
+        Paciente p3 = new Paciente("Sofía Beltrán", 17, Sexo.MUJER, 46.0, 1.65, "");
+
+        Paciente[] consulta = {p1, p2, p3};
+        for (Paciente p : consulta) {
+            System.out.println(p);
+        }
+    }
+}
+```
+</details>
+
