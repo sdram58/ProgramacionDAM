@@ -1,4 +1,7 @@
 ---
+draft: true
+prev: false
+next: false
 title: "🗄️ Unidad 10. Trabajar con bases de datos relacionales"
 description: "Conectividad de aplicaciones con JDBC, drivers de base de datos, consultas con PreparedStatement, transacciones ACID y patrón DAO."
 ---

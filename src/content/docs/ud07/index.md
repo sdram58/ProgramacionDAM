@@ -1,4 +1,7 @@
 ---
+draft: true
+prev: false
+next: false
 title: "⚡ Unidad 7. La API Stream"
 description: "Programación funcional en Java, expresiones lambda, interfaces funcionales predefinidas (Predicate, Function, Consumer, Supplier), flujos y colectores avanzados."
 ---

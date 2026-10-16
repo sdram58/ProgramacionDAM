@@ -1,4 +1,7 @@
 ---
+draft: true
+prev: false
+next: false
 title: "🌐 Unidad 11. Trabajar con bases de datos orientadas a objetos"
 description: "Persistencia orientada a objetos, bases de datos no relacionales / orientadas a objetos (ODB/NoSQL), mapeo objeto-relacional y estrategias de persistencia."
 ---

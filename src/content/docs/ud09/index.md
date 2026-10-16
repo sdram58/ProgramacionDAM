@@ -1,4 +1,7 @@
 ---
+draft: true
+prev: false
+next: false
 title: "🖼️ Unidad 9. Aplicaciones controladas por eventos"
 description: "Construcción de interfaces gráficas de escritorio con Swing y AWT, despachador EDT, gestores de diseño (layouts), listeners y patrón MVC."
 ---

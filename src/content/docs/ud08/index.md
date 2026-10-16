@@ -1,4 +1,7 @@
 ---
+draft: true
+prev: false
+next: false
 title: "📁 Unidad 8. Ficheros y streams"
 description: "Flujos de datos de entrada/salida, sistema de archivos con Java NIO.2 (Path, Files), lectura/escritura de ficheros de texto y binarios, y serialización."
 ---

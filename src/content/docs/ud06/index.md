@@ -1,4 +1,7 @@
 ---
+draft: true
+prev: false
+next: false
 title: "📚 Unidad 6. Genéricos y colecciones de datos"
 description: "Tipos genéricos <T>, Java Collections Framework (List, ArrayList, LinkedList, Set, Map, HashMap), ordenación con Comparator y algoritmos sobre colecciones."
 ---
