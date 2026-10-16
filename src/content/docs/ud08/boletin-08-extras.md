@@ -805,7 +805,140 @@ public class Proyecto06CapturadorPantallaNIO2 {
 
 ---
 
-## 🏆 Retos Externos: Acepta el Reto y CodeWars
+## ⚡ Parte 2: Micro-Retos de Procesamiento de Ficheros
+
+### Reto A: Fusión Eficiente de Ficheros Ordenados (*Merge Files*)
+
+Dispones de dos ficheros de texto (`numeros1.txt` y `numeros2.txt`), cada uno con una lista de números enteros (uno por línea) **ya ordenados de menor a mayor**. Escribe un programa que genere un tercer fichero `fusionado.txt` con todos los números de ambos ficheros fusionados en un único listado también ordenado, **sin cargar ambos ficheros enteros en la memoria RAM**.
+
+:::tip[Pista algorítmica]
+Aplica el algoritmo de mezcla de *Merge Sort*: lee el primer número de cada archivo con un `BufferedReader`, compara y escribe el menor en el `PrintWriter` de salida, avanza el puntero de lectura únicamente en el archivo del cual escribiste el número, y repite hasta vaciar ambos flujos.
+:::
+
+<details>
+<summary>💡 Solución comentada en Java 25 LTS</summary>
+
+```java
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+
+public class RetoFusionFicherosOrdenados {
+
+    public static void fusionar(String f1, String f2, String fSalida) throws IOException {
+        try (BufferedReader br1 = new BufferedReader(new FileReader(f1, StandardCharsets.UTF_8));
+             BufferedReader br2 = new BufferedReader(new FileReader(f2, StandardCharsets.UTF_8));
+             PrintWriter pw = new PrintWriter(new FileWriter(fSalida, StandardCharsets.UTF_8))) {
+
+            String linea1 = br1.readLine();
+            String linea2 = br2.readLine();
+
+            while (linea1 != null && linea2 != null) {
+                int n1 = Integer.parseInt(linea1.trim());
+                int n2 = Integer.parseInt(linea2.trim());
+
+                if (n1 <= n2) {
+                    pw.println(n1);
+                    linea1 = br1.readLine();
+                } else {
+                    pw.println(n2);
+                    linea2 = br2.readLine();
+                }
+            }
+
+            // Volcamos los elementos restantes del fichero que no haya finalizado
+            while (linea1 != null) {
+                pw.println(Integer.parseInt(linea1.trim()));
+                linea1 = br1.readLine();
+            }
+            while (linea2 != null) {
+                pw.println(Integer.parseInt(linea2.trim()));
+                linea2 = br2.readLine();
+            }
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+        // Muestra de prueba
+        java.nio.file.Files.writeString(java.nio.file.Path.of("num1.txt"), "2\n5\n8\n12\n15\n");
+        java.nio.file.Files.writeString(java.nio.file.Path.of("num2.txt"), "1\n3\n8\n9\n20\n");
+
+        fusionar("num1.txt", "num2.txt", "fusion.txt");
+        System.out.println("Ficheros fusionados con éxito. Contenido final:");
+        java.nio.file.Files.lines(java.nio.file.Path.of("fusion.txt")).forEach(System.out::println);
+
+        java.nio.file.Files.delete(java.nio.file.Path.of("num1.txt"));
+        java.nio.file.Files.delete(java.nio.file.Path.of("num2.txt"));
+        java.nio.file.Files.delete(java.nio.file.Path.of("fusion.txt"));
+    }
+}
+```
+</details>
+
+### Reto B: Generador de Índice de Concordancias por Líneas
+
+Dado un fichero de texto, genera un índice alfabético que muestre, para cada palabra única (en minúsculas y sin signos ortográficos), la lista ordenada de números de línea en los que aparece al menos una vez (sin duplicar números si una palabra aparece dos veces en la misma línea):
+
+<details>
+<summary>💡 Solución comentada en Java 25 LTS</summary>
+
+```java
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.TreeSet;
+import java.util.TreeMap;
+
+public class RetoIndiceConcordancias {
+
+    public static Map<String, TreeSet<Integer>> generarIndice(String rutaFichero) throws IOException {
+        Map<String, TreeSet<Integer>> indice = new TreeMap<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(rutaFichero, StandardCharsets.UTF_8))) {
+            String linea;
+            int numLinea = 1;
+            while ((linea = br.readLine()) != null) {
+                String[] palabras = linea.toLowerCase().replaceAll("[^a-záéíóúñ ]", "").split("\\s+");
+                for (String p : palabras) {
+                    if (p.length() >= 3) {
+                        indice.computeIfAbsent(p, k -> new TreeSet<>()).add(numLinea);
+                    }
+                }
+                numLinea++;
+            }
+        }
+        return indice;
+    }
+
+    public static void main(String[] args) throws IOException {
+        java.nio.file.Path temp = java.nio.file.Files.createTempFile("texto_indice_", ".txt");
+        java.nio.file.Files.writeString(temp, """
+                En un lugar de la Mancha de cuyo nombre
+                no quiero acordarme no ha mucho tiempo
+                que vivia un hidalgo en la Mancha
+                """);
+
+        Map<String, TreeSet<Integer>> indice = generarIndice(temp.toString());
+        System.out.println("=== ÍNDICE ALFABÉTICO DE LÍNEAS ===");
+        indice.forEach((palabra, lineas) ->
+                System.out.printf("   %-12s -> líneas %s%n", palabra, lineas));
+
+        java.nio.file.Files.deleteIfExists(temp);
+    }
+}
+```
+
+Usar un `TreeMap<String, TreeSet<Integer>>` junto con `computeIfAbsent()` garantiza que las palabras salgan ordenadas alfabéticamente y los números de línea ordenados de forma ascendente y sin repeticiones.
+</details>
+
+---
+
+## 🏆 Parte 3: Retos Externos (Acepta el Reto y CodeWars)
 
 ### 🟢 CodeWars (Manejo de Cadenas y Parsing)
 

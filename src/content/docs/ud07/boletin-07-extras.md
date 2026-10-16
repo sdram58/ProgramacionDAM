@@ -800,7 +800,90 @@ public class Proyecto06AnalizadorTextoFilesLines {
 
 ---
 
-## 🏆 Retos Externos: Acepta el Reto y CodeWars
+## ⚡ Parte 2: Micro-Retos de la API Stream
+
+### Reto A: Comprobador de Anagramas con Streams
+
+Escribe un método `public static boolean sonAnagramas(String a, String b)` que compruebe si dos palabras son anagramas (contienen exactamente las mismas letras, en cualquier orden) utilizando exclusivamente tuberías de Streams para ordenar los caracteres de cada palabra y comparar el resultado, sin ningún bucle imperativo:
+
+<details>
+<summary>💡 Solución comentada en Java 25 LTS</summary>
+
+```java
+import java.util.stream.Collectors;
+
+public class RetoAnagramasStream {
+
+    public static boolean sonAnagramas(String a, String b) {
+        if (a == null || b == null || a.length() != b.length()) return false;
+
+        String ordenadaA = a.toLowerCase().chars()
+                .sorted()
+                .mapToObj(c -> String.valueOf((char) c))
+                .collect(Collectors.joining());
+
+        String ordenadaB = b.toLowerCase().chars()
+                .sorted()
+                .mapToObj(c -> String.valueOf((char) c))
+                .collect(Collectors.joining());
+
+        return ordenadaA.equals(ordenadaB);
+    }
+
+    public static void main(String[] args) {
+        System.out.println("¿'roma' y 'amor' son anagramas?: " + sonAnagramas("roma", "amor"));
+        System.out.println("¿'frase' y 'fresa' son anagramas?: " + sonAnagramas("frase", "fresa"));
+        System.out.println("¿'hola' y 'ola' son anagramas?: " + sonAnagramas("hola", "ola"));
+    }
+}
+```
+</details>
+
+### Reto B: Informe de Facturación Semestral Agregada
+
+Dada una lista de objetos `Venta(String producto, double importe, int mes)`, genera un `Map<String, Double>` con el total facturado por producto, pero **únicamente teniendo en cuenta las ventas del segundo semestre** (meses 7 a 12) en un único pipeline de stream:
+
+<details>
+<summary>💡 Solución comentada en Java 25 LTS</summary>
+
+```java
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public class RetoVentasSegundoSemestre {
+
+    public record Venta(String producto, double importe, int mes) {}
+
+    public static Map<String, Double> totalSegundoSemestre(List<Venta> ventas) {
+        return ventas.stream()
+                .filter(v -> v.mes() >= 7 && v.mes() <= 12)
+                .collect(Collectors.groupingBy(
+                        Venta::producto,
+                        Collectors.summingDouble(Venta::importe)
+                ));
+    }
+
+    public static void main(String[] args) {
+        List<Venta> registro = List.of(
+                new Venta("Teclado", 50.0, 3),   // 1er semestre (ignorar)
+                new Venta("Teclado", 45.0, 8),   // 2º semestre
+                new Venta("Ratón", 25.0, 9),     // 2º semestre
+                new Venta("Teclado", 60.0, 11),  // 2º semestre
+                new Venta("Monitor", 200.0, 5),  // 1er semestre (ignorar)
+                new Venta("Monitor", 210.0, 12)  // 2º semestre
+        );
+
+        Map<String, Double> facturacion = totalSegundoSemestre(registro);
+        System.out.println("Facturación agregada del 2º semestre: " + facturacion);
+    }
+}
+```
+</details>
+
+---
+
+## 🏆 Parte 3: Retos Externos (Acepta el Reto y CodeWars)
 
 Pon a prueba tu dominio de la programación declarativa resolviendo estos desafíos clásicos en plataformas de programación competitiva:
 

@@ -541,7 +541,93 @@ public class RestauranteConcurrente {
 
 ---
 
-## 🏆 Parte 2: Retos de Programación Competitiva (Acepta el Reto y CodeWars)
+## ⚡ Parte 2: Micro-Retos de Optimización con Colecciones
+
+### Reto 1: Eliminar duplicados preservando el orden de primera aparición
+
+Dado un `ArrayList<Integer>` que puede contener elementos repetidos, escribe un método que devuelva una **nueva lista** con los mismos elementos pero sin duplicados, **conservando el orden exacto de la primera aparición** de cada uno.
+
+:::tip[Pista]
+Un `HashSet` no garantiza el orden de inserción... pero puedes usar un `Set` solo para *comprobar* si ya has visto un elemento, mientras construyes el resultado en una `List` aparte aprovechando el valor devuelto por `add()`.
+:::
+
+<details>
+<summary>💡 Solución comentada en Java 25 LTS</summary>
+
+```java
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class RetoSinDuplicados {
+    public static <T> List<T> sinDuplicados(List<T> lista) {
+        Set<T> vistos = new HashSet<>();
+        List<T> resultado = new ArrayList<>();
+        for (T elemento : lista) {
+            // Set.add() devuelve true si el elemento NO estaba ya en el conjunto
+            if (vistos.add(elemento)) {
+                resultado.add(elemento);
+            }
+        }
+        return resultado;
+    }
+
+    public static void main(String[] args) {
+        List<Integer> numeros = List.of(4, 2, 8, 4, 1, 2, 9, 8);
+        System.out.println("Original: " + numeros);
+        System.out.println("Sin duplicados (orden conservado): " + sinDuplicados(numeros));
+    }
+}
+```
+
+`Set.add()` devuelve `true` solo la primera vez que se añade un valor. Es un modismo fundamental en Java para combinar en una sola operación `O(1)` la comprobación de existencia y el registro.
+</details>
+
+### Reto 2: La palabra más frecuente con `Map.merge`
+
+Dado un texto largo (un `String` con varias frases), escribe un método que devuelva la palabra que más veces aparece (normalizando a minúsculas y descartando signos ortográficos) utilizando el método `merge()` de `Map`.
+
+<details>
+<summary>💡 Solución comentada en Java 25 LTS</summary>
+
+```java
+import java.util.HashMap;
+import java.util.Map;
+
+public class RetoPalabraFrecuente {
+    public static String palabraMasFrecuente(String texto) {
+        String[] palabras = texto.toLowerCase().replaceAll("[^a-záéíóúñ ]", "").split("\\s+");
+        Map<String, Integer> conteo = new HashMap<>();
+
+        for (String palabra : palabras) {
+            if (palabra.isEmpty()) continue;
+            // merge: si la clave no existe pon 1, si existe suma 1 al valor previo
+            conteo.merge(palabra, 1, Integer::sum);
+        }
+
+        String mejor = null;
+        int max = 0;
+        for (Map.Entry<String, Integer> e : conteo.entrySet()) {
+            if (e.getValue() > max) {
+                max = e.getValue();
+                mejor = e.getKey();
+            }
+        }
+        return mejor;
+    }
+
+    public static void main(String[] args) {
+        String texto = "Java es un lenguaje genial. En Java las colecciones son potentes y Java evoluciona.";
+        System.out.println("Palabra más frecuente: " + palabraMasFrecuente(texto));
+    }
+}
+```
+</details>
+
+---
+
+## 🏆 Parte 3: Retos de Programación Competitiva (Acepta el Reto y CodeWars)
 
 Pon a prueba la eficiencia asintótica (`O(1)` y `O(log n)`) de tus colecciones en jueces online reales. *(¡Recuerda!: si usas un `ArrayList` donde hace falta un `HashSet`, un `HashMap` o una `PriorityQueue`, el juez devolverá **TLE — Time Limit Exceeded**).*
 
