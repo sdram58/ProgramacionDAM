@@ -75,6 +75,16 @@ Para utilizar el driver de MySQL en un proyecto moderno de IntelliJ IDEA gestion
 </dependency>
 ```
 
+:::note[Si tu proyecto utiliza módulos Java (module-info.java)]
+En proyectos modulares, debes declarar explícitamente la dependencia en el fichero `module-info.java`:
+```java
+module mi.proyecto.dam {
+    requires java.sql;       // Habilita java.sql y javax.sql
+    requires java.desktop;   // Si se integra con Swing / JTable
+}
+```
+:::
+
 ---
 
 ## 3. Conexión con la Base de Datos
@@ -257,6 +267,28 @@ if (rs.wasNull()) {
 }
 ```
 
+### 6.2. Tipos de `ResultSet` (Desplazamiento y Concurrencia)
+
+Por defecto, un `ResultSet` avanza exclusivamente **hacia adelante** y es de **solo lectura**. Al crear un `Statement` o `PreparedStatement`, podemos especificar capacidades avanzadas:
+
+```java
+Statement st = con.createStatement(
+    ResultSet.TYPE_SCROLL_INSENSITIVE, // Permite mover el cursor hacia atrás y saltar a filas arbitrarias
+    ResultSet.CONCUR_READ_ONLY         // Modo de solo lectura
+);
+```
+
+| Constante de Tipo | Capacidad de Desplazamiento |
+| :--- | :--- |
+| `ResultSet.TYPE_FORWARD_ONLY` | Solo permite avanzar con `next()`. Es el valor predeterminado por máxima eficiencia. |
+| `ResultSet.TYPE_SCROLL_INSENSITIVE` | Permite libre movimiento (`first()`, `last()`, `previous()`, `absolute(n)`). No refleja cambios de otros usuarios. |
+| `ResultSet.TYPE_SCROLL_SENSITIVE` | Cursor desplazable bidireccional que refleja los cambios concurrentes de la base de datos en tiempo real. |
+
+| Constante de Concurrencia | Significado |
+| :--- | :--- |
+| `ResultSet.CONCUR_READ_ONLY` | El cursor no permite editar los datos subyacentes (predeterminado). |
+| `ResultSet.CONCUR_UPDATABLE` | Permite actualizar o eliminar la fila actual llamando a `updateString()`, `updateRow()` o `deleteRow()`. |
+
 ---
 
 ## 7. Metadatos de la Base de Datos
@@ -329,6 +361,36 @@ try (Connection con = GestorConexion.obtenerConexion();
     // 4. Leer el resultado devuelto por la rutina
     BigDecimal salarioNeto = cs.getBigDecimal(2);
     System.out.println("Salario neto calculado por el SGBD: " + salarioNeto + " €");
+}
+```
+
+### 8.1. Almacenamiento de Datos Binarios Grandes (`BLOB`)
+
+Para almacenar archivos binarios (imágenes, documentos PDF o firmas digitalizadas) en la base de datos relacional, SQL proporciona el tipo `BLOB` (*Binary Large Object*). 
+
+En JDBC, los datos binarios no se cargan como cadenas de texto, sino mediante flujos de entrada (`InputStream`):
+
+```java
+// Inserción de un archivo binario mediante un flujo de streaming
+String sql = "INSERT INTO usuarios_avatares (usuario_id, foto) VALUES (?, ?)";
+
+try (Connection con = GestorConexion.obtenerConexion();
+     PreparedStatement ps = con.prepareStatement(sql);
+     InputStream entradaFichero = new FileInputStream("recursos/avatar.png")) {
+
+    ps.setInt(1, 42);
+    ps.setBinaryStream(2, entradaFichero); // Envía los bytes directamente por socket
+    ps.executeUpdate();
+    System.out.println("Avatar binario guardado en la columna BLOB.");
+}
+```
+
+Para recuperarlo desde el `ResultSet`:
+
+```java
+try (InputStream flujoLectura = rs.getBinaryStream("foto");
+     OutputStream salidaFichero = new FileOutputStream("descargas/recuperado.png")) {
+    flujoLectura.transferTo(salidaFichero);
 }
 ```
 
@@ -527,6 +589,53 @@ La solución estándar es un **Pool de Conexiones (Connection Pool)** gestionado
 * Al arrancar la aplicación, el pool abre por adelantado un grupo fijo de conexiones activas (por ejemplo, 10 conexiones en reposo).
 * Cuando un hilo necesita ejecutar una consulta, el pool le "presta" una conexión existente de inmediato (en microsegundos).
 * Al invocar `connection.close()`, la conexión no se destruye físicamente ni se cierra el socket de red: simplemente se devuelve al pool lista para el siguiente usuario.
+
+### 11.1. Mapeo Objeto-Relacional (ORM) e Introducción a JPA
+
+A medida que las aplicaciones empresariales crecen, escribir a mano el código JDBC de mapeo (`ps.setString(1, e.getNombre())`, `rs.getString("nombre")`) para decenas de tablas se vuelve redundante y propenso a errores.
+
+Un **ORM (Object-Relational Mapping)** automatiza la traducción entre las tablas SQL y las clases de Java. El estándar oficial en el ecosistema Java empresarial es **JPA (Jakarta Persistence API)**, implementado por motores como **Hibernate** o **EclipseLink**.
+
+En JPA, las clases se decoran mediante anotaciones estándar:
+
+```java
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "empleados")
+public class Empleado {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(nullable = false, length = 50)
+    private String nombre;
+
+    private String puesto;
+
+    private java.math.BigDecimal salario;
+
+    // Constructores, getters y setters
+}
+```
+
+La persistencia de un objeto se delega al gestor `EntityManager`, sin necesidad de escribir sentencias SQL a mano:
+
+```java
+EntityManager em = factoriaEntityManager.createEntityManager();
+em.getTransaction().begin();
+
+// El ORM genera y ejecuta automáticamente: INSERT INTO empleados (nombre, puesto, salario) VALUES (...)
+em.persist(new Empleado("Laura Pérez", "Arquitecta de Software", new BigDecimal("3400.00")));
+
+em.getTransaction().commit();
+em.close();
+```
+
+:::note[Conexión Curricular: De JDBC a JPA]
+Dominar JDBC nativo es indispensable: JPA no reemplaza a JDBC, sino que se ejecuta **sobre** JDBC. En situaciones de optimización extrema, consultas analíticas o depuración de cuellos de botella, el desarrollador sénior de DAM siempre analiza el comportamiento de la conexión JDBC subyacente.
+:::
 
 ---
 

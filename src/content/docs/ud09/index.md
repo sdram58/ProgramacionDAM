@@ -117,6 +117,15 @@ public class VentanaPrincipal extends JFrame {
         this.setResizable(true);
     }
 
+    public static void configurarLookAndFeelNativo() {
+        try {
+            // Aplica la apariencia nativa del sistema operativo (Windows, macOS o Linux)
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            // En caso de fallo, Swing mantiene el Look and Feel Metal por defecto
+        }
+    }
+
     private void inicializarComponentes() {
         // Obtenemos el panel de contenido principal de la ventana
         JPanel panelRaiz = new JPanel();
@@ -553,6 +562,12 @@ public class PanelDibujo extends JPanel {
         g2.setColor(new Color(220, 53, 69));
         g2.fillOval(260, 30, 100, 100);
 
+        // Dibujar polígonos complejos (triángulos, tejados, flechas)
+        int[] puntosX = {420, 470, 370};
+        int[] puntosY = {30, 120, 120};
+        g2.setColor(new Color(255, 193, 7));
+        g2.fillPolygon(puntosX, puntosY, 3);
+
         // Renderizar cadenas de texto con fuentes personalizadas
         g2.setColor(Color.WHITE);
         g2.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -562,6 +577,24 @@ public class PanelDibujo extends JPanel {
 ```
 
 Para forzar al panel a repintarse cuando los datos cambian (por ejemplo, en un juego o gráfico interactivo), se invoca al método `panel.repaint()`.
+
+### 10.1. Carga de Imágenes y Recursos para Producción (`ClassLoader`)
+
+En una aplicación de consola suele usarse una ruta relativa directa como `new ImageIcon("imagenes/logo.png")`. Sin embargo, esa ruta depende estrictamente del directorio de trabajo actual y **fallará al empaquetar el proyecto en un archivo ejecutable `.jar`**.
+
+La forma robusta y profesional en Java es cargar los recursos desde el *classpath* del proyecto:
+
+```java
+// Colocar la imagen en: src/main/resources/imagenes/logo.png
+java.net.URL urlImagen = getClass().getResource("/imagenes/logo.png");
+if (urlImagen != null) {
+    ImageIcon icono = new ImageIcon(urlImagen);
+    JLabel lblLogo = new JLabel(icono);
+    panel.add(lblLogo);
+} else {
+    System.err.println("No se pudo localizar el recurso gráfico en el classpath.");
+}
+```
 
 ---
 
@@ -583,9 +616,30 @@ src/
         └── AlumnoController.java  (Listeners y coordinación entre Modelo y Vista)
 ```
 
-En **IntelliJ IDEA**, puedes diseñar interfaces directamente mediante código Java puro (la técnica recomendada y exigida en este curso por su total control, portabilidad y limpieza) o utilizar el diseñador visual integrado (*GUI Designer* generando ficheros `.form`). 
+### 11.1. Diseñar Interfaces con el GUI Designer de IntelliJ IDEA
 
----
+IntelliJ IDEA incluye un potente diseñador visual (*Swing UI Designer*):
+* **Crear un formulario:** Clic derecho sobre el paquete en el árbol del proyecto → **New → Swing UI Designer → GUI Form**. Se crearán dos ficheros vinculados: el fichero de diseño visual `.form` (descripción XML de la interfaz) y la clase Java enlazada.
+* **Componentes clave del entorno:**
+  * **Palette (Paleta):** Catálogo de componentes Swing para arrastrar y soltar sobre la ventana.
+  * **Component Tree (Árbol de componentes):** Visualiza la jerarquía exacta de contenedores (`JFrame` → `JPanel` → componentes anidados).
+  * **Property Inspector (Inspector de propiedades):** Permite configurar textos, fuentes, márgenes y, de forma crucial, el atributo `field name` (nombre del atributo en la clase Java).
+* **Vinculación de eventos:** Marca la opción *Bind to field* en el componente y añade los listeners en el constructor de la clase Java:
+
+```java
+btnAceptar.addActionListener(e -> {
+    // Código de respuesta al evento
+});
+```
+
+:::note[Compatibilidad con Proyectos Modulares (Java 9+)]
+Si el proyecto incluye un descriptor modular `module-info.java`, es obligatorio declarar la dependencia del módulo gráfico:
+```java
+module mi.aplicacion.dam {
+    requires java.desktop; // Permite el acceso a java.awt.* y javax.swing.*
+}
+```
+:::
 
 ## 12. ⭐ Be the Code: El Ciclo de Vida de un Clic
 

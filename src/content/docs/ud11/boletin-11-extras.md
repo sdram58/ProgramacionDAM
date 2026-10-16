@@ -162,3 +162,73 @@ Construye una utilidad `MigradorRelacionalADocumental` que lea las tablas normal
 * Mide la diferencia de rendimiento al consultar una factura completa con todas sus líneas:
   * En RDBMS: requiere un `SELECT ... INNER JOIN ... INNER JOIN`.
   * En MongoDB: se recupera en una única lectura por clave `_id` sin ningún tipo de combinación en tiempo de consulta.
+
+---
+
+## ⚡ Parte 2: Micro-Retos de Persistencia NoSQL Avanzada
+
+### Reto A: Agenda de Contactos con Documento Único y Arrays Anidados
+Diseña una clase `AgendaMongo` que gestione una colección de contactos en MongoDB donde cada contacto es **un solo documento completo**:
+* Campos del documento: `nombre` (cadena), `empresa` (cadena), `telefonos` (lista de cadenas), `etiquetas` (lista de cadenas).
+* Métodos a implementar:
+  1. `anadirContacto(String nombre, String empresa, List<String> telefonos, List<String> etiquetas)`
+  2. `buscarPorNombre(String patron)`: búsqueda insensible a mayúsculas utilizando expresiones regulares (`Filters.regex("nombre", Pattern.quote(patron), "i")`).
+  3. `anadirTelefono(String nombre, String nuevoTelefono)`: añade el teléfono a la lista sin necesidad de leer todo el documento previamente, utilizando `Updates.addToSet("telefonos", nuevoTelefono)` para evitar números duplicados.
+  4. `eliminarContacto(String nombre)`: borra el documento que coincida con el nombre.
+
+```java
+package com.dam.boletin11.extras;
+
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+import org.bson.Document;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+
+public class AgendaMongo {
+    private final MongoCollection<Document> colContactos;
+
+    public AgendaMongo(MongoCollection<Document> colContactos) {
+        this.colContactos = colContactos;
+    }
+
+    public void anadirContacto(String nombre, String empresa, List<String> telefonos, List<String> etiquetas) {
+        Document doc = new Document("nombre", nombre)
+                .append("empresa", empresa)
+                .append("telefonos", telefonos)
+                .append("etiquetas", etiquetas);
+        colContactos.insertOne(doc);
+    }
+
+    public List<Document> buscarPorNombre(String patron) {
+        return colContactos.find(Filters.regex("nombre", Pattern.quote(patron), "i"))
+                .into(new ArrayList<>());
+    }
+
+    public boolean anadirTelefono(String nombre, String nuevoTelefono) {
+        return colContactos.updateOne(
+                Filters.eq("nombre", nombre),
+                Updates.addToSet("telefonos", nuevoTelefono)
+        ).getModifiedCount() > 0;
+    }
+
+    public boolean eliminarContacto(String nombre) {
+        return colContactos.deleteOne(Filters.eq("nombre", nombre)).getDeletedCount() > 0;
+    }
+}
+```
+
+---
+
+### Reto B: Persistencia del Inventario de un Videojuego (POJO Embebido)
+Implementa la persistencia del perfil y equipamiento de un jugador en MongoDB:
+* Clase `Item(String nombre, String rareza, int poder)`.
+* Clase `Jugador(String nick, int nivel, int puntos, List<Item> inventario)`.
+* Empleando `PojoCodecProvider` o documentos BSON:
+  1. Guarda un jugador con 3 ítems en su inventario en una única operación.
+  2. Implementa un método `incrementarPuntuacion(String nick, int puntosExtra)` que actualice de forma atómica la puntuación del jugador mediante `Updates.inc("puntos", puntosExtra)` sin tener que descargar ni deserializar el documento entero en memoria.
+  3. Realiza una consulta para obtener el TOP 5 de jugadores ordenados por puntuación descendente (`Sorts.descending("puntos")` y `limit(5)`).
+

@@ -215,3 +215,168 @@ public class VisualizadorOrdenacion extends JFrame {
     }
 }
 ```
+
+---
+
+## ⚡ Parte 3: Micro-Retos de Interacción y Animación Gráfica
+
+### Reto A: El Juego de Adivinar el Número con Feedback Inmediato
+Crea una ventana compacta con un campo de texto `JTextField(5)`, un botón `"Probar"` y una etiqueta `JLabel` de pistas:
+* Al arrancar, el programa genera un número secreto pseudoaleatorio entre 1 y 100 (`(int)(Math.random() * 100) + 1`).
+* Cada vez que el usuario pulsa `"Probar"`, el programa evalúa el valor:
+  * Si es menor: la etiqueta indica `"Más alto ↑"`.
+  * Si es mayor: la etiqueta indica `"Más bajo ↓"`.
+  * Si acierta: la etiqueta muestra `"¡Acertaste en X intentos!"`, y el botón cambia su texto a `"Jugar otra vez"` para reiniciar el juego.
+* **Pista Clave:** Almacena el número secreto y el contador de intentos como atributos de la clase de la ventana (no como variables locales del listener) para conservar su estado entre clics sucesivos.
+
+```java
+package com.dam.boletin09.extras;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class JuegoAdivinaNumero extends JFrame {
+    private int numeroSecreto = generarNuevoNumero();
+    private int intentos = 0;
+
+    private final JTextField txtNumero = new JTextField(6);
+    private final JButton btnProbar = new JButton("Probar");
+    private final JLabel lblPista = new JLabel("Introduce un número del 1 al 100");
+
+    private static int generarNuevoNumero() {
+        return (int) (Math.random() * 100) + 1;
+    }
+
+    public JuegoAdivinaNumero() {
+        super("Adivina el Número");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 15));
+
+        this.add(txtNumero);
+        this.add(btnProbar);
+        this.add(lblPista);
+        this.pack();
+        this.setLocationRelativeTo(null);
+
+        btnProbar.addActionListener(e -> {
+            if (btnProbar.getText().equals("Jugar otra vez")) {
+                numeroSecreto = generarNuevoNumero();
+                intentos = 0;
+                btnProbar.setText("Probar");
+                lblPista.setText("Introduce un número del 1 al 100");
+                txtNumero.setText("");
+                return;
+            }
+
+            try {
+                int intentoUsuario = Integer.parseInt(txtNumero.getText().trim());
+                intentos++;
+                if (intentoUsuario < numeroSecreto) {
+                    lblPista.setText("Más alto ↑ (Intento " + intentos + ")");
+                } else if (intentoUsuario > numeroSecreto) {
+                    lblPista.setText("Más bajo ↓ (Intento " + intentos + ")");
+                } else {
+                    lblPista.setText("¡Correcto en " + intentos + " intentos!");
+                    btnProbar.setText("Jugar otra vez");
+                }
+            } catch (NumberFormatException ex) {
+                lblPista.setText("Introduce un número entero válido.");
+            }
+        });
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new JuegoAdivinaNumero().setVisible(true));
+    }
+}
+```
+
+---
+
+### Reto B: Pelota Animada que Rebota a 60 FPS con `javax.swing.Timer`
+Implementa una simulación física básica en un `JPanel` donde una esfera gráfica se desplace y rebote contra las paredes de la ventana:
+* La animación debe ejecutarse a aproximadamente 60 fotogramas por segundo utilizando un `javax.swing.Timer` con periodo de 16 ms.
+* En cada tick del temporizador: suma la velocidad `vx` y `vy` a las coordenadas `x` e `y`; si la pelota alcanza o supera los límites (`x < 0` o `x + DIAMETRO > getWidth()`), invierte el signo de la velocidad correspondiente (`vx = -vx`); y finalmente solicita un repintado con `repaint()`.
+* Añade un botón que permita alternar la pausa y reanudación de la animación (`timer.stop()` / `timer.start()`).
+
+```java
+package com.dam.boletin09.extras;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class PelotaRebotando extends JFrame {
+
+    private static class PanelPelota extends JPanel {
+        private int x = 50;
+        private int y = 50;
+        private int vx = 4;
+        private int vy = 3;
+        private static final int DIAMETRO = 28;
+
+        private final Timer timer = new Timer(16, e -> {
+            x += vx;
+            y += vy;
+            // Rebote horizontal
+            if (x < 0 || x + DIAMETRO > getWidth()) {
+                vx = -vx;
+            }
+            // Rebote vertical
+            if (y < 0 || y + DIAMETRO > getHeight()) {
+                vy = -vy;
+            }
+            repaint();
+        });
+
+        public PanelPelota() {
+            this.setBackground(Color.WHITE);
+            this.setPreferredSize(new Dimension(500, 350));
+            timer.start();
+        }
+
+        public void alternarAnimacion() {
+            if (timer.isRunning()) {
+                timer.stop();
+            } else {
+                timer.start();
+            }
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            g2.setColor(new Color(220, 53, 69)); // Pelota roja
+            g2.fillOval(x, y, DIAMETRO, DIAMETRO);
+
+            g2.setColor(Color.DARK_GRAY);
+            g2.drawOval(x, y, DIAMETRO, DIAMETRO);
+        }
+    }
+
+    public PelotaRebotando() {
+        super("Animación 60 FPS con javax.swing.Timer");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLayout(new BorderLayout());
+
+        PanelPelota panelLienzo = new PanelPelota();
+        this.add(panelLienzo, BorderLayout.CENTER);
+
+        JButton btnPausar = new JButton("Pausar / Reanudar");
+        btnPausar.addActionListener(e -> panelLienzo.alternarAnimacion());
+        JPanel panelSur = new JPanel(new FlowLayout());
+        panelSur.add(btnPausar);
+        this.add(panelSur, BorderLayout.SOUTH);
+
+        this.pack();
+        this.setLocationRelativeTo(null);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new PelotaRebotando().setVisible(true));
+    }
+}
+```
+

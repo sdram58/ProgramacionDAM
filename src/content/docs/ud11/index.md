@@ -178,6 +178,15 @@ En un grafo con cientos de objetos conectados entre sí (un cliente apunta a fac
 * **Profundidad de Activación (*Activation Depth*):** Número de niveles de referencias que Db4o carga automáticamente desde el disco al consultar un objeto raíz (por defecto, 5 niveles).
 * **Profundidad de Actualización (*Update Depth*):** Determina si al llamar a `store(objeto)` se deben actualizar también recursivamente los objetos anidados modificados.
 
+### 4.4. Evolución y Estado Actual de las BDOO: ObjectDB
+
+Aunque Db4o es un referente didáctico inmejorable por su sencillez conceptual, en entornos de producción actuales existen motores BDOO comerciales de alto rendimiento como **ObjectDB**. 
+
+La gran ventaja de ObjectDB es que se gestiona mediante la API estándar **JPA (Jakarta Persistence API)** que vimos en la Unidad 10:
+* Utiliza las mismas anotaciones oficiales (`@Entity`, `@Id`, `@OneToMany`, etc.).
+* Se programa con los mismos métodos (`em.persist(objeto)`, `em.find(Clase.class, id)`).
+* **La diferencia fundamental:** Por debajo no hay tablas relacionales ni sentencias SQL; ObjectDB serializa el grafo de objetos directamente en páginas de almacenamiento binario optimizado, eliminando el coste de traducción del ORM.
+
 ---
 
 ## 5. El Ecosistema NoSQL y la Era del Big Data
@@ -239,6 +248,19 @@ En MongoDB, cada documento posee una clave primaria única `_id` formada por un 
 * **4 bytes:** Marca de tiempo UNIX (*timestamp* en segundos desde 1970). Permite ordenar cronológicamente sin índice extra.
 * **5 bytes:** Identificador único aleatorio por proceso y máquina.
 * **3 bytes:** Contador incremental que garantiza unicidad local.
+
+### 6.3. Decisiones de Modelado: Embeber vs Referenciar
+
+Al no existir operaciones `JOIN` tradicionales en el motor documental, la arquitectura de los datos se rige por dos estrategias de diseño:
+
+1. **Embeber Documentos (*Embedded Documents*):**
+   * El subdocumento o array anidado se almacena dentro del documento padre (ej. los ítems o líneas de una factura, las direcciones de un cliente).
+   * **Ventajas:** Lectura atómica ultrarrápida en una sola consulta por clave primaria, sin cruces ni bloqueos de red.
+   * **Cuándo usarlo:** Relaciones "1 a pocos" o de contención lógica donde los elementos no tienen sentido de existencia independiente fuera del documento padre.
+2. **Referenciar Documentos (*Normalized References*):**
+   * Se almacena únicamente el identificador `_id` de la entidad foránea (similar a una clave ajena en SQL).
+   * **Ventajas:** Evita la duplicación de datos y previene documentos gigantescos que superen el límite físico de 16 MB por documento en MongoDB.
+   * **Cuándo usarlo:** Relaciones "Muchos a Muchos" (N:M) o "1 a miles/millones" (ej. un sensor con millones de lecturas históricas).
 
 ---
 
