@@ -63,7 +63,7 @@ public class Ejercicio02SumaMatriz {
         // Rellenar con números aleatorios [10, 99]
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < cols; j++) {
-                tabla[i][j] = (int) Math.Random()*(100 - 10) + 10;
+                tabla[i][j] = (int) Math.random()*(100 - 10) + 10;
             }
         }
 
