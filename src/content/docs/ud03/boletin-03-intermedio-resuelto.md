@@ -53,7 +53,6 @@ public class Ejercicio01Transpuesta {
 ### Solución Ejercicio 2: Suma por Filas y Columnas en Tablero 2D
 
 ```java
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Ejercicio02SumaMatriz {
     public static void main(String[] args) {
@@ -64,7 +63,7 @@ public class Ejercicio02SumaMatriz {
         // Rellenar con números aleatorios [10, 99]
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < cols; j++) {
-                tabla[i][j] = ThreadLocalRandom.current().nextInt(10, 100);
+                tabla[i][j] = (int) Math.Random()*(100 - 10) + 10;
             }
         }
 
