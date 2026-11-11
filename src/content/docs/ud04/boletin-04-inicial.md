@@ -1,14 +1,6 @@
 ---
 title: "Boletín 4.1: Nivel Inicial — Ejercicios Prácticos"
 description: "Ejercicios fundamentales de clases, atributos privados, constructores, getters y setters, la referencia this y miembros estáticos en Java."
-draft: true
-prev: false
-next: false
-sidebar:
-  order: 1
-  badge:
-    text: "Inicial"
-    variant: "note"
 ---
 
 Bienvenido al boletín de nivel inicial de la **Unidad 4: Clases y objetos**.
@@ -184,19 +176,37 @@ A continuación, explica cómo tendríamos que crear `l2` si quisiéramos tener 
 
 ---
 
-### Ejercicio 15: Sobrecarga de Métodos (`rellena`) y Argumentos Variables (`varargs`)
+### Ejercicio 15: La Clase `FormateadorBanner`: Encapsulamiento y Sobrecarga Orientada a Objetos
 **Enunciado:**  
-Crea una clase `UtilidadesTextoNumeros` que implemente y pruebe desde `main`:
-1. Un método estático `public static void rellena(char c, int n)` que imprima una línea con `n` repeticiones del carácter `c` (si `n <= 0`, imprime solo un salto de línea).
-2. Un método **sobrecargado** `public static void rellena(String texto)` que, para cada carácter del `String`, imprima una línea con 25 repeticiones de ese carácter reutilizando el método anterior.
-3. Un método estático `public static int maximo(int primero, int segundo, int... resto)` que acepte un número arbitrario de argumentos enteros (exigiendo como mínimo 2 gracias a los dos primeros parámetros fijos más el *varargs*) y devuelva el mayor de todos.
+Crea una clase `FormateadorBanner` para generar carteles y textos enmarcados en consola aplicando sobrecarga de métodos de instancia y variables de clase:
+- Atributos de instancia privados: `caracterBorde` (`char`, por defecto `'*'`) y `anchoMinimo` (`int`, debe ser como mínimo 10).
+- Atributo de clase privado: `private static int totalBannersGenerados = 0;`.
+- Constructores:
+  - Constructor por defecto que asigne `'*'` y ancho mínimo 30 delegando en el constructor parametrizado mediante `this('*', 30)`.
+  - Constructor parametrizado `public FormateadorBanner(char caracterBorde, int anchoMinimo)`.
+- Métodos sobrecargados de instancia:
+  - `public void imprimirBanner(String texto)`: imprime el texto centrado entre dos líneas horizontales formadas por el `caracterBorde`, asegurando el ancho mínimo e incrementando el contador global `totalBannersGenerados`.
+  - `public void imprimirBanner(String texto, char caracterEspecial)`: sobrecarga que utiliza temporalmente un carácter especial para ese cartel concreto, reutilizando la lógica interna.
+  - `public void imprimirLineas(String... lineas)`: acepta un número variable de líneas (*varargs*) y las imprime todas dentro de un único recuadro coordinado.
+- Método estático `public static int getTotalBannersGenerados()` para consultar el total global de carteles creados por cualquier instancia.
+- En `main`, crea dos instancias (una con `'='` y otra por defecto), genera varios carteles y banners multilínea, y comprueba el contador estático.
 
 ---
 
-### Ejercicio 16: Simulación de Dados y Menú de Moneda (Diseño Modular)
+### Ejercicio 16: Modelado de Objetos con Estado: Las Clases `Dado` y `Cubilete`
 **Enunciado:**  
-1. Escribe un método `public static int lanzarDadosHastaObjetivo(int objetivo)` que simule el lanzamiento repetido de un par de dados de 6 caras (usando `java.util.Random`) hasta que la suma de ambos dados coincida con el `objetivo` pasado por parámetro (validando primero que esté entre `2` y `12`). Devuelve cuántas tiradas han sido necesarias.
-2. Diseña una clase `SimuladorMoneda` que mantenga el conteo de caras y cruces obtenidas y ofrezca un menú interactivo en consola con 3 opciones (`1. Lanzar moneda`, `2. Ver resultados y porcentajes`, `3. Salir`), aplicando diseño modular (*top-down*).
+En lugar de funciones procedimentales sueltas, modela un simulador de juegos de azar aplicando Programación Orientada a Objetos:
+1. Diseña la clase `Dado`:
+   - Atributos privados: `numeroCaras` (entero, por defecto 6, validando que sea `>= 2`), `ultimoValor` (entero) y una instancia de `java.util.Random`.
+   - Constructor por defecto (6 caras) y constructor parametrizado `public Dado(int numeroCaras)`.
+   - Método `public int lanzar()`: genera un número aleatorio entre `1` y `numeroCaras`, actualiza `ultimoValor` y lo devuelve.
+   - Getter `public int getUltimoValor()` y método `toString()` que devuelva `"Dado de [N] caras (última tirada: [V])"`.
+2. Diseña la clase `Cubilete`:
+   - Atributo privado: un array de dados `private Dado[] dados`.
+   - Constructor `public Cubilete(int cantidadDados, int carasPorDado)`: inicializa el array con la cantidad indicada de objetos `Dado`.
+   - Método `public int tirarTodos()`: lanza todos los dados del cubilete y devuelve la suma total obtenida.
+   - Método `public int tirarHastaSuma(int sumaObjetivo)`: lanza repetidamente el cubilete hasta que la suma coincida con `sumaObjetivo` (validando que el objetivo sea matemáticamente posible), devolviendo cuántas tiradas han sido necesarias.
+3. En `main`, crea un cubilete con 2 dados de 6 caras, calcula cuántas tiradas se necesitan para sacar un 12, muestra el estado de cada dado mediante sus métodos y prueba también un dado de 20 caras (`D20`).
 
 ---
 

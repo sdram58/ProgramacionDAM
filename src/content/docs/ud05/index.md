@@ -4,6 +4,11 @@ description: "Relaciones entre clases, composición y copia segura, herencia y j
 draft: true
 prev: false
 next: false
+sidebar:
+  order: 5
+  badge:
+    text: "En revisión"
+    variant: "caution"
 ---
 
 ## Objetivos de Aprendizaje (RA4 y RA7 — 30 horas)
@@ -1834,3 +1839,59 @@ Pon a prueba tu dominio de la teoría antes de abordar los boletines prácticos:
     * `4) (Integer i) -> return "Alfonso " + i;`
     * `5) (String s) -> { "Iron Man"; }`
     <details><summary>Ver respuesta</summary>Son incorrectas la <b>4</b> (usa la palabra <code>return</code> sin encerrar el cuerpo entre llaves <code>{ ... ; }</code>) y la <b>5</b> (usa llaves de bloque <code>{ ... }</code> pero olvida poner la palabra clave <code>return</code> antes del literal <code>"Iron Man";</code>).</details>
+
+---
+
+## 10. Resumen de la Unidad y Conexión con la Unidad 6
+
+En esta unidad hemos completado la transición hacia el diseño de software profesional y desacoplado en Java:
+1. **Relaciones Estructurales y Copia Segura:** Comprendimos las diferencias entre clientela, asociación, agregación y composición, blindando nuestras clases contra fugas de privacidad (*privacy leaks*) mediante constructores de copia y clones profundos.
+2. **Herencia y Especialización:** Dominamos el uso de `extends`, el encadenamiento obligatorio de constructores con `super(...)`, la visibilidad `protected`, la sobrescritura rigurosa con `@Override`, el bloqueo con `final` y las modernas jerarquías selladas (`sealed`).
+3. **Abstracción e Interfaces:** Aprendimos a separar el contrato de la implementación mediante clases abstractas (`abstract class`) e interfaces (`interface`), aprovechando los métodos `default`, `static` y la ordenación natural con `Comparable<T>`.
+4. **Polimorfismo:** Interiorizamos el poder de la ligadura dinámica (*late binding*), el tratamiento uniforme de objetos heterogéneos y la conversión segura mediante *Pattern Matching for instanceof*.
+5. **Programación Funcional y Lambdas:** Simplificamos el código eliminando la verbosidad de las clases anónimas con interfaces funcionales (`@FunctionalInterface`), expresiones lambda (`->`), referencias a métodos (`::`) y el paquete estándar `java.util.function`.
+
+### El Salto Hacia la Unidad 6: Genéricos y Colecciones de Datos
+Hasta ahora, cuando necesitábamos gestionar múltiples objetos hemos recurrido a arrays convencionales o a un uso introductorio de `ArrayList<E>`. Sin embargo:
+* ¿Cómo podemos diseñar nuestras propias clases y métodos que funcionen con **cualquier tipo de dato de forma segura en tiempo de compilación** sin recurrir a conversiones forzadas (*casts*)?
+* ¿Qué ocurre si necesitamos estructuras dinámicas que no permitan duplicados (`Set`), que mantengan un orden específico o que permitan búsquedas instantáneas por clave (`Map`)?
+
+En la **Unidad 6: Genéricos y Colecciones de Datos**, conquistaremos el marco de colecciones de Java (*Java Collections Framework - JCF*), los tipos genéricos (`<T>`), los comodines (`? extends`, `? super`) y las estructuras de datos fundamentales para construir aplicaciones escalables y de alto rendimiento.
+
+---
+
+## 11. Relación Curricular Oficial (CFGS DAM - Módulo 0485)
+
+Esta unidad cubre de forma exhaustiva los **Resultados de Aprendizaje 4 y 7** con una dedicación estimada de **30 horas lectivas**:
+
+* **RA4: Desarrolla programas organizados en clases analizando y aplicando los principios de la programación orientada a objetos.**
+  * *4.a:* Se ha reconocido la sintaxis, estructura y componentes típicos de una clase.
+  * *4.b:* Se han definido clases.
+  * *4.c:* Se han definido propiedades y métodos.
+  * *4.d:* Se han creado constructores.
+  * *4.f:* Se han utilizado mecanismos para controlar la visibilidad de las clases y de sus miembros.
+  * *4.g:* Se han definido y utilizado clases heredadas.
+  * *4.h:* Se han creado y utilizado métodos estáticos.
+  * *4.i:* Se han definido y utilizado interfaces.
+  * *4.j:* Se han creado y utilizado conjuntos y librerías de clases.
+* **RA7: Utiliza las características avanzadas del lenguaje orientado a objetos diseñando y aplicando jerarquías de clases.**
+  * *7.a:* Se han identificado los conceptos de herencia, superclase y subclase.
+  * *7.b:* Se han utilizado modificadores para bloquear y forzar la herencia de clases y métodos.
+  * *7.c:* Se ha reconocido la incidencia de los constructores en la herencia.
+  * *7.d:* Se han creado clases heredadas que sobrescriban la implementación de métodos de la superclase.
+  * *7.e:* Se han diseñado y aplicado jerarquías de clases.
+  * *7.f:* Se han probado y depurado las jerarquías de clases.
+  * *7.g:* Se han realizado programas que implementen y utilicen jerarquías de clases.
+  * *7.h:* Se ha comentado y documentado el código.
+
+---
+
+## 12. 📝 Boletines de Ejercicios y Retos Prácticos
+
+Pon a prueba los conocimientos adquiridos a través de los cinco boletines de la unidad:
+
+* **[Boletín 5.1: Nivel Inicial — Ejercicios Propuestos](./boletin-05-inicial):** 12 ejercicios fundamentales de composición segura, refactorización de herencia errónea, `super(...)`, clases abstractas, interfaces y lambdas básicas.
+* **[Boletín 5.1 Resuelto: Soluciones Comentadas](./boletin-05-inicial-resuelto):** Código fuente completo, probado y explicado paso a paso de los 12 ejercicios iniciales.
+* **[Boletín 5.2: Nivel Intermedio — Ejercicios Propuestos](./boletin-05-intermedio):** 12 problemas arquitectónicos de jerarquías multinivel, composición vs. agregación, contratos de interfaces con métodos `default`, clases anidadas y composición de lambdas.
+* **[Boletín 5.2 Resuelto: Soluciones Comentadas](./boletin-05-intermedio-resuelto):** Soluciones comentadas y patrones de diseño aplicados para el nivel intermedio.
+* **[Boletín 5.3: Retos Avanzados y Programación Competitiva](./boletin-05-extras):** 8 grandes retos de ingeniería de software (análisis de riesgos inmutables, tienda de mascotas, red logística, sistema clínico veterinario SOFTVETClinic, simulador de vuelo, pasarela sellada funcional, motor de descuentos y simulador RPG táctico por turnos).

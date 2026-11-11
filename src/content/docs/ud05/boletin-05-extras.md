@@ -1,6 +1,6 @@
 ---
 title: "Boletín 5.3: Retos Avanzados y Proyectos Integradores de POO"
-description: "6 grandes retos y proyectos completos de arquitectura orientada a objetos: Análisis de Riesgos, Inventario de Mascotas, Logística de Almacenes, Clínica Veterinaria SOFTVETClinic y Jerarquías Selladas Funcionales en Java 25 LTS."
+description: "8 grandes retos y proyectos completos de arquitectura orientada a objetos: Análisis de Riesgos, Inventario de Mascotas, Logística de Almacenes, Clínica Veterinaria SOFTVETClinic y Jerarquías Selladas Funcionales en Java 25 LTS."
 draft: true
 prev: false
 next: false
@@ -992,3 +992,443 @@ public class Reto06PasarelaSelladaFuncional {
 }
 ```
 </details>
+
+---
+
+### Reto 7: Motor de Promociones y Descuentos con Composición Funcional (`Predicate` y `UnaryOperator`)
+
+#### Contexto y Planteamiento
+En el diseño de plataformas de comercio electrónico modernas, las promociones comerciales cambian constantemente (rebajas de temporada, descuentos por volumen, cupones VIP, promociones 2x1). Programar estas reglas mediante extensas cadenas de `if-else` en una sola clase rompe el principio de responsabilidad única y genera un código rígido y difícil de mantener.
+
+Diseña un **motor funcional de promociones y descuentos desacoplado**:
+1. Modela las clases de dominio inmutables:
+   - `record Articulo(String id, String nombre, double precioUnitario, String categoria)`.
+   - `record LineaPedido(Articulo articulo, int cantidad)` con método `subtotal()` (`precioUnitario * cantidad`).
+   - Clase `Pedido` con `id`, `cliente` (`record Cliente(String id, String nombre, boolean esVip)`), una lista `List<LineaPedido> lineas` y métodos para consultar:
+     - `calcularImporteBruto()`: suma de subtotales.
+     - `contarArticulosTotales()`: suma de unidades de todas las líneas.
+     - `tieneCategoria(String categoria)`: determina si alguna línea contiene artículos de esa categoría.
+2. Clase `ReglaPromocion`:
+   - Representa una oferta comercial definida por su `nombre` (`String`), una condición booleana de aplicabilidad (`Predicate<Pedido>`) y un cálculo de descuento funcional (`UnaryOperator<Double>`).
+   - Método `public double aplicar(Pedido p, double totalActual)`: si la condición se cumple, aplica el operador de descuento sobre `totalActual`; de lo contrario, devuelve `totalActual` sin cambios.
+3. Clase `MotorPromociones`:
+   - Mantiene una colección de `ReglaPromocion`.
+   - Permite registrar reglas comerciales independientes.
+   - Permite componer reglas lógicas mediante operadores `and()` y `or()` de `Predicate` y encadenar transformaciones con `andThen()`.
+   - Método `public double liquidarPedido(Pedido pedido)`: aplica secuencialmente todas las reglas activas acumulando los descuentos autorizados y mostrando un desglose legible.
+
+:::tip[Pista Funcional]
+Utiliza `UnaryOperator<Double>` (que extiende de `Function<Double, Double>`) para modelar reducciones como:
+`importe -> importe * 0.90` (descuento del 10%) o `importe -> importe - 15.0`.
+:::
+
+<details>
+<summary>💡 Ver Solución Comentada en Java 25 LTS</summary>
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
+
+public class Reto07MotorPromociones {
+
+    public record Articulo(String id, String nombre, double precioUnitario, String categoria) {}
+    public record LineaPedido(Articulo articulo, int cantidad) {
+        public double subtotal() { return articulo.precioUnitario() * cantidad; }
+    }
+    public record Cliente(String id, String nombre, boolean esVip) {}
+
+    public static class Pedido {
+        private final String id;
+        private final Cliente cliente;
+        private final List<LineaPedido> lineas;
+
+        public Pedido(String id, Cliente cliente) {
+            this.id = id;
+            this.cliente = cliente;
+            this.lineas = new ArrayList<>();
+        }
+
+        public void agregarLinea(Articulo a, int cantidad) {
+            this.lineas.add(new LineaPedido(a, cantidad));
+        }
+
+        public double calcularImporteBruto() {
+            double total = 0.0;
+            for (LineaPedido lp : lineas) total += lp.subtotal();
+            return total;
+        }
+
+        public int contarArticulosTotales() {
+            int count = 0;
+            for (LineaPedido lp : lineas) count += lp.cantidad();
+            return count;
+        }
+
+        public boolean tieneCategoria(String cat) {
+            for (LineaPedido lp : lineas) {
+                if (lp.articulo().categoria().equalsIgnoreCase(cat)) return true;
+            }
+            return false;
+        }
+
+        public String getId() { return id; }
+        public Cliente getCliente() { return cliente; }
+        public List<LineaPedido> getLineas() { return List.copyOf(lineas); }
+    }
+
+    public static class ReglaPromocion {
+        private final String nombre;
+        private final Predicate<Pedido> condicion;
+        private final UnaryOperator<Double> operadorDescuento;
+
+        public ReglaPromocion(String nombre, Predicate<Pedido> condicion, UnaryOperator<Double> operadorDescuento) {
+            this.nombre = nombre;
+            this.condicion = condicion;
+            this.operadorDescuento = operadorDescuento;
+        }
+
+        public double aplicar(Pedido pedido, double importeActual) {
+            if (condicion.test(pedido)) {
+                double nuevoImporte = operadorDescuento.apply(importeActual);
+                double ahorro = importeActual - nuevoImporte;
+                System.out.printf("   [+] Aplicada promo '%s' -> Ahorro: %.2f €%n", nombre, ahorro);
+                return nuevoImporte;
+            }
+            return importeActual;
+        }
+
+        public String getNombre() { return nombre; }
+    }
+
+    public static class MotorPromociones {
+        private final List<ReglaPromocion> reglas = new ArrayList<>();
+
+        public void registrarRegla(ReglaPromocion regla) {
+            this.reglas.add(regla);
+        }
+
+        public double liquidarPedido(Pedido pedido) {
+            double importeBruto = pedido.calcularImporteBruto();
+            System.out.printf("%n=== LIQUIDANDO PEDIDO %s (Cliente: %s) ===%n", pedido.getId(), pedido.getCliente().nombre());
+            System.out.printf("Importe bruto inicial: %.2f € (Total artículos: %d)%n", importeBruto, pedido.contarArticulosTotales());
+
+            double importeNeto = importeBruto;
+            for (ReglaPromocion regla : reglas) {
+                importeNeto = regla.aplicar(pedido, importeNeto);
+            }
+
+            System.out.printf(">>> Total final a pagar: %.2f € (Ahorro total: %.2f €)%n",
+                    importeNeto, importeBruto - importeNeto);
+            return importeNeto;
+        }
+    }
+
+    public static void main(String[] args) {
+        MotorPromociones motor = new MotorPromociones();
+
+        // Regla 1: Descuento del 10% si el cliente es VIP
+        motor.registrarRegla(new ReglaPromocion(
+                "Descuento Cliente VIP (10%)",
+                p -> p.getCliente().esVip(),
+                importe -> importe * 0.90
+        ));
+
+        // Regla 2: Descuento fijo de 15€ si el pedido supera 100€ de compra
+        motor.registrarRegla(new ReglaPromocion(
+                "Bono Super Compra > 100€ (-15€)",
+                p -> p.calcularImporteBruto() > 100.0,
+                importe -> Math.max(0.0, importe - 15.0)
+        ));
+
+        // Regla 3: Descuento del 5% si compra más de 5 artículos en total
+        motor.registrarRegla(new ReglaPromocion(
+                "Pack Volumen > 5 artículos (5%)",
+                p -> p.contarArticulosTotales() > 5,
+                importe -> importe * 0.95
+        ));
+
+        // Artículos de prueba
+        Articulo teclado = new Articulo("A1", "Teclado Mecánico", 60.0, "Periféricos");
+        Articulo raton   = new Articulo("A2", "Ratón Gaming", 30.0, "Periféricos");
+        Articulo cable   = new Articulo("A3", "Cable USB-C", 5.0, "Accesorios");
+
+        // Pedido 1: Cliente VIP que gasta 150€ con 6 artículos
+        Cliente vip = new Cliente("C1", "Elena Morales", true);
+        Pedido pedido1 = new Pedido("PED-2025-01", vip);
+        pedido1.agregarLinea(teclado, 2); // 120€
+        pedido1.agregarLinea(raton, 1);   // 30€
+        pedido1.agregarLinea(cable, 3);   // 15€ -> Total 165€ (6 artículos)
+
+        motor.liquidarPedido(pedido1);
+
+        // Pedido 2: Cliente estándar con compra pequeña
+        Cliente normal = new Cliente("C2", "Marcos Ruiz", false);
+        Pedido pedido2 = new Pedido("PED-2025-02", normal);
+        pedido2.agregarLinea(raton, 1); // 30€
+        pedido2.agregarLinea(cable, 1); // 5€ -> Total 35€ (2 artículos)
+
+        motor.liquidarPedido(pedido2);
+    }
+}
+```
+</details>
+
+---
+
+### Reto 8: Simulador de Combate Táctico por Turnos (RPG) con Jerarquías Polimórficas e Interfaces de Acción
+
+#### Contexto y Planteamiento
+En el desarrollo de videojuegos y motores de simulación, la Programación Orientada a Objetos combinada con polimorfismo dinámico es el estándar indiscutible. Permite incorporar nuevos tipos de héroes o criaturas sin alterar la lógica del bucle principal de batalla.
+
+Diseña un **simulador de combate táctico por turnos** aplicando herencia, clases abstractas, interfaces de habilidad y ligadura dinámica:
+1. **Clase Abstracta `Personaje`:**
+   - Atributos protegidos: `nombre` (`String`), `puntosVida` (`int`), `vidaMaxima` (`int`), `ataqueBase` (`int`) y `defensaBase` (`int`).
+   - Constructor canónico que inicialice y valide los atributos (vida máxima no puede ser inferior a 1).
+   - Métodos concretos:
+     - `public boolean estaVivo()`: devuelve `puntosVida > 0`.
+     - `public void recibirDanio(int danioBruto)`: resta `Math.max(1, danioBruto - defensaBase)` a los puntos de vida (sin permitir valores negativos).
+     - `public void curar(int puntos)`: suma vida sin sobrepasar `vidaMaxima`.
+   - Método abstracto:
+     - `public abstract void ejecutarTurno(List<Personaje> aliados, List<Personaje> enemigos);`
+2. **Interfaces de Habilidades:**
+   - `interface Magico`: declara métodos `int getMana()`, `void consumirMana(int coste)` y `void recargarMana(int cantidad)`.
+   - `interface Sanador`: declara método `void aplicarCuracion(Personaje objetivo)`.
+3. **Subclases Concretas de Personajes:**
+   - **`Guerrero` (`extends Personaje`):** Ataca al enemigo vivo con mayor vida. Si la vida del guerrero está por debajo del 40% de su vida máxima, entra en *modo furia* multiplicando su ataque por 1.5.
+   - **`Mago` (`extends Personaje implements Magico`):** Posee `mana` (máximo 100). Si tiene al menos 30 puntos de maná, lanza una *Explosión Arcana* que daña a **todos los enemigos vivos** por igual consumiendo 30 de maná. Si no tiene maná suficiente, realiza un ataque físico débil al enemigo más cercano y recarga 15 de maná.
+   - **`Clerigo` (`extends Personaje implements Magico, Sanador`):** Posee `mana` (máximo 80). En su turno, busca al aliado vivo con menor porcentaje de salud. Si tiene menos del 70% de vida y el clérigo tiene maná (`>= 25`), lo cura consumiendo 25 de maná. De lo contrario, ataca al enemigo más débil.
+4. **Clase `MotorBatalla`:**
+   - Contiene dos bandos: `List<Personaje> equipoAzul` y `List<Personaje> equipoRojo`.
+   - Método `public void simularCombate()`: ejecuta rondas de combate por turnos en bucle. En cada ronda, todos los personajes vivos de ambos bandos ejecutan su turno polimórficamente (`p.ejecutarTurno(...)`). La batalla concluye cuando uno de los dos equipos queda completamente fuera de combate.
+
+:::tip[Pista Polimórfica]
+En el bucle de batalla, la clase `MotorBatalla` nunca debe preguntar con `instanceof` qué tipo de personaje es: simplemente invoca `p.ejecutarTurno(aliados, enemigos)`. La **ligadura dinámica** de Java se encarga de ejecutar la estrategia específica de cada clase concreta.
+:::
+
+<details>
+<summary>💡 Ver Solución Comentada en Java 25 LTS</summary>
+
+```java
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+public class Reto08CombateTacticoRPG {
+
+    // 1. CLASE ABSTRACTA BASE
+    public static abstract class Personaje {
+        protected final String nombre;
+        protected int puntosVida;
+        protected final int vidaMaxima;
+        protected int ataqueBase;
+        protected int defensaBase;
+
+        public Personaje(String nombre, int vidaMaxima, int ataqueBase, int defensaBase) {
+            this.nombre = nombre;
+            this.vidaMaxima = vidaMaxima;
+            this.puntosVida = vidaMaxima;
+            this.ataqueBase = ataqueBase;
+            this.defensaBase = defensaBase;
+        }
+
+        public boolean estaVivo() { return this.puntosVida > 0; }
+
+        public void recibirDanio(int danioBruto) {
+            int danioReal = Math.max(1, danioBruto - this.defensaBase);
+            this.puntosVida = Math.max(0, this.puntosVida - danioReal);
+            System.out.printf("   [!] %s recibe %d de daño (Vida restante: %d/%d)%n",
+                    this.nombre, danioReal, this.puntosVida, this.vidaMaxima);
+        }
+
+        public void curar(int puntos) {
+            if (!estaVivo()) return;
+            this.puntosVida = Math.min(this.vidaMaxima, this.puntosVida + puntos);
+            System.out.printf("   [+] %s es curado con %d PV (Vida: %d/%d)%n",
+                    this.nombre, puntos, this.puntosVida, this.vidaMaxima);
+        }
+
+        public double porcentajeVida() {
+            return (double) this.puntosVida / this.vidaMaxima;
+        }
+
+        public String getNombre() { return nombre; }
+        public int getPuntosVida() { return puntosVida; }
+
+        // MÉTODO ABSTRACTO POLIMÓRFICO
+        public abstract void ejecutarTurno(List<Personaje> aliados, List<Personaje> enemigos);
+
+        @Override
+        public String toString() {
+            return String.format("%s [%d/%d PV]", nombre, puntosVida, vidaMaxima);
+        }
+    }
+
+    // 2. INTERFACES DE HABILIDAD
+    public interface Magico {
+        int getMana();
+        void consumirMana(int coste);
+        void recargarMana(int cantidad);
+    }
+
+    public interface Sanador {
+        void aplicarCuracion(Personaje objetivo);
+    }
+
+    // 3. SUBCLASES CONCRETAS
+
+    // Guerrero: Ataca al enemigo con más vida; modo furia si vida < 40%
+    public static class Guerrero extends Personaje {
+        public Guerrero(String nombre) {
+            super(nombre, 220, 35, 12);
+        }
+
+        @Override
+        public void ejecutarTurno(List<Personaje> aliados, List<Personaje> enemigos) {
+            Personaje objetivo = enemigos.stream()
+                    .filter(Personaje::estaVivo)
+                    .max(Comparator.comparingInt(Personaje::getPuntosVida))
+                    .orElse(null);
+
+            if (objetivo == null) return;
+
+            int danio = this.ataqueBase;
+            if (porcentajeVida() < 0.40) {
+                danio = (int) (danio * 1.5);
+                System.out.printf("⚔️ %s entra en ¡MODO FURIA! y ataca con %d puntos a %s%n",
+                        this.nombre, danio, objetivo.getNombre());
+            } else {
+                System.out.printf("⚔️ %s ataca con su espada a %s%n", this.nombre, objetivo.getNombre());
+            }
+            objetivo.recibirDanio(danio);
+        }
+    }
+
+    // Mago: Ataque en área si tiene maná (>= 30), o recarga
+    public static class Mago extends Personaje implements Magico {
+        private int mana = 100;
+
+        public Mago(String nombre) {
+            super(nombre, 120, 20, 5);
+        }
+
+        @Override public int getMana() { return mana; }
+        @Override public void consumirMana(int c) { this.mana = Math.max(0, this.mana - c); }
+        @Override public void recargarMana(int c) { this.mana = Math.min(100, this.mana + c); }
+
+        @Override
+        public void ejecutarTurno(List<Personaje> aliados, List<Personaje> enemigos) {
+            if (this.mana >= 30) {
+                consumirMana(30);
+                System.out.printf("🔮 %s lanza ¡EXPLOSIÓN ARCANA EN ÁREA! (Maná restante: %d)%n", this.nombre, this.mana);
+                for (Personaje e : enemigos) {
+                    if (e.estaVivo()) e.recibirDanio(40);
+                }
+            } else {
+                recargarMana(20);
+                System.out.printf("🪄 %s no tiene suficiente maná; medita y recupera 20 de maná (Maná: %d)%n", this.nombre, this.mana);
+            }
+        }
+    }
+
+    // Clérigo: Cura al aliado más herido o ataca al más débil
+    public static class Clerigo extends Personaje implements Magico, Sanador {
+        private int mana = 80;
+
+        public Clerigo(String nombre) {
+            super(nombre, 160, 18, 8);
+        }
+
+        @Override public int getMana() { return mana; }
+        @Override public void consumirMana(int c) { this.mana = Math.max(0, this.mana - c); }
+        @Override public void recargarMana(int c) { this.mana = Math.min(80, this.mana + c); }
+
+        @Override
+        public void aplicarCuracion(Personaje objetivo) {
+            consumirMana(25);
+            System.out.printf("✨ %s invoca ¡PLEGARIA SAGRADA! sobre %s (Maná restante: %d)%n",
+                    this.nombre, objetivo.getNombre(), this.mana);
+            objetivo.curar(50);
+        }
+
+        @Override
+        public void ejecutarTurno(List<Personaje> aliados, List<Personaje> enemigos) {
+            Personaje masHerido = aliados.stream()
+                    .filter(Personaje::estaVivo)
+                    .min(Comparator.comparingDouble(Personaje::porcentajeVida))
+                    .orElse(null);
+
+            if (masHerido != null && masHerido.porcentajeVida() < 0.70 && this.mana >= 25) {
+                aplicarCuracion(masHerido);
+            } else {
+                Personaje objetivo = enemigos.stream()
+                        .filter(Personaje::estaVivo)
+                        .min(Comparator.comparingInt(Personaje::getPuntosVida))
+                        .orElse(null);
+                if (objetivo != null) {
+                    System.out.printf("🔨 %s golpea con su maza bendita a %s%n", this.nombre, objetivo.getNombre());
+                    objetivo.recibirDanio(this.ataqueBase);
+                }
+            }
+        }
+    }
+
+    // 4. MOTOR DE COMBATE POLIMÓRFICO
+    public static class MotorBatalla {
+        public static void simular(List<Personaje> equipoAzul, List<Personaje> equipoRojo) {
+            int ronda = 1;
+
+            while (haySupervivientes(equipoAzul) && haySupervivientes(equipoRojo)) {
+                System.out.printf("%n==================== RONDA %d ====================%n", ronda++);
+
+                // Turno del Equipo Azul
+                for (Personaje p : equipoAzul) {
+                    if (p.estaVivo() && haySupervivientes(equipoRojo)) {
+                        p.ejecutarTurno(equipoAzul, equipoRojo);
+                    }
+                }
+
+                // Turno del Equipo Rojo
+                for (Personaje p : equipoRojo) {
+                    if (p.estaVivo() && haySupervivientes(equipoAzul)) {
+                        p.ejecutarTurno(equipoRojo, equipoAzul);
+                    }
+                }
+            }
+
+            System.out.println("
+🏁 ================= FIN DE LA BATALLA =================");
+            if (haySupervivientes(equipoAzul)) {
+                System.out.println("¡VICTORIA DEL EQUIPO AZUL!");
+                System.out.println("Supervivientes: " + equipoAzul.stream().filter(Personaje::estaVivo).toList());
+            } else {
+                System.out.println("¡VICTORIA DEL EQUIPO ROJO!");
+                System.out.println("Supervivientes: " + equipoRojo.stream().filter(Personaje::estaVivo).toList());
+            }
+        }
+
+        private static boolean haySupervivientes(List<Personaje> equipo) {
+            return equipo.stream().anyMatch(Personaje::estaVivo);
+        }
+    }
+
+    public static void main(String[] args) {
+        List<Personaje> equipoAzul = new ArrayList<>(List.of(
+            new Guerrero("Arthas (Guerrero)"),
+            new Mago("Jaina (Maga)"),
+            new Clerigo("Anduin (Clérigo)")
+        ));
+
+        List<Personaje> equipoRojo = new ArrayList<>(List.of(
+            new Guerrero("Grommash (Orco Guerrero)"),
+            new Mago("Guldan (Brujo Mago)"),
+            new Guerrero("Varok (Orco Berserker)")
+        ));
+
+        MotorBatalla.simular(equipoAzul, equipoRojo);
+    }
+}
+```
+</details>
+

@@ -1,14 +1,6 @@
 ---
 title: "Boletín 4.2: Nivel Intermedio — Ejercicios Prácticos"
 description: "Ejercicios avanzados de orientación a objetos: composición, contratos equals y hashCode, inmutabilidad, records, enums, patrón Singleton y factorías estáticas en Java."
-draft: true
-prev: false
-next: false
-sidebar:
-  order: 3
-  badge:
-    text: "Intermedio"
-    variant: "caution"
 ---
 
 Bienvenido al boletín de nivel intermedio de la **Unidad 4: Clases y objetos**.
@@ -165,12 +157,28 @@ Crea la clase `Circulo` con atributo `private double radio`, constructor, getter
 
 ---
 
-### Ejercicio 16: `StringBuilder`, Conversión Hexadecimal y Expresiones Regulares (`Pattern` / `Matcher`)
+### Ejercicio 16: Sistema de Gestión de Inventario: Clases de Dominio, Invariantes y Contenedor de Objetos
 **Enunciado:**  
-Implementa una clase de utilidades avanzadas de texto que resuelva los siguientes tres problemas:  
-1. **Capitalizador eficiente (`StringBuilder`):** Método `public static String capitalizar(String frase)` que convierta en mayúscula la primera letra de cada palabra usando `StringBuilder`, `Character.isLetter(c)` y `Character.toUpperCase(c)` (ej. `"ha llegado el momento"` → `"Ha Llegado El Momento"`).  
-2. **Evaluador Hexadecimal (`hexValor`):** Método `public static int hexValor(char c)` con un `switch` que devuelva el valor de `0` a `15` de un dígito hexadecimal (mayúscula o minúscula) o `-1` si no es válido, y un método `hexADecimal(String hex)` que calcule su valor decimal aplicando `valor = valor * 16 + hexValor(s.charAt(i))`.  
-3. **Contador de Expresiones Regulares (`cuentaMatches`):** Método sobrecargado `cuentaMatches(String er, String texto)` y `cuentaMatches(String er, String texto, int flags)` usando `Pattern` y `Matcher.find()` que cuente cuántas subcadenas casan con el patrón, además de validar enteros (`"^[+-]?\\d+$"`) y octetos IPv4 (`0..255`).
+Diseña un sistema orientado a objetos para gestionar el catálogo y stock de un almacén informático mediante clases bien encapsuladas:
+1. **Clase de entidad `Articulo`:**
+   - Atributos privados: `codigo` (`String`, debe seguir el patrón `^[A-Z]{3}-\d{3}$`, ej. `"TEC-101"`), `descripcion` (`String` no nulo ni en blanco), `precio` (`double > 0`) y `stock` (`int >= 0`).
+   - Constructor canónico con validación rigurosa de todas las invariantes (lanzando `IllegalArgumentException` ante datos erróneos).
+   - Métodos getters y setters (con validación de datos en setters).
+   - Métodos de negocio:
+     - `public void reponer(int cantidad)`: incrementa el stock (validando que `cantidad > 0`).
+     - `public boolean vender(int cantidad)`: si hay stock suficiente, descuenta las unidades y devuelve `true`; en caso contrario devuelve `false` sin modificar el stock.
+   - Sobrescritura canónica de `equals(Object o)` y `hashCode()` basados exclusivamente en el `codigo`.
+   - Sobrescritura de `toString()` con formato: `"Articulo[TEC-101: Teclado Mecánico | 59.99 € | Stock: 15]"`.
+2. **Clase contenedora de dominio `GestorAlmacen`:**
+   - Atributos privados: un array `private Articulo[] articulos` y un contador `private int totalArticulos`.
+   - Constructor `public GestorAlmacen(int capacidadMaxima)`: inicializa el array con el tamaño indicado.
+   - Métodos del almacén:
+     - `public boolean registrarArticulo(Articulo a)`: comprueba que no sea nulo, que el almacén no esté lleno y que no exista ya un artículo con el mismo código (`equals`). Retorna `true` si se registró con éxito.
+     - `public Articulo buscarPorCodigo(String codigo)`: busca por código y devuelve la referencia al artículo, o `null` si no existe.
+     - `public boolean eliminarArticulo(String codigo)`: localiza el artículo, lo elimina y **compacta el array hacia la izquierda** para evitar huecos intermedios, decrementando `totalArticulos`.
+     - `public double calcularValorTotalInventario()`: calcula y devuelve el valor económico total (`precio * stock`) de todas las existencias almacenadas.
+     - `public Articulo[] getArticulosDisponibles()`: devuelve una **copia defensiva** del array conteniendo exactamente los artículos registrados (sin posiciones nulas sobrantes).
+3. En `main`, crea un almacén con capacidad para 5 productos, registra 3 artículos, realiza una venta válida y otra con stock insuficiente, consulta el valor total del inventario, busca un artículo por código, elimina uno y comprueba que el array queda perfectamente compactado.
 
 ---
 

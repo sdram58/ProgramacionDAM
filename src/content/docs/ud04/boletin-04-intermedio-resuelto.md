@@ -1,14 +1,6 @@
 ---
-title: "Boletín 4.2: Nivel Intermedio — Soluciones Resueltas"
+title: "Boletín 4.2: Nivel Intermedio (Resuelto) — Soluciones Comentadas"
 description: "Soluciones completas, comentadas y optimizadas de los 16 ejercicios de nivel intermedio de la Unidad 4 en Java 25 LTS."
-draft: true
-prev: false
-next: false
-sidebar:
-  order: 4
-  badge:
-    text: "Soluciones"
-    variant: "success"
 ---
 
 A continuación se presentan las soluciones comentadas de los 16 ejercicios de nivel intermedio de la Unidad 4, haciendo énfasis en la inmutabilidad, el respeto a los contratos de `Object`, la modularidad y los patrones de diseño orientados a objetos.
@@ -899,87 +891,188 @@ public final class AlumnoInmutable {
 
 ---
 
-### Solución Ejercicio 16: `StringBuilder`, Conversión Hexadecimal y Expresiones Regulares (`Pattern` / `Matcher`)
+### Solución Ejercicio 16: Sistema de Gestión de Inventario: Clases de Dominio, Invariantes y Contenedor de Objetos
 
 ```java
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Arrays;
+import java.util.Objects;
 
-public class UtilidadesTextoYRegex {
+public class GestionInventarioAlmacen {
 
-    // 1. Capitalizar la primera letra de cada palabra usando StringBuilder
-    public static String capitalizar(String frase) {
-        if (frase == null || frase.isEmpty()) return frase;
-        StringBuilder sb = new StringBuilder(frase.length());
-        boolean inicioPalabra = true;
+    // 1. CLASE DE ENTIDAD: ARTÍCULO
+    public static class Articulo {
+        private final String codigo; // Inmutable una vez asignado
+        private String descripcion;
+        private double precio;
+        private int stock;
 
-        for (int i = 0; i < frase.length(); i++) {
-            char c = frase.charAt(i);
-            if (Character.isLetter(c)) {
-                sb.append(inicioPalabra ? Character.toUpperCase(c) : c);
-                inicioPalabra = false;
-            } else {
-                sb.append(c);
-                inicioPalabra = true;
+        public Articulo(String codigo, String descripcion, double precio, int stock) {
+            if (codigo == null || !codigo.matches("^[A-Z]{3}-\\d{3}$")) {
+                throw new IllegalArgumentException("Código inválido (formato esperado 'ABC-123'): " + codigo);
             }
-        }
-        return sb.toString();
-    }
-
-    // 2. Valor de un dígito hexadecimal y conversión de cadena Hex a Decimal
-    public static int hexValor(char c) {
-        return switch (Character.toUpperCase(c)) {
-            case '0' -> 0; case '1' -> 1; case '2' -> 2; case '3' -> 3; case '4' -> 4;
-            case '5' -> 5; case '6' -> 6; case '7' -> 7; case '8' -> 8; case '9' -> 9;
-            case 'A' -> 10; case 'B' -> 11; case 'C' -> 12;
-            case 'D' -> 13; case 'E' -> 14; case 'F' -> 15;
-            default -> -1;
-        };
-    }
-
-    public static long hexADecimal(String hex) {
-        if (hex == null || hex.isEmpty()) throw new IllegalArgumentException("Cadena vacía");
-        long valor = 0;
-        for (int i = 0; i < hex.length(); i++) {
-            int digito = hexValor(hex.charAt(i));
-            if (digito == -1) {
-                throw new IllegalArgumentException("Carácter no hexadecimal: " + hex.charAt(i));
+            if (descripcion == null || descripcion.isBlank()) {
+                throw new IllegalArgumentException("La descripción no puede estar vacía.");
             }
-            valor = valor * 16 + digito;
+            if (precio <= 0) {
+                throw new IllegalArgumentException("El precio debe ser estrictamente positivo: " + precio);
+            }
+            if (stock < 0) {
+                throw new IllegalArgumentException("El stock no puede ser negativo: " + stock);
+            }
+            this.codigo = codigo;
+            this.descripcion = descripcion.trim();
+            this.precio = precio;
+            this.stock = stock;
         }
-        return valor;
+
+        public String getCodigo() { return codigo; }
+        public String getDescripcion() { return descripcion; }
+        public double getPrecio() { return precio; }
+        public int getStock() { return stock; }
+
+        public void setDescripcion(String descripcion) {
+            if (descripcion == null || descripcion.isBlank()) {
+                throw new IllegalArgumentException("Descripción vacía.");
+            }
+            this.descripcion = descripcion.trim();
+        }
+
+        public void setPrecio(double precio) {
+            if (precio <= 0) {
+                throw new IllegalArgumentException("Precio debe ser > 0.");
+            }
+            this.precio = precio;
+        }
+
+        public void reponer(int cantidad) {
+            if (cantidad <= 0) {
+                throw new IllegalArgumentException("La cantidad a reponer debe ser positiva: " + cantidad);
+            }
+            this.stock += cantidad;
+        }
+
+        public boolean vender(int cantidad) {
+            if (cantidad <= 0 || cantidad > this.stock) {
+                return false; // Venta rechazada
+            }
+            this.stock -= cantidad;
+            return true;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Articulo otro)) return false;
+            return Objects.equals(this.codigo, otro.codigo);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.codigo);
+        }
+
+        @Override
+        public String toString() {
+            return String.format("Articulo[%s: %s | %.2f € | Stock: %d]",
+                    codigo, descripcion, precio, stock);
+        }
     }
 
-    // 3. Contador de coincidencias con Pattern y Matcher (sobrecargado con flags)
-    public static int cuentaMatches(String er, String texto) {
-        return cuentaMatches(er, texto, 0);
-    }
+    // 2. CLASE CONTENEDORA: GESTOR DE ALMACÉN
+    public static class GestorAlmacen {
+        private final Articulo[] articulos;
+        private int totalArticulos;
 
-    public static int cuentaMatches(String er, String texto, int flags) {
-        Pattern p = Pattern.compile(er, flags);
-        Matcher m = p.matcher(texto);
-        int contador = 0;
-        while (m.find()) {
-            contador++;
+        public GestorAlmacen(int capacidadMaxima) {
+            if (capacidadMaxima <= 0) {
+                throw new IllegalArgumentException("La capacidad debe ser positiva.");
+            }
+            this.articulos = new Articulo[capacidadMaxima];
+            this.totalArticulos = 0;
         }
-        return contador;
+
+        public boolean registrarArticulo(Articulo a) {
+            if (a == null) return false;
+            if (totalArticulos >= articulos.length) return false; // Lleno
+            if (buscarPorCodigo(a.getCodigo()) != null) return false; // Ya existe
+
+            articulos[totalArticulos++] = a;
+            return true;
+        }
+
+        public Articulo buscarPorCodigo(String codigo) {
+            if (codigo == null) return null;
+            for (int i = 0; i < totalArticulos; i++) {
+                if (articulos[i].getCodigo().equalsIgnoreCase(codigo)) {
+                    return articulos[i];
+                }
+            }
+            return null;
+        }
+
+        public boolean eliminarArticulo(String codigo) {
+            for (int i = 0; i < totalArticulos; i++) {
+                if (articulos[i].getCodigo().equalsIgnoreCase(codigo)) {
+                    // Compactar hacia la izquierda
+                    for (int j = i; j < totalArticulos - 1; j++) {
+                        articulos[j] = articulos[j + 1];
+                    }
+                    articulos[totalArticulos - 1] = null; // Limpiar para Garbage Collector
+                    totalArticulos--;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public double calcularValorTotalInventario() {
+            double total = 0.0;
+            for (int i = 0; i < totalArticulos; i++) {
+                total += articulos[i].getPrecio() * articulos[i].getStock();
+            }
+            return total;
+        }
+
+        // Copia defensiva del array disponible
+        public Articulo[] getArticulosDisponibles() {
+            return Arrays.copyOf(this.articulos, this.totalArticulos);
+        }
+
+        public int getTotalArticulos() { return totalArticulos; }
+        public int getCapacidadMaxima() { return articulos.length; }
     }
 
     public static void main(String[] args) {
-        System.out.println(capitalizar("ha llegado el momento de la verdad"));
-        System.out.println("FABADA en decimal: " + hexADecimal("FABADA"));
+        GestorAlmacen almacen = new GestorAlmacen(5);
 
-        // Patrón de entero con signo opcional y patrón de octeto IPv4 (0..255)
-        String regexEntero = "^[+-]?\\d+$";
-        String regexOctetoIPv4 = "^(25[0-5]|2[0-4]\\d|1\\d{2}|[1-9]?\\d)$";
+        Articulo a1 = new Articulo("TEC-101", "Teclado Mecánico RGB", 59.99, 15);
+        Articulo a2 = new Articulo("RAT-202", "Ratón Óptico Ergonómico", 29.50, 20);
+        Articulo a3 = new Articulo("MON-303", "Monitor 27 Pulgadas IPS", 189.00, 8);
 
-        System.out.println("¿'-43' es entero?: " + "-43".matches(regexEntero));       // true
-        System.out.println("¿'192' es octeto IPv4?: " + "192".matches(regexOctetoIPv4)); // true
-        System.out.println("¿'256' es octeto IPv4?: " + "256".matches(regexOctetoIPv4)); // false
+        almacen.registrarArticulo(a1);
+        almacen.registrarArticulo(a2);
+        almacen.registrarArticulo(a3);
 
-        System.out.println("Matches case-insensitive de 'perro': " +
-                cuentaMatches("perro", "Esto es un Perro y otro PERRO", Pattern.CASE_INSENSITIVE)); // 2
+        System.out.println("Artículos registrados: " + almacen.getTotalArticulos());
+        System.out.printf("Valor total del inventario: %.2f €%n", almacen.calcularValorTotalInventario());
+
+        // Operaciones de venta
+        System.out.println("
+Venta de 5 teclados: " + (a1.vender(5) ? "Éxito" : "Rechazada"));
+        System.out.println("Venta de 50 monitores (insuficiente): " + (a3.vender(50) ? "Éxito" : "Rechazada"));
+        System.out.println(a1);
+
+        // Eliminación y compactación
+        System.out.println("
+Eliminando ratón (RAT-202): " + almacen.eliminarArticulo("RAT-202"));
+        System.out.println("Total artículos tras borrado: " + almacen.getTotalArticulos());
+
+        // Listar copia defensiva
+        System.out.println("
+Listado actual del almacén:");
+        for (Articulo a : almacen.getArticulosDisponibles()) {
+            System.out.println(" - " + a);
+        }
     }
 }
 ```
-

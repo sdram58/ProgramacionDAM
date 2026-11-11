@@ -1,14 +1,6 @@
 ---
-title: "Boletín 4.1: Nivel Inicial — Soluciones Resueltas"
+title: "Boletín 4.1: Nivel Inicial (Resuelto) — Soluciones Comentadas"
 description: "Soluciones completas y comentadas de los 16 ejercicios de nivel inicial de la Unidad 4 en Java 25 LTS."
-draft: true
-prev: false
-next: false
-sidebar:
-  order: 2
-  badge:
-    text: "Soluciones"
-    variant: "success"
 ---
 
 A continuación se presentan las soluciones comentadas de los 16 ejercicios iniciales de la Unidad 4, implementadas siguiendo los estándares de encapsulación, validación defensiva y buenas prácticas de Java 25 LTS.
@@ -701,116 +693,213 @@ true
 
 ---
 
-### Solución Ejercicio 15: Sobrecarga de Métodos (`rellena`) y Argumentos Variables (`varargs`)
+### Solución Ejercicio 15: La Clase `FormateadorBanner`: Encapsulamiento y Sobrecarga Orientada a Objetos
 
 ```java
-public class UtilidadesTextoNumeros {
+public class FormateadorBanner {
+    private char caracterBorde;
+    private int anchoMinimo;
+    private static int totalBannersGenerados = 0;
 
-    // 1. Método rellena(char, int)
-    public static void rellena(char c, int n) {
-        for (int i = 0; i < n; i++) {
+    // Constructor canónico con validación
+    public FormateadorBanner(char caracterBorde, int anchoMinimo) {
+        if (anchoMinimo < 10) {
+            throw new IllegalArgumentException("El ancho mínimo no puede ser menor a 10.");
+        }
+        this.caracterBorde = caracterBorde;
+        this.anchoMinimo = anchoMinimo;
+    }
+
+    // Constructor por defecto delegando con this(...)
+    public FormateadorBanner() {
+        this('*', 30);
+    }
+
+    // 1. Método sobrecargado principal
+    public void imprimirBanner(String texto) {
+        imprimirBanner(texto, this.caracterBorde);
+    }
+
+    // 2. Sobrecarga con carácter especial
+    public void imprimirBanner(String texto, char caracterEspecial) {
+        String textoLimpio = (texto == null) ? "" : texto.trim();
+        int longitudLinea = Math.max(this.anchoMinimo, textoLimpio.length() + 4);
+        
+        imprimirLineaBorde(longitudLinea, caracterEspecial);
+        System.out.printf("%c %s %c%n", caracterEspecial, centrarTexto(textoLimpio, longitudLinea - 4), caracterEspecial);
+        imprimirLineaBorde(longitudLinea, caracterEspecial);
+        
+        totalBannersGenerados++;
+    }
+
+    // 3. Método con varargs para múltiples líneas
+    public void imprimirLineas(String... lineas) {
+        if (lineas == null || lineas.length == 0) {
+            imprimirBanner("");
+            return;
+        }
+        int maxLen = 0;
+        for (String linea : lineas) {
+            if (linea != null && linea.length() > maxLen) {
+                maxLen = linea.length();
+            }
+        }
+        int longitudLinea = Math.max(this.anchoMinimo, maxLen + 4);
+        
+        imprimirLineaBorde(longitudLinea, this.caracterBorde);
+        for (String linea : lineas) {
+            String l = (linea == null) ? "" : linea;
+            System.out.printf("%c %-" + (longitudLinea - 4) + "s %c%n", this.caracterBorde, l, this.caracterBorde);
+        }
+        imprimirLineaBorde(longitudLinea, this.caracterBorde);
+        
+        totalBannersGenerados++;
+    }
+
+    // Métodos auxiliares privados para no duplicar lógica
+    private void imprimirLineaBorde(int longitud, char c) {
+        for (int i = 0; i < longitud; i++) {
             System.out.print(c);
         }
         System.out.println();
     }
 
-    // 2. Sobrecarga rellena(String) que reutiliza rellena(char, int)
-    public static void rellena(String texto) {
-        if (texto == null) return;
-        for (int i = 0; i < texto.length(); i++) {
-            rellena(texto.charAt(i), 25);
-        }
+    private String centrarTexto(String texto, int espacio) {
+        int padding = (espacio - texto.length()) / 2;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < padding; i++) sb.append(' ');
+        sb.append(texto);
+        while (sb.length() < espacio) sb.append(' ');
+        return sb.toString();
     }
 
-    // 3. Máximo de un número arbitrario de enteros (mínimo 2 argumentos obligatorios)
-    public static int maximo(int primero, int segundo, int... resto) {
-        int mayor = Math.max(primero, segundo);
-        for (int num : resto) {
-            if (num > mayor) {
-                mayor = num;
-            }
-        }
-        return mayor;
+    public static int getTotalBannersGenerados() {
+        return totalBannersGenerados;
     }
 
     public static void main(String[] args) {
-        rellena('*', 10);
-        rellena("DAM");
-        System.out.println("Máximo de (4, 9): " + maximo(4, 9));
-        System.out.println("Máximo de (12, -5, 44, 8, 29): " + maximo(12, -5, 44, 8, 29));
+        FormateadorBanner fb1 = new FormateadorBanner();
+        FormateadorBanner fb2 = new FormateadorBanner('=', 40);
+
+        fb1.imprimirBanner("BIENVENIDOS A 1º DAM");
+        fb1.imprimirBanner("AVISO URGENTE", '!');
+        fb2.imprimirLineas("SISTEMA DE GESTIÓN", "Módulo de Programación", "Java 25 LTS");
+
+        System.out.println("Total de banners generados: " + FormateadorBanner.getTotalBannersGenerados());
     }
 }
 ```
 
 ---
 
-### Solución Ejercicio 16: Simulación de Dados y Menú de Moneda (Diseño Modular)
+### Solución Ejercicio 16: Modelado de Objetos con Estado: Las Clases `Dado` y `Cubilete`
 
 ```java
 import java.util.Random;
-import java.util.Scanner;
 
-public class SimulacionesAzar {
-    private static final Random RANDOM = new Random();
+public class SimuladorDadosPOO {
 
-    // 1. Lanzar par de dados hasta lograr la suma objetivo (2..12)
-    public static int lanzarDadosHastaObjetivo(int objetivo) {
-        if (objetivo < 2 || objetivo > 12) {
-            throw new IllegalArgumentException("El objetivo de 2 dados debe estar entre 2 y 12.");
+    // 1. CLASE DADO: Entidad con estado y comportamiento propio
+    public static class Dado {
+        private final int numeroCaras;
+        private int ultimoValor;
+        private static final Random RANDOM = new Random();
+
+        public Dado(int numeroCaras) {
+            if (numeroCaras < 2) {
+                throw new IllegalArgumentException("Un dado debe tener como mínimo 2 caras.");
+            }
+            this.numeroCaras = numeroCaras;
+            this.ultimoValor = 1;
         }
-        int tiradas = 0;
-        int suma;
-        do {
-            int dado1 = RANDOM.nextInt(6) + 1;
-            int dado2 = RANDOM.nextInt(6) + 1;
-            suma = dado1 + dado2;
-            tiradas++;
-        } while (suma != objetivo);
-        return tiradas;
+
+        public Dado() {
+            this(6); // Dado estándar de 6 caras
+        }
+
+        public int lanzar() {
+            this.ultimoValor = RANDOM.nextInt(this.numeroCaras) + 1;
+            return this.ultimoValor;
+        }
+
+        public int getNumeroCaras() { return numeroCaras; }
+        public int getUltimoValor() { return ultimoValor; }
+
+        @Override
+        public String toString() {
+            return String.format("Dado de %d caras (última tirada: %d)", numeroCaras, ultimoValor);
+        }
     }
 
-    // 2. Clase modular para la simulación de moneda
-    private int caras = 0;
-    private int cruces = 0;
+    // 2. CLASE CUBILETE: Gestiona un array de objetos Dado
+    public static class Cubilete {
+        private final Dado[] dados;
 
-    public void lanzarMoneda() {
-        if (RANDOM.nextBoolean()) {
-            caras++;
-            System.out.println("Resultado: ¡CARA!");
-        } else {
-            cruces++;
-            System.out.println("Resultado: ¡CRUZ!");
+        public Cubilete(int cantidadDados, int carasPorDado) {
+            if (cantidadDados <= 0) {
+                throw new IllegalArgumentException("Debe haber al menos 1 dado en el cubilete.");
+            }
+            this.dados = new Dado[cantidadDados];
+            for (int i = 0; i < cantidadDados; i++) {
+                this.dados[i] = new Dado(carasPorDado);
+            }
         }
-    }
 
-    public void mostrarResultados() {
-        int total = caras + cruces;
-        if (total == 0) {
-            System.out.println("Aún no se ha lanzado la moneda.");
-            return;
+        public int tirarTodos() {
+            int suma = 0;
+            for (Dado d : this.dados) {
+                suma += d.lanzar();
+            }
+            return suma;
         }
-        System.out.printf("Total tiradas: %d | Caras: %d (%.1f%%) | Cruces: %d (%.1f%%)%n",
-                total, caras, (caras * 100.0) / total, cruces, (cruces * 100.0) / total);
+
+        public int tirarHastaSuma(int sumaObjetivo) {
+            int minimoPosible = this.dados.length;
+            int maximoPosible = 0;
+            for (Dado d : this.dados) maximoPosible += d.getNumeroCaras();
+
+            if (sumaObjetivo < minimoPosible || sumaObjetivo > maximoPosible) {
+                throw new IllegalArgumentException(String.format(
+                        "Suma imposible. Rango válido: [%d..%d]", minimoPosible, maximoPosible));
+            }
+
+            int tiradas = 0;
+            int suma;
+            do {
+                suma = tirarTodos();
+                tiradas++;
+            } while (suma != sumaObjetivo);
+
+            return tiradas;
+        }
+
+        public void mostrarEstado() {
+            for (int i = 0; i < dados.length; i++) {
+                System.out.printf("  [Dado %d] %s%n", i + 1, dados[i]);
+            }
+        }
     }
 
     public static void main(String[] args) {
-        System.out.println("Tiradas para sacar un 12 con dos dados: " + lanzarDadosHastaObjetivo(12));
+        // Prueba de un dado suelto de 20 caras (D20 para rol)
+        Dado d20 = new Dado(20);
+        System.out.println("Tirada D20: " + d20.lanzar());
+        System.out.println(d20);
 
-        SimulacionesAzar simulador = new SimulacionesAzar();
-        Scanner sc = new Scanner(System.in);
-        int opcion;
-        do {
-            System.out.println("\n=== MENÚ MONEDA ===\n1. Lanzar moneda\n2. Ver resultados\n3. Salir");
-            System.out.print("Escoja una opción (1-3): ");
-            opcion = sc.hasNextInt() ? sc.nextInt() : 3;
-            switch (opcion) {
-                case 1 -> simulador.lanzarMoneda();
-                case 2 -> simulador.mostrarResultados();
-                case 3 -> System.out.println("¡Hasta pronto!");
-                default -> System.out.println("Opción no válida.");
-            }
-        } while (opcion != 3);
+        // Prueba del cubilete con 2 dados de 6 caras
+        Cubilete cubilete = new Cubilete(2, 6);
+        System.out.println("
+--- Tirada inicial del cubilete ---");
+        int sumaInicial = cubilete.tirarTodos();
+        System.out.println("Suma obtenida: " + sumaInicial);
+        cubilete.mostrarEstado();
+
+        // Tirar hasta obtener un 12 (doble 6)
+        System.out.println("
+Lanzando hasta conseguir un 12...");
+        int intentos = cubilete.tirarHastaSuma(12);
+        System.out.printf("¡Conseguido en %d tiradas!%n", intentos);
+        cubilete.mostrarEstado();
     }
 }
 ```
-

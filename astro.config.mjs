@@ -73,7 +73,24 @@ export default defineConfig({
             },
           ],
         },
-        { label: '🏗️ 04. Clases y objetos', link: '#', badge: { text: 'Próximamente', variant: 'note' }, attrs: { class: 'sidebar-link-disabled' } },
+        {
+          label: '🏗️ 04. Clases y objetos',
+          collapsed: true,
+          items: [
+            { label: '📖 Teoría y Contenidos', link: '/ud04/' },
+            {
+              label: '📝 Boletines de Ejercicios',
+              collapsed: true,
+              items: [
+                { label: 'Boletín Inicial', link: '/ud04/boletin-04-inicial/' },
+                { label: 'Boletín Inicial (Resuelto)', link: '/ud04/boletin-04-inicial-resuelto/' },
+                { label: 'Boletín Intermedio', link: '/ud04/boletin-04-intermedio/' },
+                { label: 'Boletín Intermedio (Resuelto)', link: '/ud04/boletin-04-intermedio-resuelto/' },
+                { label: 'Retos y Extras', link: '/ud04/boletin-04-extras/' },
+              ],
+            },
+          ],
+        },
         { label: '🧬 05. Programación orientada a objetos avanzada', link: '#', badge: { text: 'Próximamente', variant: 'note' }, attrs: { class: 'sidebar-link-disabled' } },
         { label: '📚 06. Genéricos y colecciones de datos', link: '#', badge: { text: 'Próximamente', variant: 'note' }, attrs: { class: 'sidebar-link-disabled' } },
         { label: '⚡ 07. La API Stream', link: '#', badge: { text: 'Próximamente', variant: 'note' }, attrs: { class: 'sidebar-link-disabled' } },

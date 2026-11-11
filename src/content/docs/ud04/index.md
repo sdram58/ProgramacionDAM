@@ -1,17 +1,9 @@
 ---
 title: 🏗️ Unidad 4. Clases y objetos
 description: Fundamentos de la programación orientada a objetos (POO), abstracción, encapsulamiento, instanciación en el Heap, constructores, atributos y métodos de instancia, la referencia this, modificadores de acceso, miembros static, la clase Object (toString, equals, hashCode), records inmutables, enums y depuración con IntelliJ IDEA.
-draft: true
-prev: false
-next: false
-sidebar:
-  order: 4
-  badge:
-    text: "En revisión"
-    variant: "caution"
 ---
 
-Hasta este punto de tu formación como programador, has aprendido a estructurar el flujo de ejecución con sentencias condicionales, bucles iterativos, captura de excepciones y funciones modulares (`public static`). Sin embargo, en el paradigma estructurado tradicional los datos (variables y arrays) y las funciones que los manipulan viven completamente separados. En proyectos de software medianos o grandes, esta separación provoca que el código se vuelva frágil, propenso a inconsistencias y difícil de mantener.
+Hasta este punto, hemos aprendido a estructurar el flujo de ejecución con sentencias condicionales, bucles iterativos, captura de excepciones y funciones modulares (`public static`). Sin embargo, en el paradigma estructurado tradicional los datos (variables y arrays) y las funciones que los manipulan viven completamente separados. En proyectos de software medianos o grandes, esta separación provoca que el código se vuelva frágil, propenso a inconsistencias y difícil de mantener.
 
 La **Programación Orientada a Objetos (POO)** supone una auténtica revolución conceptual en la ingeniería del software: propone modelar los programas informáticos no como secuencias lineales de instrucciones, sino como **sistemas colaborativos de entidades inteligentes denominadas objetos**, que encapsulan tanto sus **datos internos (estado)** como las **operaciones que pueden realizar (comportamiento)**.
 
@@ -381,7 +373,7 @@ public class Alumno {
 ```
 
 :::tip[Generación Automática en IntelliJ IDEA]
-No redactes manualmente cada getter y setter. En IntelliJ IDEA, coloca el cursor dentro de la clase y presiona **`Alt + Insert`** (o haz clic derecho y selecciona *Generate...*). Elige **Getter and Setter**, selecciona los atributos que deseas encapsular y el IDE generará el código de forma instantánea.
+Aunque ahora estamos aprendiendo y hay que crearlos a mano, muchos IDEs nos permiten automatizar esta tarea. En IntelliJ IDEA, coloca el cursor dentro de la clase y presiona **`Alt + Insert`** (o haz clic derecho y selecciona *Generate...*). Elige **Getter and Setter**, selecciona los atributos que deseas encapsular y el IDE generará el código de forma instantánea.
 :::
 
 ---
@@ -441,124 +433,143 @@ Ocultar los detalles internos tras una interfaz pública de getters y setters ap
 
 ---
 
-### 3.5 Ampliación de Métodos: Firma, Sobrecarga, Sobrescritura, Paso de Parámetros y Recursividad
+### 3.5 Diseño de Métodos en Clases: Responsabilidad, Métodos Auxiliares Privados y Sobrecarga en POO
 
-#### 1. La Firma de un Método (*Method Signature*)
-La **firma** de un método está compuesta exclusivamente por **su nombre y la secuencia ordenada de tipos de datos de sus parámetros formales**. La firma identifica de forma única a un método dentro de su clase:
+En la Unidad 3 aprendimos a estructurar métodos y funciones modulares (`public static`), el paso de parámetros por valor y los conceptos básicos de sobrecarga y recursividad. En la Programación Orientada a Objetos, los métodos dejan de ser funciones procedimentales aisladas para convertirse en las **capacidades operativas que dan vida al objeto** y gobiernan su estado interno.
 
-```java
-public int procesarPedido(int idCliente, double importe, boolean urgente)
-// Firma del método: procesarPedido(int, double, boolean)
-```
-*(Nota: El tipo de retorno, los modificadores de visibilidad y los nombres de los parámetros NO forman parte de la firma).*
+#### 1. El Principio de Responsabilidad Única y Métodos de Instancia
+Un método de instancia debe cumplir un único propósito claro dentro del dominio de la clase:
+- **Consultar estado:** Métodos que interrogan los atributos del objeto y devuelven una respuesta calculada o directa (como `getSaldo()`, `esMoroso()` o `calcularArea()`).
+- **Mutar estado con validación:** Métodos que alteran los atributos asegurando que nunca se vulneren las reglas de integridad del objeto (como `ingresar(cantidad)` o `frenar(decremento)`).
+- **Notificar o coordinar:** Métodos que permiten a la entidad interactuar con otros objetos colaboradores.
 
-#### 2. Sobrecarga (*Ligadura Estática*) vs. Sobrescritura (*Ligadura Dinámica*)
-Es fundamental no confundir estos dos mecanismos polimórficos:
-
-| Característica | Sobrecarga (*Overloading*) | Sobrescritura (*Overriding*) |
-| :--- | :--- | :--- |
-| **Definición** | Dos o más métodos en la misma clase (o jerarquía) con el **mismo nombre pero distinta firma** (diferente número o tipo de parámetros). | Una subclase redefine un método heredado de su superclase manteniendo **exactamente la misma firma** y un retorno compatible. |
-| **Propósito** | Ofrecer varias formas de invocar una misma operación según los datos de entrada (ej. `println(int)`, `println(String)`). | Sustituir o especializar el comportamiento heredado del padre (ej. redefinir `toString()` o `equals()` de `Object`). |
-| **Resolución (*Binding*)** | **Ligadura Estática (Temprana):** El compilador decide qué método ejecutar en tiempo de compilación mirando los tipos de los argumentos. | **Ligadura Dinámica (Tardía):** La JVM decide qué método ejecutar en tiempo de ejecución según la clase real del objeto en el Heap. |
+#### 2. Métodos Auxiliares Privados (*Private Helper Methods*)
+Una de las mejores prácticas de la ingeniería del software es mantener la **interfaz pública lo más reducida y limpia posible** (*Principio de Mínima Exposición*). Si una operación pública requiere cálculos matemáticos complejos, algoritmos de verificación o pasos intermedios, estos no deben exponerse al exterior: deben encapsularse en **métodos privados auxiliares**:
 
 ```java
-public class CalculadoraTextual {
-    // Tres métodos SOBRECARGADOS (mismo nombre 'dobla', distinta firma -> Ligadura Estática)
-    public static int dobla(int n) { return n + n; }
-    public static double dobla(double n) { return n + n; }
-    public static String dobla(String texto) { return texto + texto; }
-}
-```
+public class CuentaBancaria {
+    private String titular;
+    private String iban;
+    private double saldo;
 
-#### 3. Paso de Parámetros Objeto: Objetos Mutables vs. Inmutables
-En Java, todos los argumentos se pasan **por valor**: cuando pasas un objeto a un método, el método recibe una **copia de la referencia** (que apunta al mismo objeto en el Heap).
-- Si el objeto es **mutable** (como un array `int[]` o un `StringBuilder`), cualquier cambio realizado sobre sus elementos internos dentro del método **sí afectará al objeto original externo**.
-- Si el objeto es **inmutable** (como un `String` o un `Integer`), sus datos internos no pueden alterarse; si el método hace `s = s.toLowerCase()`, simplemente reasigna su variable local `s` a un nuevo `String`, dejando intacta la variable del programa principal:
-
-```java
-import java.util.Arrays;
-
-public class DemostracionParametros {
-    public static void transformar(String cadena, int[] vector) {
-        vector[0] = -99;              // Modifica el contenido del array original en el Heap
-        cadena = cadena.toLowerCase(); // Crea un nuevo String y cambia solo la referencia local
-        vector = new int[]{3, 3};     // Reasigna solo la referencia local; no afecta al main
+    // MÉTODO PÚBLICO: Interfaz visible y clara para el cliente de la clase
+    public void ingresar(double cantidad) {
+        validarCantidadPositiva(cantidad); // Delega la validación en un método privado
+        this.saldo += cantidad;
     }
 
-    public static void main(String[] args) {
-        int[] miArray = {1, 2, 3};
-        String miTexto = "HOLA DAM";
-
-        transformar(miTexto, miArray);
-
-        System.out.println("Texto: " + miTexto);                   // Imprime: HOLA DAM (intacto)
-        System.out.println("Array: " + Arrays.toString(miArray));  // Imprime: [-99, 2, 3] (mutado)
+    public void retirar(double cantidad) {
+        validarCantidadPositiva(cantidad);
+        validarSaldoDisponible(cantidad);
+        this.saldo -= cantidad;
     }
-}
-```
 
-#### 4. Pasar Argumentos al Programa Principal (`String[] args`) en IntelliJ IDEA
-El método de entrada `public static void main(String[] args)` recibe un array de cadenas llamado `args` que recoge los argumentos enviados al programa desde la línea de comandos del sistema operativo:
+    // MÉTODOS PRIVADOS AUXILIARES: Ocultos tras la cápsula de la clase
+    private void validarCantidadPositiva(double cantidad) {
+        if (cantidad <= 0) {
+            throw new IllegalArgumentException("La cantidad debe ser estrictamente positiva: " + cantidad);
+        }
+    }
 
-```java
-public class ProcesadorArgumentos {
-    public static void main(String[] args) {
-        System.out.println("Has pasado " + args.length + " argumentos.");
-        for (int i = 0; i < args.length; i++) {
-            System.out.println("Argumento [" + i + "]: " + args[i]);
+    private void validarSaldoDisponible(double cantidad) {
+        if (cantidad > this.saldo) {
+            throw new IllegalArgumentException("Saldo insuficiente. Disponible: " + this.saldo + ", Solicitado: " + cantidad);
         }
     }
 }
 ```
 
-:::tip[Cómo Configurar Argumentos de Programa en IntelliJ IDEA]
-Para probar un programa que recibe parámetros en `String[] args` sin salir de **IntelliJ IDEA**:
-1. Haz clic en el desplegable de ejecución en la esquina superior derecha (junto al botón verde **Run** ▶) y selecciona **Edit Configurations...**.
-2. En el campo **Program arguments**, escribe los argumentos separados por espacios (por ejemplo: `fichero_entrada.txt --modo-rapido 50`). Si un argumento contiene espacios, enciérralo entre comillas dobles (`"Juan Pérez"`).
-3. Pulsa **Apply** y **OK**. Al ejecutar el programa, `args` contendrá automáticamente esos valores.
+**Ventajas del método auxiliar privado:**
+- Evita la duplicación de código (*DRY - Don't Repeat Yourself*): varias operaciones públicas pueden reutilizar la misma comprobación interna.
+- Si la regla de validación cambia en el futuro, solo se modifica ese método privado sin alterar ningún programa externo que use la clase.
+
+#### 3. Sobrecarga de Métodos de Objeto y Delegación
+Como vimos en la Unidad 3, la **sobrecarga (*Overloading*)** consiste en definir dos o más métodos con el mismo nombre pero distinta firma (distinto número o tipos de parámetros) dentro de la misma clase, resolviéndose mediante **ligadura estática** en tiempo de compilación.
+
+En el diseño de clases orientadas a objetos, el patrón canónico de sobrecarga consiste en hacer que los métodos más sencillos **deleguen en el método más completo**, proporcionando valores predeterminados:
+
+```java
+public class Notificador {
+    // Método sobrecargado básico: proporciona un asunto por defecto
+    public void enviarMensaje(String destinatario, String cuerpo) {
+        enviarMensaje(destinatario, "Notificación del Sistema", cuerpo); // Delega en el método completo
+    }
+
+    // Método completo: concentra toda la lógica real de envío
+    public void enviarMensaje(String destinatario, String asunto, String cuerpo) {
+        if (destinatario == null || destinatario.isBlank()) {
+            throw new IllegalArgumentException("El destinatario no puede estar vacío");
+        }
+        System.out.printf("Enviando a [%s] con asunto '%s': %s%n", destinatario, asunto, cuerpo);
+    }
+}
+```
+
+#### 4. Colaboración entre Objetos: Métodos que Operan con Otras Instancias
+Los objetos rara vez trabajan solos; su verdadero poder radica en la colaboración. Un método de instancia puede recibir como argumento otra instancia de su misma clase o de otra clase:
+
+```java
+public class CuentaBancaria {
+    private String titular;
+    private double saldo;
+
+    // Colaboración entre dos cuentas bancarias
+    public void transferir(CuentaBancaria cuentaDestino, double cantidad) {
+        if (cuentaDestino == null) {
+            throw new IllegalArgumentException("La cuenta de destino no puede ser nula");
+        }
+        if (cuentaDestino == this) {
+            throw new IllegalArgumentException("No puedes realizar una transferencia a la misma cuenta");
+        }
+
+        // Reutiliza los métodos validados de la propia clase
+        this.retirar(cantidad);
+        cuentaDestino.ingresar(cantidad);
+    }
+}
+```
+
+:::note[Paso de Referencias por Valor]
+Recuerda el principio fundamental consolidado en la Unidad 3: en Java **todo se pasa por valor**. Al pasar `cuentaDestino` al método, se recibe una **copia de la dirección de memoria**. A través de esa referencia compartida podemos alterar el estado del objeto en el Heap (`cuentaDestino.ingresar(cantidad)`), pero si dentro del método reasignamos `cuentaDestino = null`, solo desconectamos la variable local del método, dejando intacta la variable original del exterior.
 :::
 
-#### 5. Recursividad: Soluciones Elegantes y Las Torres de Hanói
-La **recursividad** es la técnica mediante la cual un método se llama a sí mismo para resolver un problema descomponiéndolo en subproblemas idénticos de menor tamaño, hasta alcanzar un **caso base (o condición de parada)** cuya solución es directa:
+#### 5. Recursividad Encapsulada como Comportamiento de Objeto
+En la Unidad 3 estudiamos los fundamentos teóricos de la recursividad (el caso base y la pila de llamadas o *Call Stack*). En Programación Orientada a Objetos, los algoritmos recursivos a menudo se encapsulan como **comportamientos internos de una clase**, permitiendo que el objeto mantenga protegidas sus métricas internas de ejecución (como contadores de pasos o historiales):
 
-- **Ejemplo matemático (Potencia entera):** Calcular `base` elevado a `exponente` (`b^e`) sabiendo que el caso base es `b^0 = 1` y el caso recursivo es `b × potencia(b, e - 1)`:
-  ```java
-  public static long potenciaRecursiva(long base, int exponente) {
-      if (exponente < 0) throw new IllegalArgumentException("El exponente debe ser >= 0");
-      if (exponente == 0) return 1; // Caso base: detiene la recursión
-      return base * potenciaRecursiva(base, exponente - 1); // Llamada recursiva
-  }
-  ```
+```java
+public class SolucionadorHanoi {
+    private int totalMovimientos; // Estado interno protegido del objeto
 
-- **El Clásico Universal de la Recursividad: Las Torres de Hanói**  
-  Disponemos de 3 postes verticales (`Origen`, `Auxiliar` y `Destino`) y `n` discos de distinto diámetro apilados de mayor (abajo) a menor (arriba) en el poste `Origen`. El objetivo es trasladar toda la torre al poste `Destino` moviendo un solo disco cada vez y sin colocar jamás un disco grande sobre uno más pequeño. El número mínimo de movimientos necesarios es `2^n - 1`:
+    public SolucionadorHanoi() {
+        this.totalMovimientos = 0;
+    }
 
-  ```java
-  public class TorresDeHanoi {
-      private int movimientos = 0;
+    public int getTotalMovimientos() {
+        return totalMovimientos;
+    }
 
-      public void resolverHanoi(int numDiscos, char origen, char auxiliar, char destino) {
-          if (numDiscos == 1) {
-              // Caso base: mover directamente el disco más pequeño de origen a destino
-              movimientos++;
-              System.out.printf("Movimiento %d: Mover disco 1 de poste %c a poste %c%n",
-                      movimientos, origen, destino);
-          } else {
-              // 1. Mover los n-1 discos superiores al poste auxiliar (usando destino como apoyo)
-              resolverHanoi(numDiscos - 1, origen, destino, auxiliar);
+    // Método público de entrada para iniciar la resolución
+    public void resolver(int numDiscos, char origen, char auxiliar, char destino) {
+        this.totalMovimientos = 0; // Reinicia el estado para cada ejecución
+        ejecutarHanoi(numDiscos, origen, auxiliar, destino);
+    }
 
-              // 2. Mover el disco grande (n) de origen al poste destino final
-              movimientos++;
-              System.out.printf("Movimiento %d: Mover disco %d de poste %c a poste %c%n",
-                      movimientos, numDiscos, origen, destino);
+    // Método recursivo privado que realiza el trabajo algorítmico interno
+    private void ejecutarHanoi(int n, char desde, char aux, char hasta) {
+        if (n == 1) {
+            this.totalMovimientos++;
+            System.out.printf("Paso %d: Mover disco 1 de %c a %c%n", totalMovimientos, desde, hasta);
+            return; // Caso base
+        }
+        ejecutarHanoi(n - 1, desde, hasta, aux);
+        this.totalMovimientos++;
+        System.out.printf("Paso %d: Mover disco %d de %c a %c%n", totalMovimientos, n, desde, hasta);
+        ejecutarHanoi(n - 1, aux, desde, hasta);
+    }
+}
+```
 
-              // 3. Mover los n-1 discos desde el poste auxiliar hasta el poste destino
-              resolverHanoi(numDiscos - 1, auxiliar, origen, destino);
-          }
-      }
-  }
-  ```
-
+---
 
 ## 4. Ciclo de Vida de los Objetos: Instanciación, Constructores y Destrucción
 
@@ -826,28 +837,10 @@ public class EjemploContextos {
 }
 ```
 
----
-
-### 5.3 Bloques de Inicialización Estática
-
-Si una clase necesita inicializar atributos estáticos mediante lógica compleja (lectura de ficheros de configuración, bucles de carga o captura de excepciones), se emplean los **bloques de inicialización estática**:
-
-```java
-public class PaletaColores {
-    public static final java.util.Map<String, String> COLORES_HEX = new java.util.HashMap<>();
-
-    // Se ejecuta una sola vez cuando la JVM carga la clase en memoria por primera vez
-    static {
-        COLORES_HEX.put("ROJO", "#FF0000");
-        COLORES_HEX.put("VERDE", "#00FF00");
-        COLORES_HEX.put("AZUL", "#0000FF");
-    }
-}
-```
 
 ---
 
-### 5.4 Tabla Maestra: Combinaciones de `static` y `final` (Matriz 2×2)
+### 5.3 Tabla Maestra: Combinaciones de `static` y `final` (Matriz 2×2)
 
 Los modificadores **`static`** y **`final`** responden a dos preguntas completamente distintas pero complementarias:
 - **`static`** responde a **«¿a quién pertenece?»**: sin `static` pertenece a cada objeto individual; con `static` pertenece a la clase y se comparte entre todas las instancias.
@@ -1333,178 +1326,214 @@ public class ProcesadorAnotaciones {
 
 ---
 
-## 8. Expresiones Regulares (`java.util.regex`) y Otras Clases Esenciales de la API de Java
+## 8. Relaciones Básicas entre Objetos: Agregación Simple y Arrays de Objetos
 
-La biblioteca estándar de Java (la **API de Java**) ofrece clases fundamentales ya programadas y optimizadas para resolver problemas cotidianos: validación de patrones de texto, manipulación eficiente de cadenas, cálculo financiero exacto y comunicación con el sistema operativo.
+Hasta ahora hemos creado clases individuales que contienen atributos de tipos primitivos (`int`, `double`, `boolean`) o tipos inmutables como `String`. No obstante, el auténtico poder del paradigma orientado a objetos surge cuando **los objetos colaboran, se combinan y se contienen unos a otros** para modelar fielmente la complejidad del mundo real.
 
 ---
 
-### 8.1 Procesamiento de Texto con Expresiones Regulares (`Pattern` y `Matcher`)
+### 8.1 El Principio «Tiene-un» (*Has-a*): Agregación y Composición Simple
 
-Una **expresión regular (*Regex*)** es una cadena de texto que define un patrón de búsqueda o validación mediante caracteres literales y **metacaracteres** con significado especial.
+En el diseño de software orientado a objetos, una clase puede tener como atributo una referencia a otra clase. Esta relación se conoce genéricamente como **asociación estructural** y responde a la pregunta semántica: **«¿Un objeto A *tiene un* objeto B?»**:
 
-Aunque `String` incluye métodos rápidos que aceptan expresiones regulares directamente (`texto.matches(regex)`, `texto.split(regex)`, `texto.replaceAll(regex, reemplazo)`), cuando necesitamos máxima eficiencia, búsquedas múltiples o extracción de bloques utilizamos el paquete **`java.util.regex`**:
-- **`Pattern`**: Representa la expresión regular compilada (`Pattern.compile(er)`).
-- **`Matcher`**: Es el motor que aplica el patrón sobre un texto concreto (`patron.matcher(texto)`).
+- Un `Vehiculo` *tiene un* `Motor`.
+- Un `Alumno` *tiene una* `Direccion`.
+- Una `Factura` *tiene un* `Cliente`.
 
-#### Tablas de Referencia Rápida de Expresiones Regulares en Java:
+```java
+public class Motor {
+    private String tipoCombustible; // "Gasolina", "Diésel", "Eléctrico"
+    private int potenciaCv;
+    private boolean encendido;
 
-| Categoría | Expresión | Significado y Ejemplo |
-| :--- | :--- | :--- |
-| **Clases de caracteres** | `[abc]` / `[^pqr]` | Cualquiera de las letras `a`, `b` o `c` / Cualquier carácter **excepto** `p`, `q` o `r`. |
-| **Rangos e intersección** | `[a-zA-Z0-9]` / `[a-z&&[^bc]]` | Letras o dígitos / De la `a` a la `z` excluyendo `b` y `c`. |
-| **Metacaracteres** | `.` / `\d` / `\D` | Cualquier carácter / Un dígito `[0-9]` / Un no-dígito `[^0-9]`. |
-| **Espacios y palabras** | `\s` / `\S` / `\w` / `\W` | Espacio en blanco / No-espacio / Carácter alfanumérico `[a-zA-Z_0-9]` / No-alfanumérico. |
-| **Posición (Anclas)** | `^` / `$` / `\b` | Inicio de línea / Final de línea / Límite de palabra completa. |
-| **Cuantificadores** | `?` / `*` / `+` | 0 o 1 vez / 0 o más veces / **1 o más veces**. |
-| **Repetición exacta** | `{n}` / `{n,}` / `{n,m}` | Exactamente `n` veces / Al menos `n` veces / Entre `n` y `m` veces. |
-| **Agrupación y lógica** | `( ... )` / `A\|B` | Define un grupo de captura y aplica cuantificadores al bloque / Alternativa OR (`A` o `B`). |
+    public Motor(String tipoCombustible, int potenciaCv) {
+        this.tipoCombustible = tipoCombustible;
+        this.potenciaCv = potenciaCv;
+        this.encendido = false;
+    }
 
-:::warning[El Doble Escape `\\` en los `String` de Java]
-En un literal `String` de Java, la barra invertida `\` es ya un carácter de escape (como `\n` o `\t`). Por tanto, para escribir el metacarácter `\d` (dígito) o `\.` (punto literal) dentro de un `String` en Java, **debes duplicar siempre la barra invertida**:
-- `"\\d{8}[A-HJ-NP-TV-Z]"` → Patrón de un DNI español (8 dígitos seguidos de letra).
-- `"^\\d{5}$"` → Patrón de un código postal de exactamente 5 dígitos.
+    public void encender() { this.encendido = true; }
+    public void apagar() { this.encendido = false; }
+    public boolean isEncendido() { return encendido; }
+    public int getPotenciaCv() { return potenciaCv; }
+}
+
+public class Vehiculo {
+    private String matricula;
+    private String marca;
+    private Motor motor; // ATRIBUTO DE TIPO OBJETO: Agregación simple ("Tiene-un")
+
+    public Vehiculo(String matricula, String marca, Motor motor) {
+        if (matricula == null || motor == null) {
+            throw new IllegalArgumentException("Matrícula y motor son obligatorios");
+        }
+        this.matricula = matricula;
+        this.marca = marca;
+        this.motor = motor; // Conecta el motor al vehículo
+    }
+
+    // El vehículo delega en su motor interno las operaciones mecánicas
+    public void arrancar() {
+        System.out.println("Poniendo en marcha el vehículo " + marca + "...");
+        motor.encender();
+    }
+
+    public void detener() {
+        System.out.println("Deteniendo el vehículo " + marca + "...");
+        motor.apagar();
+    }
+}
+```
+
+:::tip[Delegación de Responsabilidades]
+Fíjate en cómo `Vehiculo` no manipula directamente cables ni bujías: simplemente invoca `motor.encender()`. Esta técnica se denomina **delegación** y es la base de un código modular, donde cada clase es experta únicamente en su propia parcela de responsabilidad.
 :::
 
-#### Métodos Clave de `Matcher` y Flags de `Pattern`:
-- **`matcher.matches()`**: Devuelve `true` solo si **toda la cadena completa** de principio a fin encaja con el patrón.
-- **`matcher.lookingAt()`**: Devuelve `true` si el comienzo de la cadena encaja con el patrón.
-- **`matcher.find()`**: Busca la **siguiente subcadena** que encaje dentro del texto (ideal con un bucle `while (matcher.find())`), pudiendo consultar dónde empieza con `matcher.start()`, dónde acaba con `matcher.end()` y el texto hallado con `matcher.group()`.
-- **Flags de compilación (`Pattern.compile(regex, flags)`)**: `Pattern.CASE_INSENSITIVE` (ignora mayúsculas/minúsculas), `Pattern.MULTILINE` (`^` y `$` aplican a cada línea), `Pattern.DOTALL` (el punto `.` incluye saltos de línea), `Pattern.COMMENTS` (permite comentarios `#`) y `Pattern.CANON_EQ` (equivalencia canónica Unicode).
+---
 
-#### Uso de Grupos de Captura (`group(i)` y referencias `$1`, `$2`)
-Al rodear partes de la expresión regular con paréntesis `(...)`, creamos **grupos de captura** numerados de izquierda a derecha desde `1` (`group(0)` devuelve siempre la coincidencia completa):
+### 8.2 Gestión de Múltiples Objetos: Arrays de Objetos como Atributo de Clase
+
+Antes de estudiar las estructuras dinámicas de la biblioteca de colecciones (`ArrayList`, `HashSet`) en la Unidad 6, en el desarrollo profesional con Java es vital aprender a modelar **clases contenedoras de dominio** que gestionan internamente una colección de objetos mediante un array convencional:
+
+Imagina que necesitamos modelar un `Catalogo` que almacene hasta un máximo de `N` libros:
 
 ```java
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+public class CatalogoLibros {
+    private Libro[] libros;     // Array que almacena las referencias a los objetos
+    private int totalLibros;    // Contador de cuántos libros reales hay almacenados
 
-public class TransformadorFechasRegex {
-    public static void main(String[] args) {
-        String texto = "El límite es 11-18-2025 y el inicio fue 01-05-2025.";
-
-        // Grupo 1: (\d{2}) Mes | Grupo 2: (\d{2}) Día | Grupo 3: (\d{4}) Año
-        Pattern patron = Pattern.compile("(\\d{2})-(\\d{2})-(\\d{4})");
-        Matcher matcher = patron.matcher(texto);
-
-        // 1. Extracción iterativa de cada grupo con while(matcher.find())
-        while (matcher.find()) {
-            String fechaCompleta = matcher.group(0);
-            String mes  = matcher.group(1);
-            String dia  = matcher.group(2);
-            String anio = matcher.group(3);
-            System.out.printf("Detectada '%s' -> Año: %s, Mes: %s, Día: %s%n",
-                    fechaCompleta, anio, mes, dia);
+    public CatalogoLibros(int capacidadMaxima) {
+        if (capacidadMaxima <= 0) {
+            throw new IllegalArgumentException("La capacidad debe ser mayor que cero");
         }
-
-        // 2. Sustitución masiva usando referencias a grupos ($3 = Año, $1 = Mes, $2 = Día)
-        matcher.reset();
-        String textoConvertido = matcher.replaceAll("$3/$1/$2");
-        System.out.println("Texto reformateado: " + textoConvertido);
-        // Imprime: El límite es 2025/11/18 y el inicio fue 2025/01/05.
+        this.libros = new Libro[capacidadMaxima]; // Reserva el vector en el Heap
+        this.totalLibros = 0;
     }
+
+    // 1. ALTA SEGURA DE UN NUEVO OBJETO
+    public boolean agregarLibro(Libro nuevoLibro) {
+        if (nuevoLibro == null) {
+            throw new IllegalArgumentException("No se puede agregar un libro nulo");
+        }
+        if (totalLibros >= libros.length) {
+            return false; // Catálogo lleno
+        }
+        libros[totalLibros] = nuevoLibro;
+        totalLibros++;
+        return true;
+    }
+
+    // 2. BÚSQUEDA POR CRITERIO (ej. por título)
+    public Libro buscarPorTitulo(String tituloBuscado) {
+        if (tituloBuscado == null) return null;
+        for (int i = 0; i < totalLibros; i++) {
+            if (libros[i].getTitulo().equalsIgnoreCase(tituloBuscado)) {
+                return libros[i]; // Retorna la referencia encontrada
+            }
+        }
+        return null; // No encontrado
+    }
+
+    // 3. ELIMINACIÓN Y COMPACTACIÓN DEL ARRAY
+    public boolean eliminarPorTitulo(String tituloBuscado) {
+        for (int i = 0; i < totalLibros; i++) {
+            if (libros[i].getTitulo().equalsIgnoreCase(tituloBuscado)) {
+                // Desplaza todos los libros siguientes un hueco a la izquierda para no dejar huecos nulos
+                for (int j = i; j < totalLibros - 1; j++) {
+                    libros[j] = libros[j + 1];
+                }
+                libros[totalLibros - 1] = null; // Limpia la última referencia para el Garbage Collector
+                totalLibros--;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int getTotalLibros() { return totalLibros; }
+    public int getCapacidadMaxima() { return libros.length; }
 }
 ```
 
-También resulta sumamente útil para **anonimizar datos sensibles** (ej. `texto.replaceAll("\\b\\d{9}\\b", "[TELÉFONO OCULTO]")`) o **sanear entradas frente a ataques XSS** eliminando etiquetas HTML (`entrada.replaceAll("<[^>]*>", "")`).
-
 ---
 
-### 8.2 Cadenas Mutables de Alto Rendimiento: `StringBuilder` y `StringBuffer`
+### 8.3 Métodos Factoría Estáticos (*Static Factory Methods*)
 
-Como sabemos, `String` es inmutable: cada vez que concatenas texto dentro de un bucle (`str = str + caracter;`), la JVM se ve obligada a reservar un nuevo objeto `String`, copiar todos los caracteres anteriores y desechar el objeto viejo al Garbage Collector. Si el bucle da 50.000 vueltas, el rendimiento se desploma.
+Los **métodos factoría estáticos** son métodos `public static` que instancian y devuelven un objeto de su propia clase. Representan una alternativa de diseño muy superior a los constructores sobrecargados en diversas situaciones:
 
-Para modificar texto intensivamente existen **`StringBuilder`** (más rápido, para un solo hilo) y **`StringBuffer`** (sincronizado y *thread-safe* para múltiples hilos). Ambos gestionan una secuencia **mutable** de caracteres que crece dinámicamente sin copiar objetos innecesariamente:
-
-```java
-StringBuilder sb = new StringBuilder("Hola");
-sb.append(" Mundo");          // Añade al final -> "Hola Mundo"
-sb.insert(5, "Java ");        // Inserta en índice 5 -> "Hola Java Mundo"
-sb.replace(5, 9, "DAM");      // Reemplaza rango [5, 9) -> "Hola DAM Mundo"
-sb.delete(4, 8);              // Elimina rango [4, 8) -> "Hola Mundo"
-sb.deleteCharAt(4);           // Borra carácter en índice 4 -> "HolaMundo"
-sb.setCharAt(0, 'h');         // Cambia un carácter -> "holaMundo"
-sb.reverse();                 // Invierte la cadena -> "odnuMaloh"
-
-String resultadoFinal = sb.toString(); // Convierte a String inmutable al terminar
-```
-
----
-
-### 8.3 Precisión Decimal Financiera Exacta: `java.math.BigDecimal`
-
-Si ejecutas en Java la siguiente suma con el tipo primitivo `double`:
+1. **Tienen nombres descriptivos:** Mientras que todos los constructores deben llamarse forzosamente igual que la clase, un método factoría explica claramente *cómo* se crea el objeto (ej. `Punto2D.desdeCartesianas(x, y)` frente a `Punto2D.desdePolares(radio, angulo)`).
+2. **Evitan colisiones de firma:** Si dos formas de instanciar un objeto requieren los mismos tipos de parámetros (por ejemplo dos `double`), no es posible crear dos constructores distintos. La factoría estática resuelve esto con elegancia.
+3. **No están obligados a crear una nueva instancia cada vez:** Pueden devolver instancias inmutables compartidas o precalculadas en caché (como hace `Integer.valueOf(int)` o `Boolean.valueOf(boolean)`).
 
 ```java
-double centimo = 0.01;
-double suma = centimo + centimo + centimo + centimo + centimo + centimo;
-System.out.println(suma); // ¡Imprime 0.060000000000000005 en lugar de 0.06!
-```
+public final class ColorRGB {
+    private final int rojo;
+    private final int verde;
+    private final int azul;
 
-¿Por qué ocurre esto? Porque las CPUs trabajan en **sistema binario (base 2)** siguiendo el estándar IEEE 754. Al igual que en base 10 la fracción `1/3` tiene infinitos decimales periódicos (`0.333333...`), en binario la fracción `1/100` (`0.01`) es periódica infinita (`0.000000101000111101...`) y al truncarse en 64 bits introduce microerrores de redondeo.
+    // Constantes predefinidas compartidas
+    public static final ColorRGB ROJO = new ColorRGB(255, 0, 0);
+    public static final ColorRGB VERDE = new ColorRGB(0, 255, 0);
+    public static final ColorRGB AZUL = new ColorRGB(0, 0, 255);
+    public static final ColorRGB BLANCO = new ColorRGB(255, 255, 255);
+    public static final ColorRGB NEGRO = new ColorRGB(0, 0, 0);
 
-En **aplicaciones bancarias, contables o de facturación está prohibido usar `double` o `float` para dinero**. En su lugar se utiliza la clase inmutable **`java.math.BigDecimal`**, que opera en **base 10 exacta**:
-
-```java
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
-public class CalculoFinancieroExacto {
-    public static void main(String[] args) {
-        // IMPORTANTE: Inicializar siempre con String o BigDecimal.valueOf()
-        BigDecimal centimo = new BigDecimal("0.01");
-        BigDecimal seisCentimos = centimo.multiply(BigDecimal.valueOf(6));
-        System.out.println("Total exacto: " + seisCentimos); // Imprime exactamente: 0.06
-
-        BigDecimal baseImponible = new BigDecimal("125.50");
-        BigDecimal iva = new BigDecimal("0.21");
-        BigDecimal cuotaIva = baseImponible.multiply(iva).setScale(2, RoundingMode.HALF_UP);
-        BigDecimal totalFactura = baseImponible.add(cuotaIva);
-
-        System.out.println("Base: " + baseImponible + "€ | IVA: " + cuotaIva + "€ | Total: " + totalFactura + "€");
+    // Constructor privado: NADIE desde fuera puede hacer 'new ColorRGB(...)'
+    private ColorRGB(int rojo, int verde, int azul) {
+        this.rojo = rojo;
+        this.verde = verde;
+        this.azul = azul;
     }
+
+    // FACTORÍA ESTÁTICA 1: Desde valores numéricos [0-255]
+    public static ColorRGB fromRGB(int r, int g, int b) {
+        if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
+            throw new IllegalArgumentException("Componentes RGB deben estar entre 0 y 255");
+        }
+        return new ColorRGB(r, g, b);
+    }
+
+    // FACTORÍA ESTÁTICA 2: Desde una cadena hexadecimal ("#FF5733")
+    public static ColorRGB fromHex(String hex) {
+        if (hex == null || !hex.matches("^#?[0-9a-fA-F]{6}$")) {
+            throw new IllegalArgumentException("Formato hexadecimal inválido: " + hex);
+        }
+        String limpio = hex.startsWith("#") ? hex.substring(1) : hex;
+        int r = Integer.parseInt(limpio.substring(0, 2), 16);
+        int g = Integer.parseInt(limpio.substring(2, 4), 16);
+        int b = Integer.parseInt(limpio.substring(4, 6), 16);
+        return new ColorRGB(r, g, b);
+    }
+
+    public int getRojo() { return rojo; }
+    public int getVerde() { return verde; }
+    public int getAzul() { return azul; }
 }
 ```
-*(Sus métodos principales —que siempre devuelven un nuevo `BigDecimal` por ser inmutable— son: `add()`, `subtract()`, `multiply()`, `divide(divisor, escala, RoundingMode)`, `pow()` y `negate()`).*
 
 ---
 
-### 8.4 `Random`, `java.awt.Color` y Ejecución de Procesos (`Runtime` vs. `ProcessBuilder`)
+### 8.4 Aplicación de Expresiones Regulares en la Validación de Objetos
 
-1. **`java.util.Random`:** Mucho más versátil y estadísticamente robusto que `Math.random()`. Permite generar enteros en un rango `[0, N-1]` con `gn.nextInt(N)`, booleanos con `nextBoolean()` o distribuciones normales con `nextGaussian()`:
-   ```java
-   java.util.Random gn = new java.util.Random();
-   int tiradaDado = gn.nextInt(6) + 1; // Entero aleatorio entre 1 y 6
-   ```
-2. **`java.awt.Color`:** Clase inmutable que representa colores en el espacio RGB/RGBA. Ofrece constantes predefinidas (`Color.RED`, `Color.BLUE`) y constructores por componentes entre `0` y `255` (`new Color(r, g, b)`, `new Color(r, g, b, opacidad)` o hexadecimal `new Color(0x2D8A4E)`).
-3. **`Runtime` vs. `ProcessBuilder` (Interacción con el Sistema Operativo):**  
-   Ambas clases permiten lanzar programas externos del sistema operativo desde Java, pero presentan diferencias críticas de seguridad y diseño:
-
-| Característica | `Runtime.getRuntime().exec(...)` | `java.lang.ProcessBuilder` (Recomendado) |
-| :--- | :--- | :--- |
-| **Introducción** | JDK 1.0 (Legado histórico) | JDK 5.0+ (API moderna y segura) |
-| **Paso de argumentos y Seguridad** | Si recibe un único `String`, lo evalúa en la shell del SO, siendo **vulnerable a inyección de comandos** (`&`, `;`, `\|`). | Recibe siempre una lista o array separado (`new ProcessBuilder("cmd", "arg1")`), evitando la inyección de comandos. |
-| **Directorio y Entorno** | Hereda rígidamente los de la JVM actual. | Permite configurar directorio de trabajo (`.directory(...)`) y variables de entorno (`.environment()`). |
-| **Redirección de E/S** | Manejo manual verboso de flujos (`InputStream`). | Simplificado con `.redirectOutput(...)` y **`.inheritIO()`** (conecta directamente la consola del proceso hijo con la de Java). |
+En la Unidad 3 estudiamos en profundidad la sintaxis y el motor de **Expresiones Regulares (*Regex*)** de Java. En la Programación Orientada a Objetos, las expresiones regulares se convierten en la principal línea de defensa para **garantizar las invariantes de los objetos** en sus constructores, setters y `records`:
 
 ```java
-import java.io.IOException;
-
-public class LanzadorProcesos {
-    public static void main(String[] args) {
-        // Ejemplo seguro con ProcessBuilder: ejecuta 'java -version' heredando la consola
-        ProcessBuilder pb = new ProcessBuilder("java", "-version");
-        pb.inheritIO();
-        try {
-            Process proceso = pb.start();
-            int codigoSalida = proceso.waitFor(); // Espera a que termine el proceso externo
-            System.out.println("Proceso finalizado con código: " + codigoSalida);
-        } catch (IOException | InterruptedException e) {
-            System.err.println("Error al ejecutar el proceso: " + e.getMessage());
+public record Usuario(String username, String email, String nif) {
+    // Constructor compacto con validaciones rigurosas mediante Regex aprendidas en UD3
+    public Usuario {
+        if (username == null || !username.matches("^[a-zA-Z0-9_]{4,15}$")) {
+            throw new IllegalArgumentException("Username inválido: debe ser alfanumérico entre 4 y 15 caracteres");
+        }
+        if (email == null || !email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+            throw new IllegalArgumentException("Formato de correo electrónico no válido: " + email);
+        }
+        if (nif == null || !nif.matches("^\\d{8}[A-HJ-NP-TV-Z]$")) {
+            throw new IllegalArgumentException("Formato de DNI español incorrecto: " + nif);
         }
     }
 }
 ```
+Gracias a esta integración, ningún objeto `Usuario` podrá crearse en el Heap con un correo corrupto o un identificador ilegítimo, blindando la integridad de todo el sistema.
 
 ---
 

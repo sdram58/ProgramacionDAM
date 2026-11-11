@@ -1,14 +1,6 @@
 ---
 title: "Boletín 4.3: Retos Orientados a Objetos y Programación Competitiva"
 description: "Retos avanzados de modelado orientado a objetos, algoritmos sobre estructuras de objetos y diseño de arquitecturas en Java 25 LTS."
-draft: true
-prev: false
-next: false
-sidebar:
-  order: 5
-  badge:
-    text: "Retos Extras"
-    variant: "danger"
 ---
 
 Bienvenido al boletín de retos avanzados de la **Unidad 4: Clases y objetos**.

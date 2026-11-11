@@ -57,13 +57,13 @@ hero:
     <a class="unit-link" href="/ProgramacionDAM/ud03/">Ver unidad →</a>
   </div>
 
-  <div class="unit-card unit-card-disabled" style="border: 1px dashed var(--sl-color-gray-4); border-radius: 8px; padding: 1.25rem;">
+  <div class="unit-card" style="border: 1px solid var(--sl-color-accent); border-radius: 8px; padding: 1.25rem; background: rgba(45, 138, 78, 0.06);">
     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem;">
       <h3 style="margin: 0; font-size: 1.2rem;">🏗️ 04. Clases y objetos</h3>
-      <span class="unit-badge-unavailable">🔒 No disponible</span>
+      <span class="unit-badge-available">Disponible</span>
     </div>
-    <p><strong>RA1, RA2, RA3, RA4 (28 h)</strong> — Fundamentos de la programación orientada a objetos, instanciación, constructores, atributos, métodos, encapsulamiento, visibilidad y referencia <code>this</code>.</p>
-    <span class="unit-link-disabled">🔒 No disponible</span>
+    <p><strong>RA1, RA2, RA3, RA4 (28 h)</strong> — Fundamentos de la programación orientada a objetos, instanciación, constructores, atributos, métodos, encapsulamiento, visibilidad, miembros static, la clase Object (toString, equals, hashCode), records inmutables, enums y relaciones con arrays de objetos.</p>
+    <a class="unit-link" href="/ProgramacionDAM/ud04/">Ver unidad →</a>
   </div>
 
   <div class="unit-card unit-card-disabled" style="border: 1px dashed var(--sl-color-gray-4); border-radius: 8px; padding: 1.25rem;">
@@ -146,6 +146,9 @@ Accede a las relaciones de problemas prácticos clasificados por nivel de dificu
 * **[Unidad 03: Boletín Inicial](/ProgramacionDAM/ud03/boletin-03-inicial/)** | **[Resuelto](/ProgramacionDAM/ud03/boletin-03-inicial-resuelto/)** · *(Descargar: [PDF](/ProgramacionDAM/pdf/ud03/Boletin-03-Inicial.pdf) · [PDF Soluciones](/ProgramacionDAM/pdf/ud03/Boletin-03-Inicial-Resuelto.pdf))*
 * **[Unidad 03: Boletín Intermedio](/ProgramacionDAM/ud03/boletin-03-intermedio/)** | **[Resuelto](/ProgramacionDAM/ud03/boletin-03-intermedio-resuelto/)** · *(Descargar: [PDF](/ProgramacionDAM/pdf/ud03/Boletin-03-Intermedio.pdf) · [PDF Soluciones](/ProgramacionDAM/pdf/ud03/Boletin-03-Intermedio-Resuelto.pdf))*
 * **[Unidad 03: Retos Extras](/ProgramacionDAM/ud03/boletin-03-extras/)** · *(Descargar: [PDF](/ProgramacionDAM/pdf/ud03/Boletin-03-Extras-Retos.pdf))*
+* **[Unidad 04: Boletín Inicial](/ProgramacionDAM/ud04/boletin-04-inicial/)** | **[Resuelto](/ProgramacionDAM/ud04/boletin-04-inicial-resuelto/)**
+* **[Unidad 04: Boletín Intermedio](/ProgramacionDAM/ud04/boletin-04-intermedio/)** | **[Resuelto](/ProgramacionDAM/ud04/boletin-04-intermedio-resuelto/)**
+* **[Unidad 04: Retos Extras](/ProgramacionDAM/ud04/boletin-04-extras/)**
 
 ---
 
