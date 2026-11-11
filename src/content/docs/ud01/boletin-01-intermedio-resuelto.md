@@ -3,7 +3,7 @@ title: 📝 Boletín 01 Intermedio (Resuelto) — Algorítmica y Pseudocódigo
 description: Soluciones completas, razonadas y verificadas en pseudocódigo PSeInt para los 10 ejercicios del Boletín Intermedio de la Unidad 1.
 ---
 
-A continuación se detallan las soluciones exhaustivas de los 10 ejercicios planteados en el [Boletín Intermedio](./boletin-01-intermedio/).
+A continuación se detallan las soluciones exhaustivas de los 10 ejercicios planteados en el [Boletín Intermedio](/ProgramacionDAM/ud01/boletin-01-intermedio/).
 
 :::tip[📥 Descarga en PDF]
 Puedes [descargar este boletín resuelto en PDF](/ProgramacionDAM/pdf/ud01/Boletin-01-Intermedio-Resuelto.pdf) para conservarlo como material de consulta y estudio.

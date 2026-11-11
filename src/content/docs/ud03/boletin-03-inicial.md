@@ -114,5 +114,5 @@ Escribe un método `public static boolean esCodigoPostalValido(String cp)` que v
 ---
 
 :::note[¿Necesitas comprobar tus soluciones?]
-Puedes ver todas las soluciones completas y explicadas en el [Boletín 3.1 Resuelto](./boletin-03-inicial-resuelto).
+Puedes ver todas las soluciones completas y explicadas en el [Boletín 3.1 Resuelto](/ProgramacionDAM/ud03/boletin-03-inicial-resuelto/).
 :::

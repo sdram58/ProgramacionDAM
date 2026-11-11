@@ -5,7 +5,7 @@ description: 13 ejercicios de nivel intermedio en Java 21 / 25 LTS sobre método
 
 Este boletín contiene **13 ejercicios prácticos aplicados** para consolidar el manejo avanzado de tipos primitivos, la inmutabilidad y los métodos de búsqueda de la clase `String`, la precisión matemática con `Math`, los tipos enumerados `enum`, la manipulación de fechas con `java.time`, el control riguroso de memoria y la resolución de problemas de geometría computacional.
 
-Antes de consultar el [Boletín Intermedio Resuelto](./boletin-02-intermedio-resuelto/), programa y verifica cada solución de manera autónoma en **IntelliJ IDEA**.
+Antes de consultar el [Boletín Intermedio Resuelto](/ProgramacionDAM/ud02/boletin-02-intermedio-resuelto/), programa y verifica cada solución de manera autónoma en **IntelliJ IDEA**.
 
 ---
 

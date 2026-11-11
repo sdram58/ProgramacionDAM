@@ -183,6 +183,6 @@ Diseña un sistema orientado a objetos para gestionar el catálogo y stock de un
 ---
 
 :::note[¿Quieres revisar el código completo?]
-Consulta todas las implementaciones detalladas en el [Boletín 4.2 Resuelto](./boletin-04-intermedio-resuelto).
+Consulta todas las implementaciones detalladas en el [Boletín 4.2 Resuelto](/ProgramacionDAM/ud04/boletin-04-intermedio-resuelto/).
 :::
 

@@ -211,6 +211,6 @@ En lugar de funciones procedimentales sueltas, modela un simulador de juegos de 
 ---
 
 :::note[¿Necesitas consultar las soluciones?]
-Revisa el código completo comentado en el [Boletín 4.1 Resuelto](./boletin-04-inicial-resuelto).
+Revisa el código completo comentado en el [Boletín 4.1 Resuelto](/ProgramacionDAM/ud04/boletin-04-inicial-resuelto/).
 :::
 

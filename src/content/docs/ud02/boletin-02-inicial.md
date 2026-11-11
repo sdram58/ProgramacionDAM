@@ -5,7 +5,7 @@ description: 13 ejercicios prácticos fundamentales en Java 21 / 25 LTS con Inte
 
 Este boletín reúne **13 ejercicios prácticos fundamentales** diseñados para consolidar tu soltura con el entorno de desarrollo **IntelliJ IDEA**, la sintaxis básica del lenguaje **Java** (versión moderna 21 LTS), el uso de la clase `Scanner`, la salida formateada con `printf` y las bifurcaciones condicionales `if-else` y `switch`.
 
-Antes de consultar el [Boletín Inicial Resuelto](./boletin-02-inicial-resuelto/), implementa y ejecuta cada solución en tu propio proyecto de IntelliJ IDEA.
+Antes de consultar el [Boletín Inicial Resuelto](/ProgramacionDAM/ud02/boletin-02-inicial-resuelto/), implementa y ejecuta cada solución en tu propio proyecto de IntelliJ IDEA.
 
 ---
 

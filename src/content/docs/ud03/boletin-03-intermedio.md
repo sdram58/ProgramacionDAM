@@ -103,5 +103,5 @@ Imagina un robot situado en la celda superior izquierda `(0, 0)` de una cuadríc
 ---
 
 :::note[¿Quieres revisar el código completo?]
-Consulta el [Boletín 3.2 Resuelto](./boletin-03-intermedio-resuelto) para examinar las soluciones completas con Java 25 LTS.
+Consulta el [Boletín 3.2 Resuelto](/ProgramacionDAM/ud03/boletin-03-intermedio-resuelto/) para examinar las soluciones completas con Java 25 LTS.
 :::

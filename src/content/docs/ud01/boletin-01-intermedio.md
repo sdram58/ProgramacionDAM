@@ -3,7 +3,7 @@ title: 📝 Boletín 01 Intermedio — Algorítmica y Pseudocódigo
 description: 10 retos algorítmicos aplicados que combinan bucles centinela, validaciones robustas con Repetir, modularidad, recursividad, primos, descomposición de dígitos, años bisiestos y arquitectura del software.
 ---
 
-Este boletín contiene **10 ejercicios de nivel intermedio** para poner a prueba tu capacidad de estructurar algoritmos modulares, robustos y eficientes en pseudocódigo. Intenta resolverlos antes de consultar el [Boletín Intermedio Resuelto](./boletin-01-intermedio-resuelto/).
+Este boletín contiene **10 ejercicios de nivel intermedio** para poner a prueba tu capacidad de estructurar algoritmos modulares, robustos y eficientes en pseudocódigo. Intenta resolverlos antes de consultar el [Boletín Intermedio Resuelto](/ProgramacionDAM/ud01/boletin-01-intermedio-resuelto/).
 
 :::tip[📥 Descarga en PDF]
 Puedes [descargar este boletín intermedio en PDF](/ProgramacionDAM/pdf/ud01/Boletin-01-Intermedio.pdf) para imprimirlo o trabajar sin conexión. También dispones del [PDF con las soluciones completas](/ProgramacionDAM/pdf/ud01/Boletin-01-Intermedio-Resuelto.pdf).

@@ -888,15 +888,13 @@ public class SimuladorDadosPOO {
 
         // Prueba del cubilete con 2 dados de 6 caras
         Cubilete cubilete = new Cubilete(2, 6);
-        System.out.println("
---- Tirada inicial del cubilete ---");
+        System.out.println("\n--- Tirada inicial del cubilete ---");
         int sumaInicial = cubilete.tirarTodos();
         System.out.println("Suma obtenida: " + sumaInicial);
         cubilete.mostrarEstado();
 
         // Tirar hasta obtener un 12 (doble 6)
-        System.out.println("
-Lanzando hasta conseguir un 12...");
+        System.out.println("\nLanzando hasta conseguir un 12...");
         int intentos = cubilete.tirarHastaSuma(12);
         System.out.printf("¡Conseguido en %d tiradas!%n", intentos);
         cubilete.mostrarEstado();

@@ -1057,19 +1057,16 @@ public class GestionInventarioAlmacen {
         System.out.printf("Valor total del inventario: %.2f €%n", almacen.calcularValorTotalInventario());
 
         // Operaciones de venta
-        System.out.println("
-Venta de 5 teclados: " + (a1.vender(5) ? "Éxito" : "Rechazada"));
+        System.out.println("\nVenta de 5 teclados: " + (a1.vender(5) ? "Éxito" : "Rechazada"));
         System.out.println("Venta de 50 monitores (insuficiente): " + (a3.vender(50) ? "Éxito" : "Rechazada"));
         System.out.println(a1);
 
         // Eliminación y compactación
-        System.out.println("
-Eliminando ratón (RAT-202): " + almacen.eliminarArticulo("RAT-202"));
+        System.out.println("\nEliminando ratón (RAT-202): " + almacen.eliminarArticulo("RAT-202"));
         System.out.println("Total artículos tras borrado: " + almacen.getTotalArticulos());
 
         // Listar copia defensiva
-        System.out.println("
-Listado actual del almacén:");
+        System.out.println("\nListado actual del almacén:");
         for (Articulo a : almacen.getArticulosDisponibles()) {
             System.out.println(" - " + a);
         }
