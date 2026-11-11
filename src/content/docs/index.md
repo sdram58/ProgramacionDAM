@@ -146,9 +146,9 @@ Accede a las relaciones de problemas prácticos clasificados por nivel de dificu
 * **[Unidad 03: Boletín Inicial](/ProgramacionDAM/ud03/boletin-03-inicial/)** | **[Resuelto](/ProgramacionDAM/ud03/boletin-03-inicial-resuelto/)** · *(Descargar: [PDF](/ProgramacionDAM/pdf/ud03/Boletin-03-Inicial.pdf) · [PDF Soluciones](/ProgramacionDAM/pdf/ud03/Boletin-03-Inicial-Resuelto.pdf))*
 * **[Unidad 03: Boletín Intermedio](/ProgramacionDAM/ud03/boletin-03-intermedio/)** | **[Resuelto](/ProgramacionDAM/ud03/boletin-03-intermedio-resuelto/)** · *(Descargar: [PDF](/ProgramacionDAM/pdf/ud03/Boletin-03-Intermedio.pdf) · [PDF Soluciones](/ProgramacionDAM/pdf/ud03/Boletin-03-Intermedio-Resuelto.pdf))*
 * **[Unidad 03: Retos Extras](/ProgramacionDAM/ud03/boletin-03-extras/)** · *(Descargar: [PDF](/ProgramacionDAM/pdf/ud03/Boletin-03-Extras-Retos.pdf))*
-* **[Unidad 04: Boletín Inicial](/ProgramacionDAM/ud04/boletin-04-inicial/)** | **[Resuelto](/ProgramacionDAM/ud04/boletin-04-inicial-resuelto/)**
-* **[Unidad 04: Boletín Intermedio](/ProgramacionDAM/ud04/boletin-04-intermedio/)** | **[Resuelto](/ProgramacionDAM/ud04/boletin-04-intermedio-resuelto/)**
-* **[Unidad 04: Retos Extras](/ProgramacionDAM/ud04/boletin-04-extras/)**
+* **[Unidad 04: Boletín Inicial](/ProgramacionDAM/ud04/boletin-04-inicial/)** | **[Resuelto](/ProgramacionDAM/ud04/boletin-04-inicial-resuelto/)** · *(Descargar: [PDF](/ProgramacionDAM/pdf/ud04/Boletin-04-Inicial.pdf) · [PDF Soluciones](/ProgramacionDAM/pdf/ud04/Boletin-04-Inicial-Resuelto.pdf))*
+* **[Unidad 04: Boletín Intermedio](/ProgramacionDAM/ud04/boletin-04-intermedio/)** | **[Resuelto](/ProgramacionDAM/ud04/boletin-04-intermedio-resuelto/)** · *(Descargar: [PDF](/ProgramacionDAM/pdf/ud04/Boletin-04-Intermedio.pdf) · [PDF Soluciones](/ProgramacionDAM/pdf/ud04/Boletin-04-Intermedio-Resuelto.pdf))*
+* **[Unidad 04: Retos Extras](/ProgramacionDAM/ud04/boletin-04-extras/)** · *(Descargar: [PDF](/ProgramacionDAM/pdf/ud04/Boletin-04-Extras-Retos.pdf))*
 
 ---
 

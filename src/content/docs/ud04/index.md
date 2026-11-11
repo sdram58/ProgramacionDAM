@@ -9,6 +9,14 @@ La **Programación Orientada a Objetos (POO)** supone una auténtica revolución
 
 En esta unidad nos adentraremos en el corazón de la POO utilizando **Java 25 LTS** (con compatibilidad plena con Java 21 LTS) y **IntelliJ IDEA** como nuestro entorno de desarrollo profesional.
 
+:::tip[📥 Recursos y Descargas en PDF de la Unidad 4]
+Puedes estudiar esta unidad tanto en la plataforma web como en formato documento digital/impreso:
+* 📄 **[Descargar Teoría Completa de la Unidad 4 en PDF](/ProgramacionDAM/pdf/ud04/UD04-Teoria-Clases-Objetos.pdf)** (44 páginas)
+* 📝 **Boletín Inicial:** [Descargar Propuestos (PDF)](/ProgramacionDAM/pdf/ud04/Boletin-04-Inicial.pdf) · [Descargar Resueltos (PDF)](/ProgramacionDAM/pdf/ud04/Boletin-04-Inicial-Resuelto.pdf)
+* 📝 **Boletín Intermedio:** [Descargar Propuestos (PDF)](/ProgramacionDAM/pdf/ud04/Boletin-04-Intermedio.pdf) · [Descargar Resueltos (PDF)](/ProgramacionDAM/pdf/ud04/Boletin-04-Intermedio-Resuelto.pdf)
+* 🧠 **Retos y Extras:** [Descargar Retos (PDF)](/ProgramacionDAM/pdf/ud04/Boletin-04-Extras-Retos.pdf)
+:::
+
 ---
 
 ## 1. El Paradigma de la Programación Orientada a Objetos (POO)
